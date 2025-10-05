@@ -1,38 +1,83 @@
 import { motion } from 'framer-motion'
 
 const TechStackSection = () => {
-  const techStack = [
+  const capabilityStacks = [
     {
-      category: "Frontend",
-      icon: "🎨",
+      category: 'ManduvIA Platform',
+      icon: '🤖',
       technologies: [
-        { name: "React", icon: "⚛️", description: "Biblioteca principal para interfaces modernas e reativas" },
-        { name: "Next.js", icon: "▲", description: "Framework React para aplicações full-stack e SSR" },
-        { name: "TypeScript", icon: "🔷", description: "Superset JavaScript para código mais seguro e escalável" },
-        { name: "Tailwind CSS", icon: "🎨", description: "Framework CSS utility-first para design responsivo" },
-        { name: "Framer Motion", icon: "🎭", description: "Biblioteca de animações para React" }
+        {
+          name: 'ManduvIA Mentor & Concierge',
+          icon: '💬',
+          description: 'Assistente empática em WhatsApp, web e voz para acolhimento, trilhas educacionais e voluntariado.'
+        },
+        {
+          name: 'NLP Multilíngue + Sentimento',
+          icon: '🧠',
+          description: 'Modelos customizados para português, libras e línguas pantaneiras com análise emocional em tempo real.'
+        },
+        {
+          name: 'Motor de jornadas',
+          icon: '🧭',
+          description: 'Orquestra fluxos de acolhimento, educação e renda com personalização ManduvIA.'
+        },
+        {
+          name: 'Assistentes especialistas',
+          icon: '🧑‍⚕️',
+          description: 'Bots especializados em saúde, esporte, dados e captação atuando com equipe humana.'
+        }
       ]
     },
     {
-      category: "Backend",
-      icon: "⚙️",
+      category: 'Infraestrutura de Dados Coloiado',
+      icon: '📊',
       technologies: [
-        { name: "Node.js", icon: "🟢", description: "Runtime JavaScript para desenvolvimento server-side" },
-        { name: "Express", icon: "🚂", description: "Framework web minimalista e flexível para Node.js" },
-        { name: "PostgreSQL", icon: "🐘", description: "Banco de dados relacional robusto e confiável" },
-        { name: "MongoDB", icon: "🍃", description: "Banco NoSQL para dados flexíveis e escaláveis" },
-        { name: "Redis", icon: "🔴", description: "Cache em memória para alta performance" }
+        {
+          name: 'Observatórios interativos',
+          icon: '📈',
+          description: 'Dashboards com drilldown por território, públicos e indicadores ESG.'
+        },
+        {
+          name: 'Crawlers sociais + APIs',
+          icon: '🛰️',
+          description: 'Coleta automatizada de dados públicos, privados e de sensores comunitários.'
+        },
+        {
+          name: 'ManduvIA Insights',
+          icon: '✨',
+          description: 'Recomendações e alertas para gestores com base em IA e especialistas Manduvia.'
+        },
+        {
+          name: 'Lakehouse ESG',
+          icon: '💾',
+          description: 'Arquitetura de dados auditável com governança, LGPD e métricas de impacto.'
+        }
       ]
     },
     {
-      category: "Cloud & DevOps",
-      icon: "☁️",
+      category: 'Experiências & Operações Manduvia',
+      icon: '🌱',
       technologies: [
-        { name: "AWS", icon: "🟠", description: "Plataforma cloud completa para deploy e escalabilidade" },
-        { name: "Docker", icon: "🐳", description: "Containerização para ambientes consistentes" },
-        { name: "GitHub Actions", icon: "🔄", description: "CI/CD automatizado para deploy contínuo" },
-        { name: "Vercel", icon: "▲", description: "Plataforma de deploy otimizada para frontend" },
-        { name: "Supabase", icon: "⚡", description: "Backend-as-a-Service com PostgreSQL e auth" }
+        {
+          name: 'Hexa Method Playbook',
+          icon: '📘',
+          description: 'Metodologia de acolhimento, inovação e impacto aplicada em esporte, educação e renda.'
+        },
+        {
+          name: 'Academia Solidária Ops',
+          icon: '🥋',
+          description: 'Processos operacionais, PIDs e analytics integrados às unidades socioesportivas.'
+        },
+        {
+          name: 'Pipeline de investimentos',
+          icon: '💡',
+          description: 'Captação ESG, leis de incentivo e parcerias articuladas com ManduvIA Dealflow.'
+        },
+        {
+          name: 'Rede de voluntariado Manduvia',
+          icon: '🫶',
+          description: 'Matching inteligente de especialistas, eventos de acolhimento e reconhecimento da rede.'
+        }
       ]
     }
   ]
@@ -80,10 +125,10 @@ const TechStackSection = () => {
           className="text-center mb-12"
         >
           <motion.h2 variants={itemVariants} className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            Stack Tecnológico
+            Arquitetura Manduvia
           </motion.h2>
           <motion.p variants={itemVariants} className="text-lg text-gray-600 max-w-3xl mx-auto">
-            Ferramentas e tecnologias que uso para criar soluções robustas e escaláveis
+            Plataforma ManduvIA, observatórios Coloiado e Operações Manduvia formam nosso ecossistema de tecnologia, dados e acolhimento.
           </motion.p>
         </motion.div>
 
@@ -94,7 +139,7 @@ const TechStackSection = () => {
           viewport={{ once: true, amount: 0.3 }}
           className="grid md:grid-cols-2 lg:grid-cols-3 gap-8"
         >
-          {techStack.map((stack, stackIndex) => (
+          {capabilityStacks.map((stack, stackIndex) => (
             <motion.div
               key={stackIndex}
               variants={cardVariants}
@@ -144,12 +189,10 @@ const TechStackSection = () => {
         >
           <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-2xl p-8">
             <h3 className="text-xl font-bold text-gray-900 mb-3">
-              Sempre Evoluindo 🚀
+              Evolução contínua Manduvia 🚀
             </h3>
             <p className="text-gray-600 max-w-2xl mx-auto">
-              Mantenho-me atualizada com as últimas tendências e tecnologias do mercado. 
-              Atualmente explorando Rust, WebAssembly, Machine Learning e Blockchain para 
-              expandir ainda mais minhas capacidades de desenvolvimento.
+              Estamos expandindo ManduvIA Voice para áudio e libras, estruturando o Marketplace Impacto Verde e construindo o Radar de Voluntariado Corporativo. Cada frente nasce conectada aos dados Coloiado e à metodologia acolhedora do Manduvi.
             </p>
           </div>
         </motion.div>
