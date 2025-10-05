@@ -1,9 +1,12 @@
-import { motion } from 'framer-motion'
-import { MapPin, Calendar, ChevronDown, ChevronUp, Coffee, Heart } from 'lucide-react'
 import { useState } from 'react'
+import { motion } from 'framer-motion'
+import { MapPin, Calendar, Sparkles, ChevronDown, ChevronUp } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import { Button } from '@/components/ui/button.jsx'
 
-const AboutSection = () => {
-  const [expandedSection, setExpandedSection] = useState(null)
+const AboutSection = ({ className = '' }) => {
+  const navigate = useNavigate()
+  const [expandedSection, setExpandedSection] = useState('mission')
 
   const toggleSection = (section) => {
     setExpandedSection(expandedSection === section ? null : section)
@@ -31,188 +34,178 @@ const AboutSection = () => {
   }
 
   return (
-    <section id="about" className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-white">
+    <section
+      id="about"
+      className={`py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-background ${className}`}
+    >
       <div className="max-w-7xl mx-auto">
         <motion.div
           variants={containerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.3 }}
-          className="bg-gradient-to-br from-purple-50 to-pink-50 rounded-3xl shadow-xl p-8 sm:p-12 lg:p-16"
+          className="about-gradient rounded-3xl shadow-xl p-8 sm:p-12 lg:p-16 space-y-12 max-w-5xl mx-auto"
         >
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left Content */}
-            <div className="space-y-8">
-              <motion.div variants={itemVariants}>
-                <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">
-                  <span className="text-black">Desenvolvedora apaixonada</span>{' '}
-                  <span className="text-gray-700">por criar experiências digitais que fazem a diferença</span>
-                </h2>
-              </motion.div>
+          <div className="space-y-8">
+            <motion.div variants={itemVariants} className="space-y-4">
+              <h2 className="text-3xl sm:text-4xl font-bold text-foreground leading-tight">
+                <span className="text-secondary">Inovamos para Acolher.</span>{' '}
+                <span className="text-foreground/80">Impactamos para Transformar.</span>
+              </h2>
+              <p className="text-foreground/70 leading-relaxed">
+                Somos uma SocialTech que transforma vidas e comunidades, desenvolvendo soluções sustentáveis com impacto imediato e duradouro. Inspirados na árvore Manduvi, unimos tecnologia, dados e afeto para acolher e despertar o potencial de cada pessoa no nosso tripé ACOLHER · INOVAR · IMPACTAR.
+              </p>
+              <div className="grid grid-cols-3 gap-3">
+                {[
+                  { label: 'Atendimentos históricos', value: '150 mil+' },
+                  { label: 'Vagas Meu Futuro', value: '13.454' },
+                  { label: 'Sensação de segurança', value: '94%' }
+                ].map((metric) => (
+                  <div key={metric.label} className="rounded-xl border border-border/40 bg-white/70 px-3 py-3 text-left">
+                    <p className="text-lg font-semibold text-primary leading-none">{metric.value}</p>
+                    <p className="text-[11px] uppercase tracking-[0.3em] text-foreground/60 mt-1">{metric.label}</p>
+                  </div>
+                ))}
+              </div>
+              <Button
+                className="bg-primary hover:bg-secondary text-primary-foreground px-5"
+                onClick={() => navigate('/projects')}
+              >
+                Conheça nossas iniciativas
+              </Button>
+            </motion.div>
 
-              <motion.div variants={itemVariants} className="space-y-6">
-                {/* Location */}
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                    <MapPin className="w-6 h-6 text-purple-500" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Localizada em</p>
-                    <p className="text-lg font-semibold text-gray-900">São Paulo, Brasil</p>
-                  </div>
-                </div>
-
-                {/* Experience */}
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                    <Calendar className="w-6 h-6 text-purple-500" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Experiência</p>
-                    <p className="text-lg font-semibold text-gray-900">5+ anos desenvolvendo</p>
-                  </div>
-                </div>
-
-                {/* Coffee */}
-                <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                    <Coffee className="w-6 h-6 text-purple-500" />
-                  </div>
-                  <div>
-                    <p className="text-sm text-gray-600">Combustível</p>
-                    <p className="text-lg font-semibold text-gray-900">Café e código ☕</p>
-                  </div>
-                </div>
-              </motion.div>
-
-              {/* Code Snippet */}
-              <motion.div variants={itemVariants} className="bg-gray-900 rounded-lg p-4 text-sm">
-                <div className="text-gray-400 font-mono">
-                  <div className="text-pink-400">const</div> <div className="text-blue-400">marina</div> <div className="text-white">=</div> <div className="text-yellow-400">{'{'}</div>
-                  <div className="text-gray-300 ml-4">nome: <span className="text-green-400">'Marina Silva Santos'</span>,</div>
-                  <div className="text-gray-300 ml-4">role: <span className="text-green-400">'Full Stack Developer'</span>,</div>
-                  <div className="text-gray-300 ml-4">location: <span className="text-green-400">'São Paulo, BR'</span>,</div>
-                  <div className="text-gray-300 ml-4">skills: <span className="text-blue-400">['React', 'Node.js', 'UX']</span>,</div>
-                  <div className="text-gray-300 ml-4">passion: <span className="text-green-400">'Criar experiências incríveis'</span></div>
-                  <div className="text-yellow-400">{'}'}</div>
-                </div>
-              </motion.div>
-
-              {/* Expandable Sections */}
-              <motion.div variants={itemVariants} className="space-y-4">
-                {/* What I Do */}
-                <div className="border border-purple-200 rounded-lg overflow-hidden bg-white/50">
-                  <button
-                    onClick={() => toggleSection('whatIDo')}
-                    className="w-full flex items-center justify-between p-4 text-left hover:bg-purple-50 transition-colors"
-                  >
-                    <span className="font-medium text-gray-900">O que eu faço</span>
-                    {expandedSection === 'whatIDo' ? (
-                      <ChevronUp className="w-5 h-5 text-gray-500" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-gray-500" />
-                    )}
-                  </button>
-                  <motion.div
-                    initial={false}
-                    animate={{
-                      height: expandedSection === 'whatIDo' ? 'auto' : 0,
-                      opacity: expandedSection === 'whatIDo' ? 1 : 0
-                    }}
-                    transition={{
-                      height: { duration: 0.3, ease: "easeInOut" },
-                      opacity: { duration: 0.2, ease: "easeInOut" }
-                    }}
-                    className="overflow-hidden"
-                  >
-                    <div className="px-4 pb-4 text-gray-600">
-                      Especializo-me em criar aplicações web modernas usando React, Node.js e tecnologias cloud. Meu foco é desenvolver interfaces intuitivas e sistemas backend robustos que escalam. Trabalho principalmente com startups e empresas de médio porte, transformando ideias em produtos digitais de sucesso.
+            <motion.div variants={itemVariants} className="space-y-6">
+              <div className="grid sm:grid-cols-3 gap-4">
+                {[
+                  {
+                    icon: <MapPin className="w-5 h-5" />,
+                    title: 'Onde estamos',
+                    detail: 'Mato Grosso · Rio · São Paulo · Alabama'
+                  },
+                  {
+                    icon: <Calendar className="w-5 h-5" />,
+                    title: 'Desde 2004',
+                    detail: 'Assistência social, educação, cultura, esporte e renda'
+                  },
+                  {
+                    icon: <Sparkles className="w-5 h-5" />,
+                    title: 'Valores',
+                    detail: 'Abraço, acolhimento, afeto, inclusão, inovação'
+                  }
+                ].map((item) => (
+                  <div key={item.title} className="rounded-2xl border border-border/40 bg-white/70 px-4 py-4 text-sm text-foreground/75">
+                    <div className="flex items-center gap-2 text-primary mb-2">
+                      {item.icon}
+                      <span className="font-semibold text-foreground text-sm">{item.title}</span>
                     </div>
-                  </motion.div>
-                </div>
-
-                {/* Always Learning */}
-                <div className="border border-purple-200 rounded-lg overflow-hidden bg-white/50">
-                  <button
-                    onClick={() => toggleSection('alwaysLearning')}
-                    className="w-full flex items-center justify-between p-4 text-left hover:bg-purple-50 transition-colors"
-                  >
-                    <span className="font-medium text-gray-900">Sempre aprendendo</span>
-                    {expandedSection === 'alwaysLearning' ? (
-                      <ChevronUp className="w-5 h-5 text-gray-500" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-gray-500" />
-                    )}
-                  </button>
-                  <motion.div
-                    initial={false}
-                    animate={{
-                      height: expandedSection === 'alwaysLearning' ? 'auto' : 0,
-                      opacity: expandedSection === 'alwaysLearning' ? 1 : 0
-                    }}
-                    transition={{
-                      height: { duration: 0.3, ease: "easeInOut" },
-                      opacity: { duration: 0.2, ease: "easeInOut" }
-                    }}
-                    className="overflow-hidden"
-                  >
-                    <div className="px-4 pb-4 text-gray-600">
-                      Estou constantemente aprendendo novas tecnologias e melhores práticas. Atualmente explorando Rust para sistemas de alta performance, WebAssembly para aplicações web, e aplicando Machine Learning em projetos de UX personalizada.
-                    </div>
-                  </motion.div>
-                </div>
-
-                {/* Personal Side */}
-                <div className="border border-purple-200 rounded-lg overflow-hidden bg-white/50">
-                  <button
-                    onClick={() => toggleSection('personal')}
-                    className="w-full flex items-center justify-between p-4 text-left hover:bg-purple-50 transition-colors"
-                  >
-                    <span className="font-medium text-gray-900">Lado pessoal</span>
-                    {expandedSection === 'personal' ? (
-                      <ChevronUp className="w-5 h-5 text-gray-500" />
-                    ) : (
-                      <ChevronDown className="w-5 h-5 text-gray-500" />
-                    )}
-                  </button>
-                  <motion.div
-                    initial={false}
-                    animate={{
-                      height: expandedSection === 'personal' ? 'auto' : 0,
-                      opacity: expandedSection === 'personal' ? 1 : 0
-                    }}
-                    transition={{
-                      height: { duration: 0.3, ease: "easeInOut" },
-                      opacity: { duration: 0.2, ease: "easeInOut" }
-                    }}
-                    className="overflow-hidden"
-                  >
-                    <div className="px-4 pb-4 text-gray-600">
-                      Formada em Ciência da Computação pela USP, sempre busquei unir tecnologia e criatividade. Quando não estou codando, você me encontra explorando novos cafés em São Paulo, praticando yoga, ou mentorando outros desenvolvedores na comunidade tech.
-                    </div>
-                  </motion.div>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Right Content - Character Illustration */}
-            <motion.div variants={itemVariants} className="flex justify-center lg:justify-end">
-              <div className="relative">
-                <div className="w-96 h-96 bg-gradient-to-br from-purple-200 to-pink-200 rounded-2xl shadow-2xl flex items-center justify-center">
-                  <div className="text-center">
-                    <div className="text-9xl mb-4">👩‍💻</div>
-                    <div className="text-2xl font-bold text-gray-800">Marina</div>
-                    <div className="text-lg text-gray-600">Full Stack Dev</div>
-                    <div className="flex justify-center gap-2 mt-4">
-                      <span className="text-2xl">⚛️</span>
-                      <span className="text-2xl">🟢</span>
-                      <span className="text-2xl">🎨</span>
-                    </div>
+                    <p className="leading-relaxed text-xs sm:text-sm text-foreground/70">{item.detail}</p>
                   </div>
-                </div>
-                <div className="absolute -bottom-4 -right-4 w-16 h-16 bg-purple-500 rounded-full flex items-center justify-center shadow-lg">
-                  <Heart className="w-8 h-8 text-white" />
-                </div>
+                ))}
+              </div>
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="rounded-lg p-4 text-sm bg-[#603813] text-[#f2f2f2] shadow-inner">
+              <div className="font-mono space-y-1">
+                <div><span className="text-[#f6d5be]">const</span> <span className="text-[#f28b30]">manduvia</span> <span className="text-[#f2f2f2]">= {'{'}</span></div>
+                <div className="ml-4">forma: <span className="text-[#f6d5be]">'SocialTech acolhedora'</span>,</div>
+                <div className="ml-4">pilastras: <span className="text-[#f28b30]">['Inovar', 'Impactar', 'Acolher']</span>,</div>
+                <div className="ml-4">metodologia: <span className="text-[#f6d5be]">'HEXA (Competência • Confiança • Conexão • Caráter • Cuidado • Contribuição)'</span>,</div>
+                <div className="ml-4">braços: <span className="text-[#f28b30]">['Educação', 'Inovação', 'Esporte', 'Cultura']</span></div>
+                <div><span className="text-[#f2f2f2]">{'}'}</span></div>
+              </div>
+            </motion.div>
+
+            <motion.div variants={itemVariants} className="space-y-4">
+              <div className="border border-secondary/30 rounded-lg overflow-hidden bg-white/70">
+                <button
+                  onClick={() => toggleSection('mission')}
+                  className="w-full flex items-center justify-between p-4 text-left hover:bg-primary/10 transition-colors"
+                >
+                  <span className="font-medium text-foreground">Missão</span>
+                  {expandedSection === 'mission' ? (
+                    <ChevronUp className="w-5 h-5 text-foreground/70" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-foreground/70" />
+                  )}
+                </button>
+                <motion.div
+                  initial={false}
+                  animate={{
+                    height: expandedSection === 'mission' ? 'auto' : 0,
+                    opacity: expandedSection === 'mission' ? 1 : 0
+                  }}
+                  transition={{
+                    height: { duration: 0.3, ease: 'easeInOut' },
+                    opacity: { duration: 0.2, ease: 'easeInOut' }
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="px-4 pb-4 text-foreground/75 text-sm leading-relaxed">
+                    Promover desenvolvimento sustentável e impacto social em parceria com diversos setores, atuando em projetos de esporte, educação, cultura, saúde, tecnologia e geração de renda para transformar vidas e comunidades.
+                  </div>
+                </motion.div>
+              </div>
+
+              <div className="border border-secondary/30 rounded-lg overflow-hidden bg-white/70">
+                <button
+                  onClick={() => toggleSection('vision')}
+                  className="w-full flex items-center justify-between p-4 text-left hover:bg-primary/10 transition-colors"
+                >
+                  <span className="font-medium text-foreground">Visão</span>
+                  {expandedSection === 'vision' ? (
+                    <ChevronUp className="w-5 h-5 text-foreground/70" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-foreground/70" />
+                  )}
+                </button>
+                <motion.div
+                  initial={false}
+                  animate={{
+                    height: expandedSection === 'vision' ? 'auto' : 0,
+                    opacity: expandedSection === 'vision' ? 1 : 0
+                  }}
+                  transition={{
+                    height: { duration: 0.3, ease: 'easeInOut' },
+                    opacity: { duration: 0.2, ease: 'easeInOut' }
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="px-4 pb-4 text-foreground/75 text-sm leading-relaxed">
+                    Ser referência em desenvolvimento sustentável e impacto social positivo, ampliando iniciativas colaborativas e inovadoras para garantir um futuro justo, inclusivo e sustentável.
+                  </div>
+                </motion.div>
+              </div>
+
+              <div className="border border-secondary/30 rounded-lg overflow-hidden bg-white/70">
+                <button
+                  onClick={() => toggleSection('values')}
+                  className="w-full flex items-center justify-between p-4 text-left hover:bg-primary/10 transition-colors"
+                >
+                  <span className="font-medium text-foreground">Valores e Cultura</span>
+                  {expandedSection === 'values' ? (
+                    <ChevronUp className="w-5 h-5 text-foreground/70" />
+                  ) : (
+                    <ChevronDown className="w-5 h-5 text-foreground/70" />
+                  )}
+                </button>
+                <motion.div
+                  initial={false}
+                  animate={{
+                    height: expandedSection === 'values' ? 'auto' : 0,
+                    opacity: expandedSection === 'values' ? 1 : 0
+                  }}
+                  transition={{
+                    height: { duration: 0.3, ease: 'easeInOut' },
+                    opacity: { duration: 0.2, ease: 'easeInOut' }
+                  }}
+                  className="overflow-hidden"
+                >
+                  <div className="px-4 pb-4 text-foreground/75 text-sm leading-relaxed space-y-2">
+                    <p>Inovação e transformação, inclusão e diversidade, colaboração e parceria, responsabilidade social e transparência guiam nossas decisões. Todas as ações são alimentadas pelo compromisso com a sustentabilidade e o empoderamento comunitário.</p>
+                    <p>Realizamos tudo isso por meio da Manduvia — nossa anfitriã digital —, do Observatório Coloiado e da rede de voluntários que mantém o Manduvi vivo.</p>
+                  </div>
+                </motion.div>
               </div>
             </motion.div>
           </div>

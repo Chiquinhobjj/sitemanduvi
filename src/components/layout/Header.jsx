@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react'
 import { Menu, X } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 
 const Header = () => {
+  const navigate = useNavigate()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
 
@@ -14,18 +16,16 @@ const Header = () => {
   }, [])
 
   const navItems = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Works', href: '#projects' },
-    { name: 'Say Hi', href: '#contact' }
+    { name: 'Home', path: '/' },
+    { name: 'Sobre', path: '/about' },
+    { name: 'Skills', path: '/skills' },
+    { name: 'Iniciativas', path: '/projects' },
+    { name: 'Contato', path: '/contact' }
   ]
 
-  const scrollToSection = (href) => {
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
-    }
+  const goTo = (path) => {
     setIsMenuOpen(false)
+    navigate(path)
   }
 
   return (
@@ -47,7 +47,7 @@ const Header = () => {
               {navItems.map((item) => (
                 <button
                   key={item.name}
-                  onClick={() => scrollToSection(item.href)}
+                  onClick={() => goTo(item.path)}
                   className="text-muted-foreground hover:text-primary px-4 py-2 text-lg font-bold transition-colors duration-200 hover:scale-105"
                 >
                   {item.name}
@@ -74,7 +74,7 @@ const Header = () => {
               {navItems.map((item) => (
                 <button
                   key={item.name}
-                  onClick={() => scrollToSection(item.href)}
+                  onClick={() => goTo(item.path)}
                   className="text-muted-foreground hover:text-primary block px-4 py-3 text-lg font-bold w-full text-left transition-colors duration-200"
                 >
                   {item.name}
@@ -89,4 +89,3 @@ const Header = () => {
 }
 
 export default Header
-

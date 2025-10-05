@@ -1,86 +1,220 @@
-import { useState, useEffect } from 'react'
-import { motion } from 'framer-motion'
-import { Home, User, Code, Briefcase, Award, Mail } from 'lucide-react'
+import { useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { ChevronDown, Menu } from 'lucide-react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { initiatives } from '@/data/initiatives.js'
 
 const FloatingNav = () => {
-  const [activeSection, setActiveSection] = useState('home')
+  const location = useLocation()
+  const navigate = useNavigate()
+  const [openDropdown, setOpenDropdown] = useState(null)
+  const [mobileOpen, setMobileOpen] = useState(false)
 
   const navItems = [
-    { id: 'home', name: 'Início', icon: Home, href: '#home' },
-    { id: 'about', name: 'Sobre', icon: User, href: '#about' },
-    { id: 'skills', name: 'Skills', icon: Code, href: '#skills' },
-    { id: 'projects', name: 'Projetos', icon: Briefcase, href: '#projects' },
-    { id: 'achievements', name: 'Conquistas', icon: Award, href: '#achievements' },
-    { id: 'contact', name: 'Contato', icon: Mail, href: '#contact' }
+    { id: 'home', name: 'Início', path: '/' },
+    { id: 'about', name: 'Sobre', path: '/about' },
+    { id: 'skills', name: 'Skills', path: '/skills' },
+    {
+      id: 'projects',
+      name: 'Iniciativas',
+      path: '/projects',
+      children: initiatives.map(({ id, name }) => ({ id, name, path: `/projects/${id}` }))
+    },
+    { id: 'achievements', name: 'Conquistas', path: '/achievements' },
+    { id: 'contact', name: 'Contato', path: '/contact' }
   ]
 
-  const scrollToSection = (href) => {
-    const element = document.querySelector(href)
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' })
+  const isActive = (itemPath) => {
+    if (itemPath === '/') {
+      return location.pathname === '/'
+    }
+    return location.pathname.startsWith(itemPath)
+  }
+
+  const handleNavigate = (path) => {
+    setOpenDropdown(null)
+    setMobileOpen(false)
+    if (location.pathname !== path) {
+      navigate(path)
     }
   }
 
-  const handleNavClick = (item) => {
-    setActiveSection(item.id)
-    scrollToSection(item.href)
+  const toggleDropdown = (id) => {
+    setOpenDropdown((current) => (current === id ? null : id))
   }
-
-  // Update active section based on scroll position
-  useEffect(() => {
-    const handleScroll = () => {
-      const sections = navItems.map(item => ({
-        id: item.id,
-        element: document.querySelector(item.href)
-      }))
-
-      const scrollPosition = window.scrollY + window.innerHeight / 2
-
-      for (const section of sections) {
-        if (section.element) {
-          const { offsetTop, offsetHeight } = section.element
-          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-            setActiveSection(section.id)
-            break
-          }
-        }
-      }
-    }
-
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [])
 
   return (
-    <motion.nav 
-      className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50"
-      initial={{ y: 100, opacity: 0 }}
+    <motion.nav
+      className="fixed top-4 left-1/2 -translate-x-1/2 z-50"
+      initial={{ y: -60, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+      transition={{ duration: 0.5, ease: 'easeOut' }}
     >
-      <div className="bg-white/90 backdrop-blur-md rounded-2xl shadow-lg border border-gray-200 px-2 py-2">
-        <div className="flex items-center gap-1">
-          {navItems.map((item) => (
-            <motion.button
-              key={item.id}
-              onClick={() => handleNavClick(item)}
-              className={`relative p-3 rounded-xl transition-all duration-200 group ${
-                activeSection === item.id
-                  ? 'bg-purple-500 text-white shadow-md'
-                  : 'text-gray-600 hover:text-purple-500 hover:bg-purple-50'
-              }`}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              <item.icon className="w-5 h-5" />
-              
-              {/* Tooltip */}
-              <div className="absolute bottom-full left-1/2 transform -translate-x-1/2 mb-2 px-2 py-1 bg-gray-800 text-white text-xs rounded opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none whitespace-nowrap">
-                {item.name}
-              </div>
-            </motion.button>
-          ))}
+      <div className="bg-white/90 backdrop-blur-md border border-border rounded-2xl shadow-lg px-3 py-2">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center justify-center px-3">
+            <img
+              src="/images/M_manduvi.svg"
+              alt="Logotipo Manduvi"
+              className="w-10 h-10 object-contain"
+            />
+          </div>
+
+          <div className="hidden lg:flex items-center gap-3">
+            {navItems.map((item) => {
+              const active = isActive(item.path)
+              const baseClasses = `relative px-4 py-2 rounded-xl text-sm font-medium transition-all duration-200 ${
+                active
+                  ? 'bg-primary text-primary-foreground shadow-md'
+                  : 'text-foreground/70 hover:text-primary hover:bg-primary/10'
+              }`
+
+              if (item.children) {
+                return (
+                  <div
+                    key={item.id}
+                    className="relative"
+                    onMouseEnter={() => setOpenDropdown(item.id)}
+                    onMouseLeave={() => setOpenDropdown(null)}
+                  >
+                    <button
+                      type="button"
+                      onClick={() => {
+                        if (openDropdown === item.id) {
+                          handleNavigate(item.path)
+                        } else {
+                          toggleDropdown(item.id)
+                        }
+                      }}
+                      className={`${baseClasses} inline-flex items-center gap-1`}
+                    >
+                      {item.name}
+                      <ChevronDown className="h-4 w-4" />
+                    </button>
+                    <AnimatePresence>
+                      {openDropdown === item.id && (
+                        <motion.div
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          exit={{ opacity: 0, y: 10 }}
+                          transition={{ duration: 0.2 }}
+                          className="absolute left-1/2 top-full mt-2 w-56 -translate-x-1/2 rounded-2xl border border-border bg-white/95 shadow-lg backdrop-blur-md"
+                        >
+                          <ul className="py-2">
+                            {item.children.map((child) => (
+                              <li key={child.id}>
+                                <button
+                                  type="button"
+                                  onClick={() => handleNavigate(child.path)}
+                                  className="block w-full px-4 py-2 text-left text-sm text-foreground/80 hover:bg-primary/10 hover:text-primary transition-colors"
+                                >
+                                  {child.name}
+                                </button>
+                              </li>
+                            ))}
+                          </ul>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </div>
+                )
+              }
+
+              return (
+                <motion.button
+                  key={item.id}
+                  onClick={() => handleNavigate(item.path)}
+                  className={baseClasses}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {item.name}
+                </motion.button>
+              )
+            })}
+          </div>
+
+          <button
+            type="button"
+            onClick={() => setMobileOpen((prev) => !prev)}
+            className="lg:hidden inline-flex items-center justify-center rounded-xl px-3 py-2 text-foreground/80 hover:text-primary hover:bg-primary/10 transition-colors"
+            aria-label="Abrir menu"
+          >
+            <Menu className="h-5 w-5" />
+          </button>
         </div>
+
+        <AnimatePresence>
+          {mobileOpen && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              transition={{ duration: 0.2 }}
+              className="lg:hidden mt-3 border-t border-border pt-3"
+            >
+              <nav className="flex flex-col gap-2">
+                {navItems.map((item) => {
+                  if (!item.children) {
+                    return (
+                      <button
+                        key={item.id}
+                        type="button"
+                        onClick={() => handleNavigate(item.path)}
+                        className={`text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          isActive(item.path) ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:bg-primary/10 hover:text-primary'
+                        }`}
+                      >
+                        {item.name}
+                      </button>
+                    )
+                  }
+
+                  const dropdownOpen = openDropdown === item.id
+                  return (
+                    <div key={item.id} className="border border-border rounded-lg">
+                      <button
+                        type="button"
+                        onClick={() => toggleDropdown(item.id)}
+                        className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                          dropdownOpen ? 'bg-primary text-primary-foreground' : 'text-foreground/80 hover:bg-primary/10 hover:text-primary'
+                        }`}
+                      >
+                        <span>{item.name}</span>
+                        <ChevronDown className={`h-4 w-4 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      <AnimatePresence>
+                        {dropdownOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="overflow-hidden"
+                          >
+                            <ul className="py-2 bg-white/95">
+                              {item.children.map((child) => (
+                                <li key={child.id}>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleNavigate(child.path)}
+                                    className="block w-full text-left px-4 py-2 text-sm text-foreground/80 hover:bg-primary/10 hover:text-primary transition-colors"
+                                  >
+                                    {child.name}
+                                  </button>
+                                </li>
+                              ))}
+                            </ul>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  )
+                })}
+              </nav>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </motion.nav>
   )
