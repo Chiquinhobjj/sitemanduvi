@@ -26,6 +26,9 @@ importers:
       '@hookform/resolvers':
         specifier: ^5.0.1
         version: 5.0.1(react-hook-form@7.56.3(react@19.1.0))
+      '@openai/chatkit-react':
+        specifier: ^0.0.0
+        version: 0.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-accordion':
         specifier: ^1.2.10
         version: 1.2.10(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -577,6 +580,15 @@ packages:
   '@modelcontextprotocol/sdk@1.11.3':
     resolution: {integrity: sha512-rmOWVRUbUJD7iSvJugjUbFZshTAuJ48MXoZ80Osx1GM0K/H1w7rSEvmw8m6vdWxNASgtaHIhAgre4H/E9GJiYQ==}
     engines: {node: '>=18'}
+
+  '@openai/chatkit-react@0.0.0':
+    resolution: {integrity: sha512-ppoAKiWKUJGIlKuFQ0mgPRVMAAjJ+PonAzdo1p7BQmTEZtwFI8vq6W7ZRN2UTfzZZIKbJ2diwU6ePbYSKsePuQ==}
+    peerDependencies:
+      react: '>=18'
+      react-dom: '>=18'
+
+  '@openai/chatkit@0.0.0':
+    resolution: {integrity: sha512-9YomebDd2dpWFR3s1fiEtNknXmEC8QYt//2ConGjr/4geWdRqunEpO+i7yJXYEGLJbkmB4lxwKmbwWJA4pvpSg==}
 
   '@radix-ui/number@1.1.1':
     resolution: {integrity: sha512-MkKCwxlXTgz6CFoJx3pCwn07GKp36+aZyu/u2Ln2VrA5DcdyCZkASEDBTd8x5whTQQL5CiYf4prXKLcgQdv29g==}
@@ -2936,6 +2948,14 @@ snapshots:
       zod-to-json-schema: 3.24.5(zod@3.24.4)
     transitivePeerDependencies:
       - supports-color
+
+  '@openai/chatkit-react@0.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+    dependencies:
+      '@openai/chatkit': 0.0.0
+      react: 19.1.0
+      react-dom: 19.1.0(react@19.1.0)
+
+  '@openai/chatkit@0.0.0': {}
 
   '@radix-ui/number@1.1.1': {}
 

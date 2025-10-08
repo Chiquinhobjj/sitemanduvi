@@ -23,6 +23,35 @@ npm run dev
 pnpm dev
 ```
 
+## 🤖 Chatbot ManduvIA (ChatKit)
+
+O assistente da ManduvIA agora está conectado ao workflow hospedado na OpenAI via ChatKit.
+
+### Variáveis de ambiente
+- `OPENAI_API_KEY`: chave privada da OpenAI (nunca exponha no frontend). Requer permissão para o workflow.
+- `OPENAI_CHATKIT_WORKFLOW_ID` (opcional): por padrão usamos `wf_68e6a6d819d88190aee60893b4b8ef660de2547f19c73575`. Ajuste se criar outro workflow.
+
+Crie um arquivo `.env.local` na raiz do projeto e adicione:
+```bash
+OPENAI_API_KEY="coloque_sua_chave_aqui"
+# OPENAI_CHATKIT_WORKFLOW_ID="wf_personalizado_se_precisar"
+```
+
+### Fluxo de autenticação
+- O Vite expõe o endpoint local `/api/chatkit/session`, que troca o `workflow_id` por um `client_secret`.
+- O frontend nunca conhece a sua `OPENAI_API_KEY`; apenas consome o `client_secret`.
+- Em produção, replique esse endpoint em qualquer servidor (Node/Edge) e mantenha a rota `/api/chatkit/session`.
+
+### Personalização do widget
+- O componente `ManduviaChat` (`src/components/assistant/ManduviaChat.jsx`) usa `@openai/chatkit-react`.
+- Ajuste `startScreen.prompts`, a mensagem de boas-vindas ou o placeholder do composer para mudar os atalhos sugeridos.
+- Para estilização avançada consulte a [documentação oficial](https://platform.openai.com/docs/guides/chatkit) e altere a chave `theme` do hook `useChatKit`.
+
+### Cuidados de produção
+- O build continua estático, mas você precisa de um backend/dynamic route para `/api/chatkit/session`.
+- Não versione arquivos `.env*` com a chave.
+- Teste o fluxo rodando `pnpm dev` após configurar a variável – o console avisará se o token não puder ser emitido.
+
 ## 🎯 Arquivos Principais para Editar
 
 ### 📄 **1. Informações Básicas**
