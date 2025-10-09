@@ -82,13 +82,6 @@ const SuperralinhaEvent = () => {
                 Campeonato de Futebol Society
               </div>
             </div>
-            <h1 className="text-4xl sm:text-6xl font-bold text-foreground mb-4">
-              <span className="text-yellow-500">SUPER</span> <span className="text-blue-600">RALINHA</span>
-            </h1>
-            <p className="text-xl text-foreground/70 max-w-3xl mx-auto leading-relaxed">
-              O maior campeonato de futebol society da comunidade Manduvi, onde esporte, integração e 
-              celebração se unem para fortalecer laços e promover valores através do futebol.
-            </p>
           </motion.div>
 
           {/* Event Banner */}
@@ -127,10 +120,10 @@ const SuperralinhaEvent = () => {
           {/* Event Info Cards */}
           <motion.div variants={itemVariants} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[
-              { icon: Calendar, label: 'Data', value: 'Anual', color: 'bg-blue-50 text-blue-600' },
-              { icon: MapPin, label: 'Local', value: 'Mato Grosso', color: 'bg-green-50 text-green-600' },
-              { icon: Users, label: 'Times', value: '16+ times', color: 'bg-purple-50 text-purple-600' },
-              { icon: Trophy, label: 'Modalidade', value: 'Futebol Society', color: 'bg-yellow-50 text-yellow-600' }
+              { icon: Calendar, label: 'Data', value: 'Em breve', color: 'bg-blue-50 text-blue-600' },
+              { icon: MapPin, label: 'Local', value: 'Em breve', color: 'bg-green-50 text-green-600' },
+              { icon: Users, label: 'Times', value: 'Em breve', color: 'bg-purple-50 text-purple-600' },
+              { icon: Trophy, label: 'Modalidade', value: 'Em breve', color: 'bg-yellow-50 text-yellow-600' }
             ].map((info, index) => (
               <div key={index} className="bg-white/95 border border-border/50 rounded-2xl p-6 text-center">
                 <div className={`w-12 h-12 rounded-full ${info.color} flex items-center justify-center mx-auto mb-3`}>
@@ -148,20 +141,8 @@ const SuperralinhaEvent = () => {
             <motion.div variants={itemVariants} className="space-y-6">
               <h2 className="text-3xl font-bold text-foreground">Sobre o Campeonato</h2>
               <div className="space-y-4 text-foreground/80 leading-relaxed">
-                <p>
-                  O Superralinha é o maior campeonato de futebol society da comunidade Manduvi, 
-                  um evento que une esporte, integração e celebração em uma competição que vai 
-                  além dos gramados, fortalecendo laços e promovendo valores através do futebol.
-                </p>
-                <p>
-                  Durante o campeonato, times de diferentes iniciativas do Instituto Manduvi, 
-                  voluntários, parceiros e apoiadores se reúnem para competir, celebrar e 
-                  compartilhar experiências únicas através do esporte.
-                </p>
-                <p>
-                  É um momento especial onde a paixão pelo futebol se encontra com nossa missão 
-                  de transformação social, criando oportunidades de integração e celebração 
-                  através do esporte mais popular do Brasil.
+                <p className="text-center text-lg font-medium text-foreground/60">
+                  Em breve
                 </p>
               </div>
             </motion.div>
@@ -170,22 +151,9 @@ const SuperralinhaEvent = () => {
             <motion.div variants={itemVariants} className="space-y-6">
               <h2 className="text-3xl font-bold text-foreground">Destaques</h2>
               <div className="space-y-4">
-                {[
-                  { icon: Trophy, title: 'Competição de Futebol Society', desc: 'Campeonato com times de diferentes iniciativas do Instituto Manduvi' },
-                  { icon: Award, title: 'Cerimônia de Premiação', desc: 'Reconhecimento dos melhores times, jogadores e fair play' },
-                  { icon: Target, title: 'Torneio Eliminatório', desc: 'Sistema de disputa emocionante com mata-mata e finais' },
-                  { icon: Zap, title: 'Atividades Paralelas', desc: 'Workshops, palestras e integração entre participantes' }
-                ].map((highlight, index) => (
-                  <div key={index} className="flex gap-4 p-4 bg-white/50 rounded-2xl">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
-                      <highlight.icon className="h-6 w-6" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-foreground mb-1">{highlight.title}</h3>
-                      <p className="text-sm text-foreground/70">{highlight.desc}</p>
-                    </div>
-                  </div>
-                ))}
+                <p className="text-center text-lg font-medium text-foreground/60">
+                  Em breve
+                </p>
               </div>
             </motion.div>
           </div>
@@ -193,18 +161,10 @@ const SuperralinhaEvent = () => {
           {/* Impact Numbers */}
           <motion.div variants={itemVariants} className="bg-gradient-to-r from-blue-50 to-yellow-50 rounded-3xl p-8">
             <h2 className="text-3xl font-bold text-foreground text-center mb-8">Números do Superralinha</h2>
-            <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {[
-                { number: '16+', label: 'Times participantes' },
-                { number: '200+', label: 'Jogadores inscritos' },
-                { number: '3', label: 'Dias de competição' },
-                { number: '100%', label: 'Fair play garantido' }
-              ].map((stat, index) => (
-                <div key={index} className="text-center">
-                  <div className="text-4xl font-bold text-blue-600 mb-2">{stat.number}</div>
-                  <div className="text-foreground/70">{stat.label}</div>
-                </div>
-              ))}
+            <div className="text-center">
+              <p className="text-lg font-medium text-foreground/60">
+                Em breve
+              </p>
             </div>
           </motion.div>
 
@@ -233,9 +193,6 @@ const SuperralinhaEvent = () => {
                         <div className="flex items-start justify-between gap-3">
                           <div className="flex-1">
                             <div className="flex items-center gap-2 mb-2">
-                              <span className="text-xs text-foreground/60 bg-blue-50 px-2 py-1 rounded-full">
-                                {new Date(publication.date).toLocaleDateString('pt-BR')}
-                              </span>
                               <span className={`text-xs font-medium px-2 py-1 rounded-full ${category?.color}`}>
                                 {category?.icon} {category?.name}
                               </span>
@@ -286,59 +243,10 @@ const SuperralinhaEvent = () => {
                   <h3 className="text-xl font-bold text-foreground">Esclarecimentos</h3>
                 </div>
                 
-                <div className="space-y-4">
-                  {[
-                    {
-                      icon: Info,
-                      title: 'Inscrições de Times',
-                      content: 'As inscrições para o Superralinha 2024 estão abertas até 30/10. Cada time deve ter no mínimo 7 jogadores e no máximo 12.',
-                      type: 'info'
-                    },
-                    {
-                      icon: CheckCircle,
-                      title: 'Documentação Necessária',
-                      content: 'Todos os jogadores devem apresentar RG, CPF e atestado médico válido no dia da competição.',
-                      type: 'success'
-                    },
-                    {
-                      icon: AlertCircle,
-                      title: 'Uniforme Obrigatório',
-                      content: 'Cada time deve ter uniforme completo (camisa, short e meias) com numeração de 1 a 12. Uniformes serão verificados antes de cada jogo.',
-                      type: 'warning'
-                    },
-                    {
-                      icon: Info,
-                      title: 'Premiação',
-                      content: 'Serão premiados: 1º lugar (troféu + medalhas), 2º lugar (medalhas), 3º lugar (medalhas) e melhor jogador do campeonato.',
-                      type: 'info'
-                    },
-                    {
-                      icon: CheckCircle,
-                      title: 'Alimentação',
-                      content: 'O Instituto Manduvi fornecerá lanche e hidratação para todos os participantes durante os dias de competição.',
-                      type: 'success'
-                    },
-                    {
-                      icon: AlertCircle,
-                      title: 'Comportamento',
-                      content: 'Qualquer atitude antidesportiva resultará em exclusão do campeonato. O fair play é fundamental.',
-                      type: 'warning'
-                    }
-                  ].map((clarification, index) => (
-                    <div key={index} className="flex gap-3 p-3 rounded-2xl bg-gray-50">
-                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                        clarification.type === 'info' ? 'bg-blue-50 text-blue-600' :
-                        clarification.type === 'success' ? 'bg-green-50 text-green-600' :
-                        'bg-yellow-50 text-yellow-600'
-                      }`}>
-                        <clarification.icon className="h-4 w-4" />
-                      </div>
-                      <div>
-                        <h4 className="font-semibold text-foreground mb-1">{clarification.title}</h4>
-                        <p className="text-sm text-foreground/70">{clarification.content}</p>
-                      </div>
-                    </div>
-                  ))}
+                <div className="text-center">
+                  <p className="text-lg font-medium text-foreground/60">
+                    Em breve
+                  </p>
                 </div>
               </div>
             </div>
@@ -421,7 +329,7 @@ const SuperralinhaEvent = () => {
                   <div>
                     <h3 className="text-lg font-bold text-foreground">{selectedDocument.title}</h3>
                     <p className="text-sm text-foreground/60">
-                      {new Date(selectedDocument.date).toLocaleDateString('pt-BR')} • {selectedDocument.file.size}
+                      {selectedDocument.file.size}
                     </p>
                   </div>
                 </div>
