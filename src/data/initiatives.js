@@ -12,7 +12,8 @@ import {
   Target,
   Users,
   Database,
-  Boxes
+  Boxes,
+  GraduationCap
 } from 'lucide-react'
 
 export const initiatives = [
@@ -639,6 +640,110 @@ export const initiatives = [
         actions: [
           { label: 'Doar agora', href: '#contato' },
           { label: 'Criar programa de cuidado', href: '#materiais' }
+        ]
+      }
+    }
+  },
+  {
+    id: 'cursos-ead',
+    name: 'Cursos EAD Manduvi',
+    pillar: 'Educação Digital',
+    icon: GraduationCap,
+    headline: 'De amador a empreendedor, nós te levamos lá',
+    intro:
+      'Plataforma de educação a distância com mais de 100 cursos certificados em tecnologia, administração, saúde e desenvolvimento pessoal.',
+    highlights: [
+      'Mais de 100 cursos disponíveis em 4 categorias principais.',
+      'Preços acessíveis a partir de R$ 99,00 com certificação oficial.',
+      'Cursos gratuitos disponíveis em programas especiais de capacitação.'
+    ],
+    metric: 'Educação que transforma vidas',
+    landing: {
+      hero: {
+        eyebrow: 'Educação & capacitação',
+        title: 'Cursos EAD Manduvi – sua jornada de aprendizado começa aqui',
+        subtitle: 'Plataforma completa de educação a distância com cursos certificados e preços acessíveis',
+        description:
+          'Oferecemos cursos em Administração, Economia e Finanças, Bem Estar e Qualidade de Vida, Idiomas e Vendas. Todos com certificação oficial e suporte especializado.',
+        media: { type: 'image', src: '/images/hero-background.webp' },
+        primaryCta: { label: 'Acessar plataforma de cursos', href: 'https://www.manduvi.social/loja_virtual/pesquisacurso.php?search=todos' },
+        secondaryCta: { label: 'Ver cursos gratuitos', href: 'https://www.manduvi.social/loja_virtual/pesquisacurso.php?search=todos' }
+      },
+      metrics: [
+        {
+          label: 'Cursos disponíveis',
+          value: '100+',
+          description: 'Tecnologia, administração, saúde e desenvolvimento pessoal',
+          trend: 'Novos cursos mensais'
+        },
+        {
+          label: 'Categorias',
+          value: '4 principais',
+          description: 'Administração, Bem Estar, Idiomas e Vendas',
+          trend: 'Conteúdo atualizado'
+        },
+        {
+          label: 'Investimento',
+          value: 'A partir de R$ 99',
+          description: 'Preços acessíveis com certificação oficial',
+          trend: 'Cursos gratuitos disponíveis'
+        }
+      ],
+      proofPoints: [
+        'Cursos certificados com validade nacional e reconhecimento profissional.',
+        'Plataforma intuitiva com suporte técnico especializado.',
+        'Programas especiais com cursos gratuitos para comunidades vulneráveis.'
+      ],
+      experience: {
+        title: 'Como funciona nossa plataforma',
+        steps: [
+          {
+            title: 'Escolha seu curso',
+            description: 'Navegue por mais de 100 opções em 4 categorias principais com descrições detalhadas.'
+          },
+          {
+            title: 'Matricule-se online',
+            description: 'Processo simples e seguro com pagamento facilitado e acesso imediato.'
+          },
+          {
+            title: 'Estude no seu ritmo',
+            description: 'Conteúdo disponível 24/7 com suporte e certificação ao final.'
+          }
+        ]
+      },
+      testimonials: [
+        {
+          quote:
+            'Os cursos do Manduvi me ajudaram a conseguir uma promoção no trabalho. O conteúdo é excelente e o preço justo.',
+          author: 'Maria Silva',
+          role: 'Aluna de Administração'
+        }
+      ],
+      gallery: [
+        { image: '/images/hero-background.webp', caption: 'Plataforma de cursos EAD Manduvi' },
+        { image: '/images/mindfulapp.jpg', caption: 'Estudantes acessando conteúdo online' }
+      ],
+      timeline: [
+        { year: '2020', milestone: 'Lançamento da plataforma EAD' },
+        { year: '2022', milestone: 'Expansão para 100+ cursos' },
+        { year: '2024', milestone: 'Programas gratuitos para comunidades' }
+      ],
+      faqs: [
+        {
+          question: 'Os certificados são válidos?',
+          answer: 'Sim, todos os nossos certificados têm validade nacional e são reconhecidos pelo mercado de trabalho.'
+        },
+        {
+          question: 'Como funciona o suporte?',
+          answer: 'Oferecemos suporte técnico e pedagógico através de chat, email e telefone durante todo o curso.'
+        }
+      ],
+      support: {
+        headline: 'Comece sua jornada de aprendizado hoje',
+        description: 'Acesse nossa plataforma, escolha seu curso e transforme sua carreira com educação de qualidade.',
+        actions: [
+          { label: 'Acessar cursos', href: 'https://www.manduvi.social/loja_virtual/pesquisacurso.php?search=todos' },
+          { label: 'Falar com consultor', href: '#contato' }
         ]
       }
     }
