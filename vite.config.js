@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 import { jsxLocPlugin } from '@builder.io/vite-plugin-jsx-loc'
@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
-const chatkitSessionPlugin = () => ({
+const chatkitSessionPlugin = (env) => ({
   name: 'chatkit-session-endpoint',
   configureServer(server) {
     server.middlewares.use('/api/chatkit/session', (req, res) => {
@@ -20,9 +20,9 @@ const chatkitSessionPlugin = () => ({
       }
 
       const workflowId =
-        process.env.OPENAI_CHATKIT_WORKFLOW_ID ??
+        env.OPENAI_CHATKIT_WORKFLOW_ID ??
         'wf_68e6a6d819d88190aee60893b4b8ef660de2547f19c73575'
-      const apiKey = process.env.OPENAI_API_KEY
+      const apiKey = env.OPENAI_API_KEY
 
       if (!workflowId) {
         res.statusCode = 500
@@ -92,15 +92,18 @@ const chatkitSessionPlugin = () => ({
 })
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), tailwindcss(), jsxLocPlugin(), chatkitSessionPlugin()],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, __dirname, '')
+  return {
+    plugins: [react(), tailwindcss(), jsxLocPlugin(), chatkitSessionPlugin(env)],
+    resolve: {
+      alias: {
+        "@": path.resolve(__dirname, "./src"),
+      },
     },
-  },
-  server: {
-    port: 5175,
-    strictPort: true,
-  },
+    server: {
+      port: 5175,
+      strictPort: true,
+    },
+  }
 })
