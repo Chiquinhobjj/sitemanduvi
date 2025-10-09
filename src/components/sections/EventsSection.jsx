@@ -12,7 +12,7 @@ const EventsSection = () => {
       date: '2024',
       location: 'Mato Grosso',
       description: 'Campeonato de futebol society que une esporte, integração e celebração da comunidade Manduvi',
-      image: '/images/hero-background.webp',
+      image: '/images/BANNER_superralinha@4x.webp',
       status: 'ativo',
       participants: '16+ times',
       highlights: [
