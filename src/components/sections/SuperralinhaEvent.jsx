@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Calendar, MapPin, Users, Clock, Award, Heart, Star, ArrowLeft, Trophy, Target, Zap } from 'lucide-react'
+import { Calendar, MapPin, Users, Clock, Award, Heart, Star, ArrowLeft, Trophy, Target, Zap, FileText, AlertCircle, Info, CheckCircle } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 const SuperralinhaEvent = () => {
@@ -145,6 +145,152 @@ const SuperralinhaEvent = () => {
                   <div className="text-foreground/70">{stat.label}</div>
                 </div>
               ))}
+            </div>
+          </motion.div>
+
+          {/* Publications Section */}
+          <motion.div variants={itemVariants} className="space-y-6">
+            <h2 className="text-3xl font-bold text-foreground text-center">Publicações do Evento</h2>
+            
+            <div className="grid gap-6 lg:grid-cols-2">
+              {/* Notes */}
+              <div className="bg-white/95 border border-border/50 rounded-3xl p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <FileText className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-xl font-bold text-foreground">Notas Oficiais</h3>
+                </div>
+                
+                <div className="space-y-4">
+                  {[
+                    {
+                      date: '15/10/2024',
+                      title: 'Regulamento do Campeonato 2024',
+                      content: 'Publicado o regulamento oficial com todas as regras, critérios de pontuação e sistema de disputa do Superralinha 2024.',
+                      type: 'regulamento'
+                    },
+                    {
+                      date: '10/10/2024',
+                      title: 'Lista de Times Inscritos',
+                      content: 'Confira a lista completa dos 16 times confirmados para participar do campeonato.',
+                      type: 'inscricoes'
+                    },
+                    {
+                      date: '08/10/2024',
+                      title: 'Cronograma de Jogos',
+                      content: 'Divulgado o cronograma completo com horários e campos para todas as partidas do campeonato.',
+                      type: 'cronograma'
+                    },
+                    {
+                      date: '05/10/2024',
+                      title: 'Critérios de Fair Play',
+                      content: 'Estabelecidos os critérios de fair play e conduta esperada de todos os participantes.',
+                      type: 'fairplay'
+                    }
+                  ].map((note, index) => (
+                    <div key={index} className="border-l-4 border-blue-200 pl-4 py-2">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-xs text-foreground/60 bg-blue-50 px-2 py-1 rounded-full">
+                          {note.date}
+                        </span>
+                        <span className="text-xs text-blue-600 font-medium uppercase">
+                          {note.type}
+                        </span>
+                      </div>
+                      <h4 className="font-semibold text-foreground mb-1">{note.title}</h4>
+                      <p className="text-sm text-foreground/70">{note.content}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Clarifications */}
+              <div className="bg-white/95 border border-border/50 rounded-3xl p-6">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-full bg-yellow-50 text-yellow-600 flex items-center justify-center">
+                    <AlertCircle className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-xl font-bold text-foreground">Esclarecimentos</h3>
+                </div>
+                
+                <div className="space-y-4">
+                  {[
+                    {
+                      icon: Info,
+                      title: 'Inscrições de Times',
+                      content: 'As inscrições para o Superralinha 2024 estão abertas até 30/10. Cada time deve ter no mínimo 7 jogadores e no máximo 12.',
+                      type: 'info'
+                    },
+                    {
+                      icon: CheckCircle,
+                      title: 'Documentação Necessária',
+                      content: 'Todos os jogadores devem apresentar RG, CPF e atestado médico válido no dia da competição.',
+                      type: 'success'
+                    },
+                    {
+                      icon: AlertCircle,
+                      title: 'Uniforme Obrigatório',
+                      content: 'Cada time deve ter uniforme completo (camisa, short e meias) com numeração de 1 a 12. Uniformes serão verificados antes de cada jogo.',
+                      type: 'warning'
+                    },
+                    {
+                      icon: Info,
+                      title: 'Premiação',
+                      content: 'Serão premiados: 1º lugar (troféu + medalhas), 2º lugar (medalhas), 3º lugar (medalhas) e melhor jogador do campeonato.',
+                      type: 'info'
+                    },
+                    {
+                      icon: CheckCircle,
+                      title: 'Alimentação',
+                      content: 'O Instituto Manduvi fornecerá lanche e hidratação para todos os participantes durante os dias de competição.',
+                      type: 'success'
+                    },
+                    {
+                      icon: AlertCircle,
+                      title: 'Comportamento',
+                      content: 'Qualquer atitude antidesportiva resultará em exclusão do campeonato. O fair play é fundamental.',
+                      type: 'warning'
+                    }
+                  ].map((clarification, index) => (
+                    <div key={index} className="flex gap-3 p-3 rounded-2xl bg-gray-50">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        clarification.type === 'info' ? 'bg-blue-50 text-blue-600' :
+                        clarification.type === 'success' ? 'bg-green-50 text-green-600' :
+                        'bg-yellow-50 text-yellow-600'
+                      }`}>
+                        <clarification.icon className="h-4 w-4" />
+                      </div>
+                      <div>
+                        <h4 className="font-semibold text-foreground mb-1">{clarification.title}</h4>
+                        <p className="text-sm text-foreground/70">{clarification.content}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Important Notice */}
+            <div className="bg-gradient-to-r from-yellow-50 to-orange-50 border border-yellow-200 rounded-3xl p-6">
+              <div className="flex items-start gap-4">
+                <div className="w-10 h-10 rounded-full bg-yellow-100 text-yellow-600 flex items-center justify-center flex-shrink-0">
+                  <AlertCircle className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-bold text-foreground mb-2">Aviso Importante</h3>
+                  <p className="text-foreground/80 leading-relaxed">
+                    Todas as informações sobre o Superralinha são atualizadas regularmente. 
+                    Recomendamos que participantes e times acompanhem as publicações oficiais 
+                    para ficarem informados sobre eventuais mudanças no regulamento, cronograma 
+                    ou procedimentos do campeonato.
+                  </p>
+                  <p className="text-sm text-foreground/60 mt-2">
+                    Para dúvidas específicas, entre em contato através do formulário de contato ou 
+                    pelos canais oficiais do Instituto Manduvi.
+                  </p>
+                </div>
+              </div>
             </div>
           </motion.div>
 
