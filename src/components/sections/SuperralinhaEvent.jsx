@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
-import { Calendar, MapPin, Users, Clock, Award, Heart, Star, ArrowLeft, Trophy, Target, Zap, FileText, AlertCircle, Info, CheckCircle } from 'lucide-react'
+import { Calendar, MapPin, Users, Clock, Award, Heart, Star, ArrowLeft, Trophy, Target, Zap, FileText, AlertCircle, Info, CheckCircle, Download, Eye, File } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { publications, documentCategories, documentTypes } from '@/data/publications.js'
 
 const SuperralinhaEvent = () => {
   const navigate = useNavigate()
@@ -153,55 +154,66 @@ const SuperralinhaEvent = () => {
             <h2 className="text-3xl font-bold text-foreground text-center">Publicações do Evento</h2>
             
             <div className="grid gap-6 lg:grid-cols-2">
-              {/* Notes */}
+              {/* Documents */}
               <div className="bg-white/95 border border-border/50 rounded-3xl p-6">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
                     <FileText className="h-5 w-5" />
                   </div>
-                  <h3 className="text-xl font-bold text-foreground">Notas Oficiais</h3>
+                  <h3 className="text-xl font-bold text-foreground">Documentos Oficiais</h3>
                 </div>
                 
                 <div className="space-y-4">
-                  {[
-                    {
-                      date: '15/10/2024',
-                      title: 'Regulamento do Campeonato 2024',
-                      content: 'Publicado o regulamento oficial com todas as regras, critérios de pontuação e sistema de disputa do Superralinha 2024.',
-                      type: 'regulamento'
-                    },
-                    {
-                      date: '10/10/2024',
-                      title: 'Lista de Times Inscritos',
-                      content: 'Confira a lista completa dos 16 times confirmados para participar do campeonato.',
-                      type: 'inscricoes'
-                    },
-                    {
-                      date: '08/10/2024',
-                      title: 'Cronograma de Jogos',
-                      content: 'Divulgado o cronograma completo com horários e campos para todas as partidas do campeonato.',
-                      type: 'cronograma'
-                    },
-                    {
-                      date: '05/10/2024',
-                      title: 'Critérios de Fair Play',
-                      content: 'Estabelecidos os critérios de fair play e conduta esperada de todos os participantes.',
-                      type: 'fairplay'
-                    }
-                  ].map((note, index) => (
-                    <div key={index} className="border-l-4 border-blue-200 pl-4 py-2">
-                      <div className="flex items-center gap-2 mb-1">
-                        <span className="text-xs text-foreground/60 bg-blue-50 px-2 py-1 rounded-full">
-                          {note.date}
-                        </span>
-                        <span className="text-xs text-blue-600 font-medium uppercase">
-                          {note.type}
-                        </span>
+                  {publications.map((publication) => {
+                    const docType = documentTypes.find(type => type.id === publication.type)
+                    const category = documentCategories.find(cat => cat.id === publication.category)
+                    
+                    return (
+                      <div key={publication.id} className="border border-border/30 rounded-2xl p-4 hover:shadow-md transition-shadow">
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-2 mb-2">
+                              <span className="text-xs text-foreground/60 bg-blue-50 px-2 py-1 rounded-full">
+                                {new Date(publication.date).toLocaleDateString('pt-BR')}
+                              </span>
+                              <span className={`text-xs font-medium px-2 py-1 rounded-full ${category?.color}`}>
+                                {category?.icon} {category?.name}
+                              </span>
+                              <span className="text-xs text-blue-600 font-medium uppercase">
+                                {docType?.icon} {docType?.name}
+                              </span>
+                            </div>
+                            <h4 className="font-semibold text-foreground mb-2">{publication.title}</h4>
+                            <p className="text-sm text-foreground/70 mb-3">{publication.description}</p>
+                            <div className="flex items-center gap-4 text-xs text-foreground/60">
+                              <span className="flex items-center gap-1">
+                                <File className="h-3 w-3" />
+                                {publication.file.size}
+                              </span>
+                              <span>{publication.file.pages} páginas</span>
+                            </div>
+                          </div>
+                          <div className="flex flex-col gap-2">
+                            <button
+                              onClick={() => window.open(publication.file.url, '_blank')}
+                              className="inline-flex items-center gap-2 px-3 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
+                            >
+                              <Eye className="h-4 w-4" />
+                              Visualizar
+                            </button>
+                            <a
+                              href={publication.file.url}
+                              download={publication.file.name}
+                              className="inline-flex items-center gap-2 px-3 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors text-sm font-medium"
+                            >
+                              <Download className="h-4 w-4" />
+                              Baixar
+                            </a>
+                          </div>
+                        </div>
                       </div>
-                      <h4 className="font-semibold text-foreground mb-1">{note.title}</h4>
-                      <p className="text-sm text-foreground/70">{note.content}</p>
-                    </div>
-                  ))}
+                    )
+                  })}
                 </div>
               </div>
 
