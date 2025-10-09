@@ -1,10 +1,36 @@
-import { motion } from 'framer-motion'
-import { Calendar, MapPin, Users, Clock, Award, Heart, Star, ArrowLeft, Trophy, Target, Zap, FileText, AlertCircle, Info, CheckCircle, Download, Eye, File } from 'lucide-react'
+import { motion, AnimatePresence } from 'framer-motion'
+import { Calendar, MapPin, Users, Clock, Award, Heart, Star, ArrowLeft, Trophy, Target, Zap, FileText, AlertCircle, Info, CheckCircle, Download, Eye, File, X, ExternalLink } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
+import { useState, useRef, useEffect } from 'react'
 import { publications, documentCategories, documentTypes } from '@/data/publications.js'
 
 const SuperralinhaEvent = () => {
   const navigate = useNavigate()
+  const [selectedDocument, setSelectedDocument] = useState(null)
+  const publicationsRef = useRef(null)
+
+  const scrollToPublications = () => {
+    publicationsRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  const openDocumentPopup = (publication) => {
+    setSelectedDocument(publication)
+  }
+
+  const closeDocumentPopup = () => {
+    setSelectedDocument(null)
+  }
+
+  // Close popup on escape key
+  useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        closeDocumentPopup()
+      }
+    }
+    document.addEventListener('keydown', handleEscape)
+    return () => document.removeEventListener('keydown', handleEscape)
+  }, [])
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -149,8 +175,29 @@ const SuperralinhaEvent = () => {
             </div>
           </motion.div>
 
+          {/* Publications Banner */}
+          <motion.div variants={itemVariants} className="text-center">
+            <button
+              onClick={scrollToPublications}
+              className="group inline-flex items-center gap-3 bg-gradient-to-r from-blue-50 to-yellow-50 hover:from-blue-100 hover:to-yellow-100 border border-blue-200 rounded-3xl px-8 py-6 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+            >
+              <div className="w-12 h-12 rounded-full bg-blue-100 group-hover:bg-blue-200 flex items-center justify-center transition-colors">
+                <FileText className="h-6 w-6 text-blue-600" />
+              </div>
+              <div className="text-left">
+                <h3 className="text-xl font-bold text-foreground group-hover:text-blue-600 transition-colors">
+                  Publicações do Evento
+                </h3>
+                <p className="text-sm text-foreground/70">
+                  Documentos oficiais, regulamentos e esclarecimentos
+                </p>
+              </div>
+              <ExternalLink className="h-5 w-5 text-blue-600 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </motion.div>
+
           {/* Publications Section */}
-          <motion.div variants={itemVariants} className="space-y-6">
+          <motion.div ref={publicationsRef} variants={itemVariants} className="space-y-6">
             <h2 className="text-3xl font-bold text-foreground text-center">Publicações do Evento</h2>
             
             <div className="grid gap-6 lg:grid-cols-2">
@@ -195,7 +242,7 @@ const SuperralinhaEvent = () => {
                           </div>
                           <div className="flex flex-col gap-2">
                             <button
-                              onClick={() => window.open(publication.file.url, '_blank')}
+                              onClick={() => openDocumentPopup(publication)}
                               className="inline-flex items-center gap-2 px-3 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium"
                             >
                               <Eye className="h-4 w-4" />
@@ -334,6 +381,83 @@ const SuperralinhaEvent = () => {
           </motion.div>
         </motion.div>
       </div>
+
+      {/* Document Popup */}
+      <AnimatePresence>
+        {selectedDocument && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4"
+            onClick={closeDocumentPopup}
+          >
+            <motion.div
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.9, opacity: 0 }}
+              className="bg-white rounded-3xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+              onClick={(e) => e.stopPropagation()}
+            >
+              {/* Header */}
+              <div className="flex items-center justify-between p-6 border-b border-border/20">
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center">
+                    <FileText className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-foreground">{selectedDocument.title}</h3>
+                    <p className="text-sm text-foreground/60">
+                      {new Date(selectedDocument.date).toLocaleDateString('pt-BR')} • {selectedDocument.file.size}
+                    </p>
+                  </div>
+                </div>
+                <button
+                  onClick={closeDocumentPopup}
+                  className="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center transition-colors"
+                >
+                  <X className="h-4 w-4" />
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="p-6">
+                <div className="mb-4">
+                  <p className="text-foreground/80 leading-relaxed">{selectedDocument.description}</p>
+                </div>
+                
+                {/* PDF Viewer */}
+                <div className="border border-border/30 rounded-2xl overflow-hidden">
+                  <iframe
+                    src={`${selectedDocument.file.url}#toolbar=1&navpanes=1&scrollbar=1`}
+                    className="w-full h-[60vh]"
+                    title={selectedDocument.title}
+                  />
+                </div>
+
+                {/* Actions */}
+                <div className="flex gap-3 mt-6">
+                  <a
+                    href={selectedDocument.file.url}
+                    download={selectedDocument.file.name}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 text-green-600 rounded-lg hover:bg-green-100 transition-colors font-medium"
+                  >
+                    <Download className="h-4 w-4" />
+                    Baixar PDF
+                  </a>
+                  <button
+                    onClick={() => window.open(selectedDocument.file.url, '_blank')}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-blue-50 text-blue-600 rounded-lg hover:bg-blue-100 transition-colors font-medium"
+                  >
+                    <ExternalLink className="h-4 w-4" />
+                    Abrir em nova aba
+                  </button>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </section>
   )
 }
