@@ -103,6 +103,27 @@ const SuperralinhaEvent = () => {
             </div>
           </motion.div>
 
+          {/* Publications Banner */}
+          <motion.div variants={itemVariants} className="text-center">
+            <button
+              onClick={scrollToPublications}
+              className="group inline-flex items-center gap-3 bg-gradient-to-r from-blue-50 to-yellow-50 hover:from-blue-100 hover:to-yellow-100 border border-blue-200 rounded-3xl px-8 py-6 transition-all duration-300 hover:scale-105 hover:shadow-lg"
+            >
+              <div className="w-12 h-12 rounded-full bg-blue-100 group-hover:bg-blue-200 flex items-center justify-center transition-colors">
+                <FileText className="h-6 w-6 text-blue-600" />
+              </div>
+              <div className="text-left">
+                <h3 className="text-xl font-bold text-foreground group-hover:text-blue-600 transition-colors">
+                  Publicações do Evento
+                </h3>
+                <p className="text-sm text-foreground/70">
+                  Documentos oficiais, regulamentos e esclarecimentos
+                </p>
+              </div>
+              <ExternalLink className="h-5 w-5 text-blue-600 group-hover:translate-x-1 transition-transform" />
+            </button>
+          </motion.div>
+
           {/* Event Info Cards */}
           <motion.div variants={itemVariants} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[
@@ -187,26 +208,6 @@ const SuperralinhaEvent = () => {
             </div>
           </motion.div>
 
-          {/* Publications Banner */}
-          <motion.div variants={itemVariants} className="text-center">
-            <button
-              onClick={scrollToPublications}
-              className="group inline-flex items-center gap-3 bg-gradient-to-r from-blue-50 to-yellow-50 hover:from-blue-100 hover:to-yellow-100 border border-blue-200 rounded-3xl px-8 py-6 transition-all duration-300 hover:scale-105 hover:shadow-lg"
-            >
-              <div className="w-12 h-12 rounded-full bg-blue-100 group-hover:bg-blue-200 flex items-center justify-center transition-colors">
-                <FileText className="h-6 w-6 text-blue-600" />
-              </div>
-              <div className="text-left">
-                <h3 className="text-xl font-bold text-foreground group-hover:text-blue-600 transition-colors">
-                  Publicações do Evento
-                </h3>
-                <p className="text-sm text-foreground/70">
-                  Documentos oficiais, regulamentos e esclarecimentos
-                </p>
-              </div>
-              <ExternalLink className="h-5 w-5 text-blue-600 group-hover:translate-x-1 transition-transform" />
-            </button>
-          </motion.div>
 
           {/* Publications Section */}
           <motion.div ref={publicationsRef} variants={itemVariants} className="space-y-6">
