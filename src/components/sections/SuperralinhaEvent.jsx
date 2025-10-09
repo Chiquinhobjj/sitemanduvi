@@ -91,6 +91,18 @@ const SuperralinhaEvent = () => {
             </p>
           </motion.div>
 
+          {/* Event Banner */}
+          <motion.div variants={itemVariants} className="mb-8">
+            <div className="relative rounded-3xl overflow-hidden shadow-2xl">
+              <img
+                src="/images/BANNER_superralinha@4x.webp"
+                alt="Banner do Superralinha - Campeonato de Futebol Society"
+                className="w-full h-auto object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent"></div>
+            </div>
+          </motion.div>
+
           {/* Event Info Cards */}
           <motion.div variants={itemVariants} className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
             {[
