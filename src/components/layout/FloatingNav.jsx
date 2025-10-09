@@ -20,6 +20,14 @@ const FloatingNav = () => {
       path: '/projects',
       children: initiatives.map(({ id, name }) => ({ id, name, path: `/projects/${id}` }))
     },
+    {
+      id: 'events',
+      name: 'Eventos',
+      path: '/events',
+      children: [
+        { id: 'superralinha', name: 'Superralinha', path: '/events/superralinha' }
+      ]
+    },
     { id: 'achievements', name: 'Conquistas', path: '/achievements' },
     { id: 'contact', name: 'Contato', path: '/contact' }
   ]
