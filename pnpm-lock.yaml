@@ -27,8 +27,8 @@ importers:
         specifier: ^5.0.1
         version: 5.0.1(react-hook-form@7.56.3(react@19.1.0))
       '@openai/chatkit-react':
-        specifier: ^0.0.0
-        version: 0.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
+        specifier: ^1.1.1
+        version: 1.1.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
       '@radix-ui/react-accordion':
         specifier: ^1.2.10
         version: 1.2.10(@types/react-dom@19.1.5(@types/react@19.1.4))(@types/react@19.1.4)(react-dom@19.1.0(react@19.1.0))(react@19.1.0)
@@ -581,14 +581,14 @@ packages:
     resolution: {integrity: sha512-rmOWVRUbUJD7iSvJugjUbFZshTAuJ48MXoZ80Osx1GM0K/H1w7rSEvmw8m6vdWxNASgtaHIhAgre4H/E9GJiYQ==}
     engines: {node: '>=18'}
 
-  '@openai/chatkit-react@0.0.0':
-    resolution: {integrity: sha512-ppoAKiWKUJGIlKuFQ0mgPRVMAAjJ+PonAzdo1p7BQmTEZtwFI8vq6W7ZRN2UTfzZZIKbJ2diwU6ePbYSKsePuQ==}
+  '@openai/chatkit-react@1.1.1':
+    resolution: {integrity: sha512-sbYZBqLkx5nEIRmBFXJ8OCsRB+0II1eu/9QSVJP4T73PdAsggTMPfxw8FUGioFFJcYrNVoFvYaBFHZVUC71jtw==}
     peerDependencies:
       react: '>=18'
       react-dom: '>=18'
 
-  '@openai/chatkit@0.0.0':
-    resolution: {integrity: sha512-9YomebDd2dpWFR3s1fiEtNknXmEC8QYt//2ConGjr/4geWdRqunEpO+i7yJXYEGLJbkmB4lxwKmbwWJA4pvpSg==}
+  '@openai/chatkit@1.0.0':
+    resolution: {integrity: sha512-BlRu1UMz29z01bn0D2nA5lgSeo0Eu/5uNdGUMKchoFEDHWQ8ViCHDRFO45O6FT/cdqhXbYZOzIrjUryq6djk4w==}
 
   '@radix-ui/number@1.1.1':
     resolution: {integrity: sha512-MkKCwxlXTgz6CFoJx3pCwn07GKp36+aZyu/u2Ln2VrA5DcdyCZkASEDBTd8x5whTQQL5CiYf4prXKLcgQdv29g==}
@@ -2949,13 +2949,13 @@ snapshots:
     transitivePeerDependencies:
       - supports-color
 
-  '@openai/chatkit-react@0.0.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
+  '@openai/chatkit-react@1.1.1(react-dom@19.1.0(react@19.1.0))(react@19.1.0)':
     dependencies:
-      '@openai/chatkit': 0.0.0
+      '@openai/chatkit': 1.0.0
       react: 19.1.0
       react-dom: 19.1.0(react@19.1.0)
 
-  '@openai/chatkit@0.0.0': {}
+  '@openai/chatkit@1.0.0': {}
 
   '@radix-ui/number@1.1.1': {}
 
