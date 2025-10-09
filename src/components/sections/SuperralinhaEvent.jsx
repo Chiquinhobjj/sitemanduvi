@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { Calendar, MapPin, Users, Clock, Award, Heart, Star, ArrowLeft } from 'lucide-react'
+import { Calendar, MapPin, Users, Clock, Award, Heart, Star, ArrowLeft, Trophy, Target, Zap } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
 
 const SuperralinhaEvent = () => {
@@ -49,12 +49,18 @@ const SuperralinhaEvent = () => {
 
           {/* Hero Section */}
           <motion.div variants={itemVariants} className="text-center">
+            <div className="mb-6">
+              <div className="inline-flex items-center gap-3 bg-blue-50 text-blue-600 px-4 py-2 rounded-full text-sm font-semibold mb-4">
+                <Trophy className="h-5 w-5" />
+                Campeonato de Futebol Society
+              </div>
+            </div>
             <h1 className="text-4xl sm:text-6xl font-bold text-foreground mb-4">
-              <span className="text-primary">Super</span>ralinha
+              <span className="text-yellow-500">SUPER</span> <span className="text-blue-600">RALINHA</span>
             </h1>
             <p className="text-xl text-foreground/70 max-w-3xl mx-auto leading-relaxed">
-              O maior evento de celebração e integração da comunidade Manduvi, onde reconhecemos conquistas, 
-              fortalecemos laços e renovamos nosso compromisso com a transformação social.
+              O maior campeonato de futebol society da comunidade Manduvi, onde esporte, integração e 
+              celebração se unem para fortalecer laços e promover valores através do futebol.
             </p>
           </motion.div>
 
@@ -63,8 +69,8 @@ const SuperralinhaEvent = () => {
             {[
               { icon: Calendar, label: 'Data', value: 'Anual', color: 'bg-blue-50 text-blue-600' },
               { icon: MapPin, label: 'Local', value: 'Mato Grosso', color: 'bg-green-50 text-green-600' },
-              { icon: Users, label: 'Participantes', value: '500+', color: 'bg-purple-50 text-purple-600' },
-              { icon: Clock, label: 'Duração', value: '2 dias', color: 'bg-orange-50 text-orange-600' }
+              { icon: Users, label: 'Times', value: '16+ times', color: 'bg-purple-50 text-purple-600' },
+              { icon: Trophy, label: 'Modalidade', value: 'Futebol Society', color: 'bg-yellow-50 text-yellow-600' }
             ].map((info, index) => (
               <div key={index} className="bg-white/95 border border-border/50 rounded-2xl p-6 text-center">
                 <div className={`w-12 h-12 rounded-full ${info.color} flex items-center justify-center mx-auto mb-3`}>
@@ -80,21 +86,22 @@ const SuperralinhaEvent = () => {
           <div className="grid lg:grid-cols-2 gap-12">
             {/* About Event */}
             <motion.div variants={itemVariants} className="space-y-6">
-              <h2 className="text-3xl font-bold text-foreground">Sobre o Evento</h2>
+              <h2 className="text-3xl font-bold text-foreground">Sobre o Campeonato</h2>
               <div className="space-y-4 text-foreground/80 leading-relaxed">
                 <p>
-                  O Superralinha é o coração pulsante da comunidade Manduvi, um evento que transcende 
-                  a simples celebração para se tornar um momento de renovação, reconhecimento e 
-                  fortalecimento dos laços que unem nossa rede de transformação social.
+                  O Superralinha é o maior campeonato de futebol society da comunidade Manduvi, 
+                  um evento que une esporte, integração e celebração em uma competição que vai 
+                  além dos gramados, fortalecendo laços e promovendo valores através do futebol.
                 </p>
                 <p>
-                  Durante dois dias intensos, reunimos participantes de todas as nossas iniciativas, 
-                  voluntários, parceiros e apoiadores para celebrar conquistas, compartilhar 
-                  experiências e planejar o futuro da nossa missão.
+                  Durante o campeonato, times de diferentes iniciativas do Instituto Manduvi, 
+                  voluntários, parceiros e apoiadores se reúnem para competir, celebrar e 
+                  compartilhar experiências únicas através do esporte.
                 </p>
                 <p>
-                  É um momento único onde a diversidade da nossa atuação se encontra: do esporte 
-                  inclusivo à educação tecnológica, da assistência social à inovação sustentável.
+                  É um momento especial onde a paixão pelo futebol se encontra com nossa missão 
+                  de transformação social, criando oportunidades de integração e celebração 
+                  através do esporte mais popular do Brasil.
                 </p>
               </div>
             </motion.div>
@@ -104,10 +111,10 @@ const SuperralinhaEvent = () => {
               <h2 className="text-3xl font-bold text-foreground">Destaques</h2>
               <div className="space-y-4">
                 {[
-                  { icon: Award, title: 'Cerimônia de Reconhecimento', desc: 'Homenageamos voluntários, parceiros e participantes que se destacaram durante o ano' },
-                  { icon: Heart, title: 'Feira de Iniciativas', desc: 'Exposição interativa de todos os projetos e programas do Instituto Manduvi' },
-                  { icon: Star, title: 'Workshops e Palestras', desc: 'Oportunidades de aprendizado e troca de experiências entre os participantes' },
-                  { icon: Users, title: 'Atividades de Integração', desc: 'Dinâmicas e jogos que fortalecem os laços da comunidade Manduvi' }
+                  { icon: Trophy, title: 'Competição de Futebol Society', desc: 'Campeonato com times de diferentes iniciativas do Instituto Manduvi' },
+                  { icon: Award, title: 'Cerimônia de Premiação', desc: 'Reconhecimento dos melhores times, jogadores e fair play' },
+                  { icon: Target, title: 'Torneio Eliminatório', desc: 'Sistema de disputa emocionante com mata-mata e finais' },
+                  { icon: Zap, title: 'Atividades Paralelas', desc: 'Workshops, palestras e integração entre participantes' }
                 ].map((highlight, index) => (
                   <div key={index} className="flex gap-4 p-4 bg-white/50 rounded-2xl">
                     <div className="w-12 h-12 rounded-full bg-primary/10 text-primary flex items-center justify-center flex-shrink-0">
@@ -124,17 +131,17 @@ const SuperralinhaEvent = () => {
           </div>
 
           {/* Impact Numbers */}
-          <motion.div variants={itemVariants} className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-3xl p-8">
-            <h2 className="text-3xl font-bold text-foreground text-center mb-8">Impacto do Superralinha</h2>
+          <motion.div variants={itemVariants} className="bg-gradient-to-r from-blue-50 to-yellow-50 rounded-3xl p-8">
+            <h2 className="text-3xl font-bold text-foreground text-center mb-8">Números do Superralinha</h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {[
-                { number: '500+', label: 'Participantes por edição' },
-                { number: '15+', label: 'Iniciativas apresentadas' },
-                { number: '50+', label: 'Voluntários reconhecidos' },
-                { number: '100%', label: 'Satisfação dos participantes' }
+                { number: '16+', label: 'Times participantes' },
+                { number: '200+', label: 'Jogadores inscritos' },
+                { number: '3', label: 'Dias de competição' },
+                { number: '100%', label: 'Fair play garantido' }
               ].map((stat, index) => (
                 <div key={index} className="text-center">
-                  <div className="text-4xl font-bold text-primary mb-2">{stat.number}</div>
+                  <div className="text-4xl font-bold text-blue-600 mb-2">{stat.number}</div>
                   <div className="text-foreground/70">{stat.label}</div>
                 </div>
               ))}
@@ -148,8 +155,8 @@ const SuperralinhaEvent = () => {
                 Quer participar do próximo Superralinha?
               </h3>
               <p className="text-foreground/70 mb-6 max-w-2xl mx-auto">
-                Entre em contato conosco para receber informações sobre a próxima edição e 
-                como você pode fazer parte desta celebração única da comunidade Manduvi.
+                Entre em contato conosco para inscrever seu time ou receber informações sobre 
+                a próxima edição do campeonato de futebol society da comunidade Manduvi.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <button

@@ -11,15 +11,15 @@ const EventsSection = () => {
       name: 'Superralinha',
       date: '2024',
       location: 'Mato Grosso',
-      description: 'Evento especial de integração e celebração das conquistas da comunidade Manduvi',
+      description: 'Campeonato de futebol society que une esporte, integração e celebração da comunidade Manduvi',
       image: '/images/hero-background.webp',
       status: 'ativo',
-      participants: '500+',
+      participants: '16+ times',
       highlights: [
-        'Celebração das conquistas da comunidade',
-        'Integração entre participantes',
-        'Atividades esportivas e culturais',
-        'Reconhecimento de voluntários'
+        'Campeonato de futebol society',
+        'Competição entre times das iniciativas',
+        'Cerimônia de premiação',
+        'Fair play e integração'
       ]
     }
   ]
