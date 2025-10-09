@@ -4,7 +4,7 @@ export const publications = [
     id: 'regulamento-geral-2024',
     title: 'Regulamento Geral - Super Ralinha 2024',
     type: 'regulamento',
-    date: '2024-07-19',
+    date: '2025-10-09',
     description: 'Regulamento oficial completo com todas as regras, critérios de pontuação, sistema de disputa e diretrizes do Super Ralinha 2024.',
     file: {
       name: 'REGULAMENTO GERAL - SUPER RALINHA 2024.pdf',
@@ -19,7 +19,7 @@ export const publications = [
     id: 'boletim-comissao-disciplinar',
     title: 'Boletim Oficial - Comissão Disciplinar',
     type: 'comunicado',
-    date: '2024-10-09',
+    date: '2025-10-09',
     description: 'Boletim oficial da Comissão Disciplinar do Super Ralinha com decisões e orientações disciplinares.',
     file: {
       name: 'BOLETIM OFICIAL - COMISSÃO DISCIPLINAR DO SUPER RALINHA.pdf',
@@ -34,7 +34,7 @@ export const publications = [
     id: 'sumula-julgamento',
     title: 'Súmula de Julgamento - Comissão Disciplinar',
     type: 'comunicado',
-    date: '2024-10-09',
+    date: '2025-10-09',
     description: 'Súmula de julgamento da Comissão Disciplinar do Super Ralinha com decisões e penalidades aplicadas.',
     file: {
       name: 'SUMULA DE JULGAMENTO - COMISSÃO DISCIPLINAR DO SUPER RALINHA.pdf',
