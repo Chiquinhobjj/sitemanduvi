@@ -382,7 +382,7 @@ const ManduviaChat = () => {
         'Olá! Sou a MirIA, anfitriã especialista do Instituto Manduvi. Tenho acesso a uma base de conhecimento completa sobre nossos projetos, metodologias e iniciativas. Como posso te ajudar hoje?',
       prompts: [
         {
-          label: '🎓 Cursos EAD',
+          label: '🎓 Cursos',
           prompt: 'Quero conhecer os cursos certificados e o Programa Meu Futuro'
         },
         {
