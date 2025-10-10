@@ -156,39 +156,39 @@ div[class*="prompt"] {
   min-height: 280px;
 }
 
-/* Responsive height for different screen sizes - Mobile First */
+/* Responsive height for different screen sizes - Mobile First - MUITO MAIS COMPACTO */
 .chat-container {
-  min-height: 180px;
-  max-height: 40vh;
+  min-height: 120px;
+  max-height: 25vh;
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
-  .chat-container {
-    min-height: 240px;
-    max-height: 50vh;
-  }
-}
-
-@media (min-width: 1025px) {
-  .chat-container {
-    min-height: 280px;
-    max-height: 60vh;
-  }
-}
-
-/* Ajustes específicos para telas muito pequenas */
-@media (max-width: 480px) {
   .chat-container {
     min-height: 160px;
     max-height: 35vh;
   }
 }
 
+@media (min-width: 1025px) {
+  .chat-container {
+    min-height: 200px;
+    max-height: 40vh;
+  }
+}
+
+/* Ajustes específicos para telas muito pequenas */
+@media (max-width: 480px) {
+  .chat-container {
+    min-height: 100px;
+    max-height: 20vh;
+  }
+}
+
 /* Ajustes para telas grandes */
 @media (min-width: 1440px) {
   .chat-container {
-    min-height: 320px;
-    max-height: 65vh;
+    min-height: 250px;
+    max-height: 45vh;
   }
 }
 
@@ -232,34 +232,34 @@ div[class*="prompt"] {
   margin-bottom: 16px !important;
 }
 
-/* Responsive adjustments for start screen - Mobile First */
+/* Responsive adjustments for start screen - Mobile First - MUITO MAIS COMPACTO */
 .chatkit-start-screen {
-  min-height: 180px !important;
+  min-height: 120px !important;
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
   .chatkit-start-screen {
-    min-height: 240px !important;
+    min-height: 160px !important;
   }
 }
 
 @media (min-width: 1025px) {
   .chatkit-start-screen {
-    min-height: 280px !important;
+    min-height: 200px !important;
   }
 }
 
 /* Ajustes específicos para telas muito pequenas */
 @media (max-width: 480px) {
   .chatkit-start-screen {
-    min-height: 160px !important;
+    min-height: 100px !important;
   }
 }
 
 /* Ajustes para telas grandes */
 @media (min-width: 1440px) {
   .chatkit-start-screen {
-    min-height: 320px !important;
+    min-height: 250px !important;
   }
 }
 

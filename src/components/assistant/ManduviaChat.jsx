@@ -190,20 +190,20 @@ const ManduviaChat = () => {
           let baseHeight, maxHeightPercentage, minHeight
           
           if (isMobile) {
-            // Mobile: altura mais compacta
-            baseHeight = 200
-            maxHeightPercentage = 0.4 // 40% da tela
-            minHeight = 180
+            // Mobile: altura muito compacta
+            baseHeight = 150
+            maxHeightPercentage = 0.25 // 25% da tela
+            minHeight = 120
           } else if (isTablet) {
-            // Tablet: altura intermediária
-            baseHeight = 280
-            maxHeightPercentage = 0.5 // 50% da tela
-            minHeight = 240
+            // Tablet: altura moderada
+            baseHeight = 200
+            maxHeightPercentage = 0.35 // 35% da tela
+            minHeight = 160
           } else {
-            // Desktop: altura mais generosa
-            baseHeight = 320
-            maxHeightPercentage = 0.6 // 60% da tela
-            minHeight = 280
+            // Desktop: altura controlada
+            baseHeight = 250
+            maxHeightPercentage = 0.4 // 40% da tela
+            minHeight = 200
           }
           
           if (prompts) {
@@ -484,14 +484,14 @@ const ManduviaChat = () => {
                   className="chat-container mt-2 sm:mt-3 w-full overflow-y-auto relative"
                   style={{ 
                     height: containerHeight,
-                    maxHeight: '40vh' // Mobile first
+                    maxHeight: '25vh' // Mobile first - muito mais compacto
                   }}
                 >
                   <ChatKit 
                     control={control} 
                     className="h-auto w-full" 
                     style={{
-                      minHeight: '180px', // Mobile first
+                      minHeight: '120px', // Mobile first - muito mais compacto
                       maxHeight: '100%'
                     }}
                   />
