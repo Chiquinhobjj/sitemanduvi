@@ -420,22 +420,24 @@ const HeroSection = () => {
                           title="Ir para o final da conversa"
                           style={{ 
                             position: 'absolute', 
-                            bottom: '20px', 
+                            bottom: '60px', 
                             right: '20px', 
-                            width: '44px', 
-                            height: '44px',
-                            background: 'white',
-                            border: '1px solid #e5e7eb',
+                            width: '32px', 
+                            height: '32px',
+                            background: 'rgba(255, 255, 255, 0.9)',
+                            border: '1px solid rgba(229, 231, 235, 0.6)',
                             borderRadius: '50%',
                             display: 'flex',
                             alignItems: 'center',
                             justifyContent: 'center',
                             cursor: 'pointer',
                             zIndex: 1000,
-                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+                            boxShadow: '0 1px 4px rgba(0, 0, 0, 0.1)',
+                            backdropFilter: 'blur(4px)',
+                            transition: 'all 0.2s ease'
                           }}
                         >
-                          <ArrowDown className="h-5 w-5" style={{ color: '#374151' }} />
+                          <ArrowDown className="h-4 w-4" style={{ color: '#6b7280' }} />
                         </button>
                       )}
                     </div>

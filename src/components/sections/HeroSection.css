@@ -26,33 +26,34 @@
 /* Scroll to bottom button */
 .scroll-to-bottom-btn {
   position: absolute;
-  bottom: 20px;
+  bottom: 60px;
   right: 20px;
-  width: 44px;
-  height: 44px;
-  background: white;
-  color: #374151;
-  border: 1px solid #e5e7eb;
+  width: 32px;
+  height: 32px;
+  background: rgba(255, 255, 255, 0.9);
+  color: #6b7280;
+  border: 1px solid rgba(229, 231, 235, 0.6);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 1000;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(4px);
   transition: all 0.2s ease;
 }
 
 .scroll-to-bottom-btn:hover {
-  background: #f9fafb;
-  border-color: #d1d5db;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: rgba(255, 255, 255, 1);
+  border-color: rgba(209, 213, 219, 0.8);
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .scroll-to-bottom-btn:active {
   transform: translateY(0);
-  background: #f3f4f6;
+  background: rgba(249, 250, 251, 0.95);
 }
 
 /* ChatKit prompt buttons - Microajustes seguindo padrão ouro */
