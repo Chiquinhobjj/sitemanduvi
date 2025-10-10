@@ -366,16 +366,13 @@ const ManduviaChat = () => {
     },
     theme: {
       colorScheme: 'light',
-      radius: 'lg',
-      density: 'spacious',
+      radius: 'md',
+      density: 'compact',
       color: {
-        grayscale: { hue: 0, tint: 0 },
         accent: { primary: '#603813', level: 1 }
       },
       typography: {
-        baseSize: 13,
-        fontFamily: '"OpenAI Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif',
-        fontFamilyMono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace'
+        baseSize: 14
       }
     },
     composer: {
