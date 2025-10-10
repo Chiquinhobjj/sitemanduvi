@@ -364,7 +364,7 @@ const HeroSection = () => {
                           : status === 'booting' && sessionCreated
                           ? 'Carregando interface do chat...'
                           : status === 'booting'
-                          ? 'Inicializando ChatKit...'
+                          ? 'Inicializando MirIA...'
                           : 'Conectando com a MirIA especialista...'}
                       </span>
                     </div>
