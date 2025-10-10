@@ -374,28 +374,36 @@ const ManduviaChat = () => {
       },
     },
         composer: {
-          placeholder: 'Dê-me uma missão...',
+          placeholder: 'Pergunte sobre nossos projetos, cursos, eventos ou metodologia...',
           attachments: { enabled: false },
         },
     startScreen: {
       greeting:
-        'Olá! Sou a MirIA, anfitriã do Manduvi. Respondo rápido e te levo ao que você busca. Por onde começamos?',
+        'Olá! Sou a MirIA, anfitriã especialista do Instituto Manduvi. Tenho acesso a uma base de conhecimento completa sobre nossos projetos, metodologias e iniciativas. Como posso te ajudar hoje?',
       prompts: [
         {
-          label: 'Cursos',
-          prompt: 'Quero conhecer os cursos disponíveis'
+          label: '🎓 Cursos EAD',
+          prompt: 'Quero conhecer os cursos certificados e o Programa Meu Futuro'
         },
         {
-          label: 'Eventos',
-          prompt: 'Quero saber sobre os eventos do Instituto Manduvi'
+          label: '🏆 Superralinha',
+          prompt: 'Quero saber sobre o campeonato de futebol society'
         },
         {
-          label: 'Iniciativas & Projetos',
-          prompt: 'Quero conhecer as iniciativas e projetos do Instituto'
+          label: '🚀 Nossas Iniciativas',
+          prompt: 'Quero conhecer os 7 projetos principais do Instituto'
         },
         {
-          label: 'Sobre o Instituto',
-          prompt: 'Quero saber mais sobre o Instituto Manduvi'
+          label: '📖 Sobre o Instituto',
+          prompt: 'Quero saber mais sobre nossa missão, metodologia HEXA e história'
+        },
+        {
+          label: '🌐 Redes Sociais',
+          prompt: 'Quero acompanhar o Instituto nas redes sociais'
+        },
+        {
+          label: '📊 Transparência',
+          prompt: 'Quero ver relatórios de impacto e transparência'
         }
       ],
     },
@@ -403,7 +411,7 @@ const ManduviaChat = () => {
       const message =
         typeof detail === 'string'
           ? detail
-          : detail?.message ?? 'Ocorreu um erro durante a conversa.'
+          : detail?.message ?? 'Ocorreu um erro ao acessar a base de conhecimento. Tente novamente.'
       setStatus('error')
       setErrorMessage(message)
     },
@@ -416,11 +424,11 @@ const ManduviaChat = () => {
           {status !== 'ready' && !errorMessage && (
             <div className="flex items-center gap-2 rounded-xl sm:rounded-2xl border border-primary/10 bg-white px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-foreground/70">
               <Sparkle className="h-3 w-3 sm:h-4 sm:w-4 animate-pulse text-primary" />
-              <span className="truncate">
-                {status === 'refreshing'
-                  ? 'Atualizando sua sessão...'
-                  : 'Conectando com a MirIA...'}
-              </span>
+                  <span className="truncate">
+                    {status === 'refreshing'
+                      ? 'Atualizando base de conhecimento...'
+                      : 'Conectando com a MirIA especialista...'}
+                  </span>
             </div>
           )}
 
@@ -434,13 +442,13 @@ const ManduviaChat = () => {
                   onClick={async () => {
                     setErrorMessage(null)
                     setStatus('booting')
-                    try {
-                      await fetchUpdates?.()
-                    } catch (error) {
-                      console.error('Erro ao tentar reconectar:', error)
-                      setStatus('error')
-                      setErrorMessage('Falha ao reconectar. Tente novamente.')
-                    }
+                        try {
+                          await fetchUpdates?.()
+                        } catch (error) {
+                          console.error('Erro ao tentar reconectar:', error)
+                          setStatus('error')
+                          setErrorMessage('Falha ao reconectar com a base de conhecimento. Tente novamente.')
+                        }
                   }}
                 >
                   Tentar novamente
