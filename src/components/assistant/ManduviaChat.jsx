@@ -366,7 +366,7 @@ const ManduviaChat = () => {
     },
     theme: {
       colorScheme: 'light',
-      radius: 'round',
+      radius: 'lg',
       density: 'spacious',
       color: {
         grayscale: { hue: 0, tint: 0 },
