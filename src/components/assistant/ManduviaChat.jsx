@@ -379,7 +379,7 @@ const ManduviaChat = () => {
         },
     startScreen: {
       greeting:
-        'Olá! Sou a MirIA, anfitriã especialista do Instituto Manduvi. Como posso te ajudar hoje?',
+        'Olá! Sou a MirIA, anfitriã do Manduvi. Como posso te ajudar hoje?',
       prompts: [
         {
           label: '🎓 Cursos',
