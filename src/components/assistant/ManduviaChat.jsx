@@ -311,13 +311,21 @@ const ManduviaChat = () => {
       radius: 'round',
       density: 'spacious',
       color: {
+        grayscale: {
+          hue: 0,
+          tint: 0
+        },
         accent: {
           primary: '#603813',
           level: 1
+        },
+        surface: {
+          background: '#ffffff',
+          foreground: '#ffffff'
         }
       },
       typography: {
-        baseSize: 15,
+        baseSize: 14,
         fontFamily: '"OpenAI Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif',
         fontFamilyMono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace',
         fontSources: [
