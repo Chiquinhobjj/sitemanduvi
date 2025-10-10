@@ -351,35 +351,36 @@ const ManduviaChat = () => {
     theme: {
       colorScheme: 'light',
       radius: 'round',
-      density: 'compact',
+      density: 'spacious',
       color: {
-        grayscale: { hue: 0, tint: 0 },
-        accent: { primary: '#603813', level: 1 },
+        accent: {
+          primary: '#603813',
+          level: 1
+        }
       },
       typography: {
         baseSize: 15,
-        fontFamily:
-          '"OpenAI Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif',
-        fontFamilyMono:
-          'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace',
+        fontFamily: '"OpenAI Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif',
+        fontFamilyMono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace',
         fontSources: [
           {
             family: 'OpenAI Sans',
             src: 'https://cdn.openai.com/common/fonts/openai-sans/v2/OpenAISans-Regular.woff2',
             weight: 400,
             style: 'normal',
-            display: 'swap',
-          },
-        ],
-      },
+            display: 'swap'
+          }
+        ]
+      }
     },
-        composer: {
-          placeholder: 'Pergunte sobre nossos projetos, cursos, eventos ou metodologia...',
-          attachments: { enabled: false },
-        },
+    composer: {
+      placeholder: 'Pergunte sobre nossos projetos, cursos, eventos ou metodologia...',
+      attachments: {
+        enabled: false
+      }
+    },
     startScreen: {
-      greeting:
-        'Olá! Sou a MirIA, anfitriã do Manduvi. Como posso te ajudar hoje?',
+      greeting: 'Olá! Sou a MirIA, Anfitriã do Manduvi. Como posso te ajudar hoje?',
       prompts: [
         {
           label: '🎓 Cursos',
@@ -405,7 +406,7 @@ const ManduviaChat = () => {
           label: '📊 Transparência',
           prompt: 'Quero ver relatórios de impacto e transparência'
         }
-      ],
+      ]
     },
     onError: (detail) => {
       const message =
