@@ -420,7 +420,7 @@ const HeroSection = () => {
                           title="Ir para o final da conversa"
                           style={{ 
                             position: 'absolute', 
-                            bottom: '60px', 
+                            bottom: '80px', 
                             right: '20px', 
                             width: '32px', 
                             height: '32px',
