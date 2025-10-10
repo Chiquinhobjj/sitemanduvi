@@ -10,20 +10,21 @@ const HeroSection = () => {
   const [status, setStatus] = useState('booting')
   const [errorMessage, setErrorMessage] = useState(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
+  const [sessionCreated, setSessionCreated] = useState(false)
   const chatContainerRef = useRef(null)
 
   // Timeout para evitar carregamento infinito
   useEffect(() => {
     const timeout = setTimeout(() => {
-      if (status === 'booting') {
+      if (status === 'booting' && !sessionCreated) {
         console.warn('⚠️ ChatKit: Timeout - forçando status para error')
         setStatus('error')
         setErrorMessage('Timeout ao conectar com o chat. Tente recarregar a página.')
       }
-    }, 45000) // 45 segundos - mais tempo para o ChatKit carregar
+    }, 60000) // 60 segundos - mais tempo para o ChatKit carregar
 
     return () => clearTimeout(timeout)
-  }, [status])
+  }, [status, sessionCreated])
 
   // Reset timeout quando status muda para ready
   useEffect(() => {
@@ -59,6 +60,7 @@ const HeroSection = () => {
           }
 
           console.log('✅ ChatKit: Sessão criada!')
+          setSessionCreated(true)
           return payload.client_secret
         } catch (error) {
           console.error('❌ ChatKit: Erro', error)
@@ -136,6 +138,7 @@ const HeroSection = () => {
       setStatus(newStatus)
       if (newStatus === 'ready') {
         setErrorMessage(null)
+        setSessionCreated(true)
         console.log('✅ ChatKit: Widget pronto!')
       } else if (newStatus === 'error') {
         console.error('❌ ChatKit: Widget com erro')
@@ -344,6 +347,8 @@ const HeroSection = () => {
                       <span>
                         {status === 'refreshing'
                           ? 'Atualizando base de conhecimento...'
+                          : status === 'booting' && sessionCreated
+                          ? 'Carregando interface do chat...'
                           : status === 'booting'
                           ? 'Inicializando ChatKit...'
                           : 'Conectando com a MirIA especialista...'}
