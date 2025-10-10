@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from 'react'
 import { ChatKit, useChatKit } from '@openai/chatkit-react'
-import { Sparkle } from 'lucide-react'
+import { Sparkle, ArrowDown } from 'lucide-react'
 import './ManduviaChat.css'
 
 const DEVICE_STORAGE_KEY = 'manduvia-chat-device-id'
@@ -29,6 +29,7 @@ const ManduviaChat = () => {
   const [status, setStatus] = useState('booting')
   const [errorMessage, setErrorMessage] = useState(null)
   const [deviceId] = useState(() => resolveDeviceId())
+  const [showScrollButton, setShowScrollButton] = useState(false)
   const chatContainerRef = useRef(null)
   const bottomRef = useRef(null)
 
@@ -169,20 +170,24 @@ const ManduviaChat = () => {
     }
   }, [status])
 
+  // Função para scroll ao final
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
+    }
+    if (bottomRef.current) {
+      bottomRef.current.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
+
   // Scroll automático para manter a última interação visível
   useEffect(() => {
-    const scrollToBottom = () => {
-      if (bottomRef.current) {
-        bottomRef.current.scrollIntoView({ behavior: 'smooth' })
-      }
-    }
-
     // Scroll quando o status muda para 'ready'
     if (status === 'ready') {
-      setTimeout(scrollToBottom, 100)
+      setTimeout(scrollToBottom, 500)
     }
 
-    // Observer para detectar mudanças no conteúdo do chat
+    // Observer mais agressivo para detectar mudanças no conteúdo do chat
     const observer = new MutationObserver((mutations) => {
       let shouldScroll = false
       mutations.forEach(mutation => {
@@ -193,8 +198,12 @@ const ManduviaChat = () => {
               if (node.querySelector && (
                 node.querySelector('[data-message]') ||
                 node.querySelector('.message') ||
+                node.querySelector('[class*="message"]') ||
+                node.querySelector('[class*="chat"]') ||
                 node.textContent?.includes('MirIA') ||
-                node.textContent?.includes('Olá')
+                node.textContent?.includes('Olá') ||
+                node.textContent?.includes('Entendi') ||
+                node.textContent?.includes('Pensou')
               )) {
                 shouldScroll = true
               }
@@ -204,7 +213,7 @@ const ManduviaChat = () => {
       })
       
       if (shouldScroll) {
-        setTimeout(scrollToBottom, 200)
+        setTimeout(scrollToBottom, 300)
       }
     })
 
@@ -217,6 +226,29 @@ const ManduviaChat = () => {
 
     return () => {
       observer.disconnect()
+    }
+  }, [status])
+
+  // Detectar scroll para mostrar/esconder botão
+  useEffect(() => {
+    const handleScroll = () => {
+      if (chatContainerRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10
+        setShowScrollButton(!isAtBottom)
+      }
+    }
+
+    if (chatContainerRef.current) {
+      chatContainerRef.current.addEventListener('scroll', handleScroll)
+      // Verificar estado inicial
+      handleScroll()
+    }
+
+    return () => {
+      if (chatContainerRef.current) {
+        chatContainerRef.current.removeEventListener('scroll', handleScroll)
+      }
     }
   }, [status])
 
@@ -363,13 +395,24 @@ const ManduviaChat = () => {
               ) : (
                 <div 
                   ref={chatContainerRef}
-                  className="chat-container mt-3 sm:mt-4 w-full max-h-[60vh] overflow-y-auto"
+                  className="chat-container mt-3 sm:mt-4 w-full max-h-[60vh] overflow-y-auto relative"
                 >
                   <ChatKit 
                     control={control} 
                     className="h-[240px] sm:h-[280px] lg:h-[320px] min-h-[240px] sm:min-h-[280px] lg:min-h-[320px] w-full" 
                   />
                   <div ref={bottomRef} />
+                  
+                  {/* Botão de scroll para o final */}
+                  {showScrollButton && (
+                    <button
+                      onClick={scrollToBottom}
+                      className="scroll-to-bottom-btn"
+                      title="Ir para o final da conversa"
+                    >
+                      <ArrowDown className="h-5 w-5" />
+                    </button>
+                  )}
                 </div>
               )}
         </div>
