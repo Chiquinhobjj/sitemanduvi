@@ -30,6 +30,7 @@ const ManduviaChat = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [deviceId] = useState(() => resolveDeviceId())
   const [showScrollButton, setShowScrollButton] = useState(false)
+  const [containerHeight, setContainerHeight] = useState('auto')
   const chatContainerRef = useRef(null)
 
   // Aplicar estilos CSS personalizados após o ChatKit ser renderizado
@@ -167,6 +168,50 @@ const ManduviaChat = () => {
       timeouts.forEach(clearTimeout)
       observer.disconnect()
     }
+  }, [status])
+
+  // Ajustar altura do container dinamicamente
+  useEffect(() => {
+    const adjustContainerHeight = () => {
+      if (chatContainerRef.current && status === 'ready') {
+        const container = chatContainerRef.current
+        const startScreen = container.querySelector('[data-chatkit-start-screen], .chatkit-start-screen')
+        
+        if (startScreen) {
+          const prompts = startScreen.querySelector('.chatkit-start-screen-prompts, div[role="group"]')
+          if (prompts) {
+            // Calcular altura necessária para mostrar todos os prompts
+            const promptsHeight = prompts.offsetHeight
+            const greetingHeight = startScreen.querySelector('p, div')?.offsetHeight || 0
+            const padding = 60 // padding e margens
+            
+            const requiredHeight = Math.max(
+              promptsHeight + greetingHeight + padding,
+              280 // altura mínima
+            )
+            
+            const maxHeight = Math.min(requiredHeight, window.innerHeight * 0.7)
+            setContainerHeight(`${maxHeight}px`)
+          }
+        }
+      }
+    }
+
+    // Ajustar altura quando o status muda para ready
+    if (status === 'ready') {
+      setTimeout(adjustContainerHeight, 500)
+      setTimeout(adjustContainerHeight, 1000)
+    }
+
+    // Ajustar altura quando a janela é redimensionada
+    const handleResize = () => {
+      if (status === 'ready') {
+        adjustContainerHeight()
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
   }, [status])
 
   // Função para scroll ao final (apenas dentro do chat)
@@ -396,11 +441,12 @@ const ManduviaChat = () => {
               ) : (
                 <div 
                   ref={chatContainerRef}
-                  className="chat-container mt-3 sm:mt-4 w-full max-h-[60vh] overflow-y-auto relative"
+                  className="chat-container mt-3 sm:mt-4 w-full max-h-[70vh] overflow-y-auto relative"
+                  style={{ height: containerHeight }}
                 >
                   <ChatKit 
                     control={control} 
-                    className="h-[240px] sm:h-[280px] lg:h-[320px] min-h-[240px] sm:min-h-[280px] lg:min-h-[320px] w-full" 
+                    className="h-auto min-h-[280px] sm:min-h-[320px] lg:min-h-[360px] max-h-[65vh] w-full" 
                   />
                   
                   {/* Botão de scroll para o final */}

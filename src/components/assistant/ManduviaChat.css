@@ -130,6 +130,30 @@ div[class*="prompt"] {
 .chat-container {
   scrollbar-width: thin;
   scrollbar-color: #d1d5db #f9fafb;
+  /* Responsive height adjustments */
+  min-height: 280px;
+}
+
+/* Responsive height for different screen sizes */
+@media (max-width: 640px) {
+  .chat-container {
+    min-height: 300px;
+    max-height: 60vh;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .chat-container {
+    min-height: 340px;
+    max-height: 65vh;
+  }
+}
+
+@media (min-width: 1025px) {
+  .chat-container {
+    min-height: 380px;
+    max-height: 70vh;
+  }
 }
 
 .chat-container::-webkit-scrollbar {
@@ -158,6 +182,37 @@ div[class*="prompt"] {
 /* Ensure chat content fills available space */
 .chat-container > div {
   min-height: 100%;
+}
+
+/* Ensure prompts are always visible */
+.chatkit-start-screen {
+  min-height: 280px !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.chatkit-start-screen-prompts {
+  flex-shrink: 0 !important;
+  margin-bottom: 16px !important;
+}
+
+/* Responsive adjustments for start screen */
+@media (max-width: 640px) {
+  .chatkit-start-screen {
+    min-height: 300px !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .chatkit-start-screen {
+    min-height: 340px !important;
+  }
+}
+
+@media (min-width: 1025px) {
+  .chatkit-start-screen {
+    min-height: 380px !important;
+  }
 }
 
 /* Scroll to bottom button styles */
