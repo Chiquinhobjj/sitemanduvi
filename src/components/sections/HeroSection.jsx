@@ -134,7 +134,8 @@ const HeroSection = () => {
       ],
     },
     startScreen: {
-      greeting: 'Olá! Sou a MirIA, Anfitriã do Manduvi. Como posso te ajudar hoje?',
+      greeting: 'Olá! Sou a MirIA, Anfitriã do Manduvi.
+      Como posso te ajudar hoje?',
       prompts: [],
     },
     onError: (detail) => {
