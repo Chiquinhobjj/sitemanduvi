@@ -4,7 +4,7 @@ export default async function handler(req, res) {
     return
   }
 
-  const workflowId = 'wf_68e6a6d819d88190aee60893b4b8ef660de2547f19c73575'
+  const workflowId = 'wf_68e6a6d819d88190aee60893b4b8ef660de2547f19c73575' // Novo workflow ID
   const apiKey = process.env.OPENAI_API_KEY
 
   if (!workflowId) {

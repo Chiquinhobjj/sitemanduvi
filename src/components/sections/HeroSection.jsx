@@ -64,38 +64,60 @@ const HeroSection = () => {
     theme: {
       colorScheme: 'light',
       radius: 'round',
-      density: 'compact',
+      density: 'spacious',
       color: {
+        grayscale: { hue: 0, tint: 0 },
         accent: { primary: '#603813', level: 1 },
+        surface: {
+          background: '#ffffff',
+          foreground: '#ffffff',
+        },
       },
       typography: {
-        baseSize: 15,
+        baseSize: 14,
+        fontFamily:
+          '"OpenAI Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif',
+        fontFamilyMono:
+          'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace',
+        fontSources: [
+          {
+            family: 'OpenAI Sans',
+            src: 'https://cdn.openai.com/common/fonts/openai-sans/v2/OpenAISans-Regular.woff2',
+            weight: 400,
+            style: 'normal',
+            display: 'swap',
+          },
+        ],
       },
     },
     composer: {
-      placeholder: 'Pergunte sobre nossos projetos, cursos, eventos ou metodologia...',
-      attachments: { enabled: false },
+      placeholder: 'Dê-me uma missão...',
+      attachments: {
+        enabled: true,
+        maxCount: 5,
+        maxSize: 10_485_760,
+      },
+      tools: [
+        {
+          id: 'search_docs',
+          label: 'Search docs',
+          shortLabel: 'Docs',
+          placeholderOverride: 'Search documentation',
+          icon: 'book-open',
+          pinned: false,
+        },
+      ],
+      models: [
+        {
+          id: 'crisp',
+          label: 'Crisp',
+          description: 'Concise and factual',
+        },
+      ],
     },
     startScreen: {
-      greeting: 'Olá! Sou a MirIA, anfitriã especialista do Instituto Manduvi. Como posso te ajudar hoje?',
-      prompts: [
-        {
-          label: 'Cursos',
-          prompt: 'Quero conhecer os cursos certificados'
-        },
-        {
-          label: 'Projetos',
-          prompt: 'Quero conhecer os projetos do Instituto'
-        },
-        {
-          label: 'Super Ralinha',
-          prompt: 'Quero saber sobre o campeonato Super Ralinha'
-        },
-        {
-          label: 'Sobre',
-          prompt: 'Quero saber mais sobre o Instituto'
-        }
-      ],
+      greeting: 'Olá! Sou a MirIA, Anfitriã do Manduvi. Como posso te ajudar hoje?',
+      prompts: [],
     },
     onError: (detail) => {
       console.error('❌ ChatKit: Erro no widget', detail)
