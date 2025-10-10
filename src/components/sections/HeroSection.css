@@ -1,0 +1,150 @@
+/* ChatKit Integration Styles */
+.chat-container {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(96, 56, 19, 0.3) transparent;
+}
+
+.chat-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-container::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+  background-color: rgba(96, 56, 19, 0.3);
+  border-radius: 3px;
+}
+
+.chat-container::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(96, 56, 19, 0.5);
+}
+
+/* Scroll to bottom button */
+.scroll-to-bottom-btn {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
+  background: rgba(96, 56, 19, 0.9);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 1000;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: all 0.2s ease;
+}
+
+.scroll-to-bottom-btn:hover {
+  background: rgba(96, 56, 19, 1);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+.scroll-to-bottom-btn:active {
+  transform: translateY(0);
+}
+
+/* ChatKit prompt buttons styling */
+.chatkit-start-screen-prompts {
+  display: grid !important;
+  grid-template-columns: 1fr 1fr 1fr !important;
+  gap: 12px !important;
+  margin-top: 16px !important;
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+.chatkit-start-screen-prompts button {
+  padding: 12px 16px !important;
+  font-size: 14px !important;
+  line-height: 1.4 !important;
+  min-height: 48px !important;
+  max-height: none !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(96, 56, 19, 0.2) !important;
+  background: rgba(255, 255, 255, 0.9) !important;
+  color: #603813 !important;
+  transition: all 0.2s ease !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+.chatkit-start-screen-prompts button:hover {
+  background: rgba(96, 56, 19, 0.1) !important;
+  border-color: rgba(96, 56, 19, 0.4) !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+.chatkit-start-screen-prompts button:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 768px) {
+  .chatkit-start-screen-prompts {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+  
+  .chatkit-start-screen-prompts button {
+    padding: 10px 12px !important;
+    font-size: 13px !important;
+    min-height: 44px !important;
+  }
+  
+  .scroll-to-bottom-btn {
+    width: 40px;
+    height: 40px;
+    bottom: 16px;
+    right: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chatkit-start-screen-prompts button {
+    padding: 8px 10px !important;
+    font-size: 12px !important;
+    min-height: 40px !important;
+  }
+}
+
+/* Hide ChatKit's native scroll buttons */
+.chatkit-scroll-to-bottom,
+.chatkit-scroll-button,
+[data-testid="scroll-to-bottom"],
+button[aria-label*="scroll"],
+button[title*="scroll"],
+button[class*="scroll"] {
+  display: none !important;
+}
+
+/* Additional ChatKit styling overrides */
+.chatkit-start-screen {
+  display: flex !important;
+  flex-direction: column !important;
+  height: 100% !important;
+}
+
+.chatkit-start-screen-prompts {
+  flex-shrink: 0 !important;
+}
+
+/* Ensure proper spacing */
+.chatkit-start-screen-greeting {
+  margin-bottom: 16px !important;
+  padding: 0 !important;
+}

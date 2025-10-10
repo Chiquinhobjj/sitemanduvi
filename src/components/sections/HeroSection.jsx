@@ -1,8 +1,163 @@
 import { motion } from 'framer-motion'
 import Marquee from 'react-fast-marquee'
-import ManduviaChat from '../assistant/ManduviaChat'
+import { ChatKit, useChatKit } from '@openai/chatkit-react'
+import { useState, useEffect, useRef } from 'react'
+import { Sparkle, ArrowDown } from 'lucide-react'
+import './HeroSection.css'
 
 const HeroSection = () => {
+  // ChatKit state
+  const [status, setStatus] = useState('booting')
+  const [errorMessage, setErrorMessage] = useState(null)
+  const [showScrollButton, setShowScrollButton] = useState(false)
+  const chatContainerRef = useRef(null)
+
+  // ChatKit configuration
+  const { control, fetchUpdates } = useChatKit({
+    api: {
+      async createSession() {
+        try {
+          const response = await fetch('/api/chatkit/session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ deviceId: crypto.randomUUID() })
+          })
+
+          console.log('📡 ChatKit: Resposta recebida', { status: response.status, ok: response.ok })
+          const payload = await response.json().catch(() => null)
+          console.log('📡 ChatKit: Payload parseado', { hasClientSecret: !!payload?.client_secret })
+
+          if (!response.ok || !payload?.client_secret) {
+            const message = payload?.error ?? 'Não foi possível iniciar uma sessão com o MirIA agora.'
+            console.error('❌ ChatKit: Erro na sessão', { message, payload })
+            throw new Error(message)
+          }
+
+          return { client_secret: payload.client_secret }
+        } catch (error) {
+          console.error('❌ ChatKit: Erro geral', error)
+          setStatus('error')
+          setErrorMessage(
+            error?.message ?? 'Falha ao conectar com o agente. Tente novamente em instantes.'
+          )
+          throw error
+        }
+      },
+    },
+    theme: {
+      colorScheme: 'light',
+      radius: 'round',
+      density: 'compact',
+      color: {
+        grayscale: { hue: 0, tint: 0 },
+        accent: { primary: '#603813', level: 1 },
+      },
+      typography: {
+        baseSize: 15,
+        fontFamily:
+          '"OpenAI Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif',
+        fontFamilyMono:
+          'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace',
+        fontSources: [
+          {
+            family: 'OpenAI Sans',
+            src: 'https://cdn.openai.com/common/fonts/openai-sans/v2/OpenAISans-Regular.woff2',
+            weight: 400,
+            style: 'normal',
+            display: 'swap',
+          },
+        ],
+      },
+    },
+    composer: {
+      placeholder: 'Pergunte sobre nossos projetos, cursos, eventos ou metodologia...',
+      attachments: { enabled: false },
+    },
+    startScreen: {
+      greeting: 'Olá! Sou a MirIA, anfitriã especialista do Instituto Manduvi. Como posso te ajudar hoje?',
+      prompts: [
+        {
+          label: '🎓 Cursos',
+          prompt: 'Quero conhecer os cursos certificados e o Programa Meu Futuro'
+        },
+        {
+          label: '🏆 Superralinha',
+          prompt: 'Quero saber sobre o campeonato de futebol society'
+        },
+        {
+          label: '🚀 Nossas Iniciativas',
+          prompt: 'Quero conhecer os 7 projetos principais do Instituto'
+        },
+        {
+          label: '📖 Sobre o Instituto',
+          prompt: 'Quero saber mais sobre nossa missão, metodologia HEXA e história'
+        },
+        {
+          label: '🌐 Redes Sociais',
+          prompt: 'Quero acompanhar o Instituto nas redes sociais'
+        },
+        {
+          label: '📊 Transparência',
+          prompt: 'Quero ver relatórios de impacto e transparência'
+        }
+      ],
+    },
+    onError: (detail) => {
+      console.error('❌ ChatKit: Erro no widget', detail)
+      setStatus('error')
+      setErrorMessage('Ocorreu um erro ao acessar a base de conhecimento. Tente novamente.')
+    },
+    onStatusChange: (newStatus) => {
+      console.log('📡 ChatKit: Status mudou', newStatus)
+      setStatus(newStatus)
+      if (newStatus === 'ready') {
+        setErrorMessage(null)
+      }
+    },
+  })
+
+  // Scroll functions
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
+    }
+  }
+
+  // Auto-scroll effect
+  useEffect(() => {
+    if (status === 'ready' && chatContainerRef.current) {
+      const container = chatContainerRef.current
+      const observer = new MutationObserver(() => {
+        if (container.scrollHeight > container.clientHeight) {
+          const isAtBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 10
+          if (isAtBottom) {
+            scrollToBottom()
+          }
+        }
+      })
+      
+      observer.observe(container, { childList: true, subtree: true })
+      return () => observer.disconnect()
+    }
+  }, [status])
+
+  // Scroll button visibility
+  useEffect(() => {
+    const handleScroll = () => {
+      if (chatContainerRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 30
+        setShowScrollButton(!isAtBottom && scrollHeight > clientHeight)
+      }
+    }
+
+    const container = chatContainerRef.current
+    if (container) {
+      container.addEventListener('scroll', handleScroll)
+      return () => container.removeEventListener('scroll', handleScroll)
+    }
+  }, [status])
+
   const palette = {
     primary: { bg: 'rgba(242, 139, 48, 0.68)', text: '#2f1a08' },
     secondary: { bg: 'rgba(166, 69, 33, 0.7)', text: '#F2F2F2' },
@@ -149,7 +304,67 @@ const HeroSection = () => {
           </motion.div>
 
           <motion.div variants={itemVariants} className="mt-12">
-            <ManduviaChat />
+            <div className="w-full max-w-4xl mx-auto px-2 sm:px-4 lg:px-6">
+              <div className="bg-white/95 backdrop-blur-lg border border-white/40 shadow-2xl rounded-[20px] sm:rounded-[24px] lg:rounded-[28px] overflow-hidden">
+                <div className="px-3 sm:px-4 lg:px-6 pb-4 sm:pb-6 pt-1 sm:pt-2">
+                  {status !== 'ready' && !errorMessage && (
+                    <div className="flex items-center gap-2 rounded-xl sm:rounded-2xl border border-primary/10 bg-white px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-foreground/70">
+                      <Sparkle className="h-4 w-4 animate-spin text-primary" />
+                      <span>
+                        {status === 'refreshing'
+                          ? 'Atualizando base de conhecimento...'
+                          : 'Conectando com a MirIA especialista...'}
+                      </span>
+                    </div>
+                  )}
+
+                  {errorMessage ? (
+                    <div className="rounded-xl sm:rounded-2xl border border-red-200 bg-red-50 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-red-700">
+                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                        <span className="flex-1">{errorMessage}</span>
+                        <button
+                          type="button"
+                          className="text-primary underline text-xs sm:text-sm font-medium hover:text-primary/80 transition-colors"
+                          onClick={async () => {
+                            setErrorMessage(null)
+                            setStatus('booting')
+                            try {
+                              await fetchUpdates?.()
+                            } catch (error) {
+                              console.error('Erro ao tentar reconectar:', error)
+                              setStatus('error')
+                              setErrorMessage('Falha ao reconectar com a base de conhecimento. Tente novamente.')
+                            }
+                          }}
+                        >
+                          Tentar novamente
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <div 
+                      ref={chatContainerRef}
+                      className="chat-container mt-3 sm:mt-4 w-full max-h-[70vh] overflow-y-auto relative"
+                    >
+                      <ChatKit 
+                        control={control} 
+                        className="h-auto min-h-[280px] sm:min-h-[320px] lg:min-h-[360px] max-h-[65vh] w-full" 
+                      />
+                      
+                      {showScrollButton && (
+                        <button
+                          onClick={scrollToBottom}
+                          className="scroll-to-bottom-btn"
+                          title="Ir para o final da conversa"
+                        >
+                          <ArrowDown className="h-5 w-5" />
+                        </button>
+                      )}
+                    </div>
+                  )}
+                </div>
+              </div>
+            </div>
           </motion.div>
         </motion.div>
       </div>
