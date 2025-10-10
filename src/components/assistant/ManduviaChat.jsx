@@ -324,14 +324,32 @@ const ManduviaChat = () => {
             body: JSON.stringify({ deviceId }),
           })
 
-          console.log('📡 ChatKit: Resposta recebida', { status: response.status, ok: response.ok })
-          const payload = await response.json().catch(() => null)
-          console.log('📡 ChatKit: Payload parseado', { hasClientSecret: !!payload?.client_secret })
+          console.log('📡 ChatKit: Resposta recebida', { 
+            status: response.status, 
+            ok: response.ok,
+            statusText: response.statusText,
+            headers: Object.fromEntries(response.headers.entries())
+          })
+          
+          const payload = await response.json().catch((parseError) => {
+            console.error('❌ ChatKit: Erro ao fazer parse do JSON', parseError)
+            return null
+          })
+          
+          console.log('📡 ChatKit: Payload parseado', { 
+            hasClientSecret: !!payload?.client_secret,
+            payload: payload
+          })
 
-          if (!response.ok || !payload?.client_secret) {
-            const message =
-              payload?.error ?? 'Não foi possível iniciar uma sessão com o MirIA agora.'
-            console.error('❌ ChatKit: Erro na sessão', { message, payload })
+          if (!response.ok) {
+            const message = payload?.error ?? `Erro HTTP ${response.status}: ${response.statusText}`
+            console.error('❌ ChatKit: Erro na resposta HTTP', { message, payload, status: response.status })
+            throw new Error(message)
+          }
+
+          if (!payload?.client_secret) {
+            const message = 'Resposta inválida: client_secret não encontrado'
+            console.error('❌ ChatKit: Client secret não encontrado', { payload })
             throw new Error(message)
           }
 
@@ -361,16 +379,7 @@ const ManduviaChat = () => {
       typography: {
         baseSize: 13,
         fontFamily: '"OpenAI Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif',
-        fontFamilyMono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace',
-        fontSources: [
-          {
-            family: 'OpenAI Sans',
-            src: 'https://cdn.openai.com/common/fonts/openai-sans/v2/OpenAISans-Regular.woff2',
-            weight: 400,
-            style: 'normal',
-            display: 'swap'
-          }
-        ]
+        fontFamilyMono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace'
       }
     },
     composer: {
@@ -416,25 +425,34 @@ const ManduviaChat = () => {
           )}
 
           {errorMessage ? (
-            <div className="rounded-xl sm:rounded-2xl border border-red-200 bg-red-50 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-red-700">
-              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                <span className="flex-1">{errorMessage}</span>
+            <div className="rounded-xl sm:rounded-2xl border border-red-200 bg-red-50 px-3 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm text-red-700">
+              <div className="flex flex-col gap-3">
+                <div className="flex items-start gap-2">
+                  <div className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span className="text-red-600 text-xs">⚠️</span>
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-medium text-red-800 mb-1">Conexão perdida</p>
+                    <p className="text-red-700">{errorMessage}</p>
+                  </div>
+                </div>
                 <button
                   type="button"
-                  className="text-primary underline text-xs sm:text-sm font-medium hover:text-primary/80 transition-colors"
+                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
                   onClick={async () => {
                     setErrorMessage(null)
                     setStatus('booting')
-                        try {
-                          await fetchUpdates?.()
-                        } catch (error) {
-                          console.error('Erro ao tentar reconectar:', error)
-                          setStatus('error')
-                          setErrorMessage('Falha ao reconectar com a base de conhecimento. Tente novamente.')
-                        }
+                    try {
+                      await fetchUpdates?.()
+                    } catch (error) {
+                      console.error('Erro ao tentar reconectar:', error)
+                      setStatus('error')
+                      setErrorMessage('Falha ao reconectar com a base de conhecimento. Tente novamente.')
+                    }
                   }}
                 >
-                  Tentar novamente
+                  <Sparkle className="h-4 w-4" />
+                  Reconectar com a MirIA
                 </button>
               </div>
             </div>
