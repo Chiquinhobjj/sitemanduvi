@@ -350,7 +350,7 @@ const HeroSection = () => {
 
           <motion.div variants={itemVariants} className="mt-12">
             <div className="w-full max-w-4xl mx-auto px-2 sm:px-4 lg:px-6">
-              <div className="bg-white/95 backdrop-blur-lg border border-white/40 shadow-2xl rounded-[20px] sm:rounded-[24px] lg:rounded-[28px] overflow-hidden">
+              <div className="bg-white/95 backdrop-blur-lg shadow-2xl rounded-[20px] sm:rounded-[24px] lg:rounded-[28px] overflow-hidden">
                 <div className="px-3 sm:px-4 lg:px-6 pb-4 sm:pb-6 pt-1 sm:pt-2">
                   {status !== 'ready' && !errorMessage && (
                     <div className="flex items-center gap-2 rounded-xl sm:rounded-2xl border border-primary/10 bg-white px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-foreground/70">
