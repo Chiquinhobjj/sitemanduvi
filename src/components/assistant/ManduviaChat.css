@@ -218,10 +218,10 @@ div[class*="prompt"] {
 /* Scroll to bottom button styles */
 .scroll-to-bottom-btn {
   position: absolute;
-  bottom: 16px;
-  right: 16px;
-  width: 40px;
-  height: 40px;
+  bottom: 20px;
+  right: 20px;
+  width: 44px;
+  height: 44px;
   background: #603813;
   color: white;
   border-radius: 50%;
@@ -231,7 +231,7 @@ div[class*="prompt"] {
   display: flex;
   align-items: center;
   justify-content: center;
-  z-index: 10;
+  z-index: 1000; /* Z-index muito alto para ficar acima de tudo */
   transition: all 0.2s ease;
 }
 
@@ -259,4 +259,17 @@ div[class*="prompt"] {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+/* Esconder botões de scroll do ChatKit para evitar sobreposição */
+[data-chatkit-scroll-to-bottom],
+.chatkit-scroll-to-bottom,
+button[aria-label*="scroll"],
+button[title*="scroll"] {
+  display: none !important;
+}
+
+/* Esconder qualquer botão que possa estar sobrepondo */
+.chat-container button[style*="position: absolute"]:not(.scroll-to-bottom-btn) {
+  display: none !important;
 }

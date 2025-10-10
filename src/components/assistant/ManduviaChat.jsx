@@ -286,14 +286,6 @@ const ManduviaChat = () => {
         
         // Mostrar botão se há conteúdo scrollável e não está no final
         const shouldShow = hasScrollableContent && !isAtBottom
-        console.log('🔍 Scroll Debug:', { 
-          scrollTop, 
-          scrollHeight, 
-          clientHeight, 
-          hasScrollableContent, 
-          isAtBottom, 
-          shouldShow 
-        })
         setShowScrollButton(shouldShow)
       }
     }
@@ -381,10 +373,11 @@ const ManduviaChat = () => {
         ],
       },
     },
-    composer: {
-      placeholder: 'Dê-me uma missão...',
-      attachments: { enabled: false },
-    },
+        composer: {
+          placeholder: 'Dê-me uma missão...',
+          attachments: { enabled: false },
+          showScrollToBottom: false, // Desabilitar botão de scroll do ChatKit
+        },
     startScreen: {
       greeting:
         'Olá! Sou a MirIA, anfitriã do Manduvi. Respondo rápido e te levo ao que você busca. Por onde começamos?',
@@ -467,15 +460,11 @@ const ManduviaChat = () => {
                   />
                   
                   {/* Botão de scroll para o final */}
-                  {(showScrollButton || status === 'ready') && (
+                  {showScrollButton && (
                     <button
                       onClick={scrollToBottom}
                       className="scroll-to-bottom-btn"
                       title="Ir para o final da conversa"
-                      style={{ 
-                        opacity: showScrollButton ? 1 : 0.3,
-                        pointerEvents: showScrollButton ? 'auto' : 'none'
-                      }}
                     >
                       <ArrowDown className="h-5 w-5" />
                     </button>
