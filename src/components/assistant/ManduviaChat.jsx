@@ -27,7 +27,7 @@ const resolveDeviceId = () => {
 const ManduviaChat = () => {
   const [status, setStatus] = useState('booting')
   const [errorMessage, setErrorMessage] = useState(null)
-  const [deviceId] = useState(resolveDeviceId)
+  const [deviceId] = useState(() => resolveDeviceId())
 
   const { control, fetchUpdates } = useChatKit({
     api: {
@@ -102,36 +102,22 @@ const ManduviaChat = () => {
     startScreen: {
       greeting:
         'Olá! Sou a MirIA, anfitriã do Manduvi. Respondo rápido e te levo ao que você busca. Por onde começamos?',
-      widgets: [
+      prompts: [
         {
-          type: 'row',
-          children: [
-            {
-              type: 'button',
-              label: 'Cursos EAD',
-              prompt: 'Quero conhecer os cursos EAD disponíveis'
-            },
-            {
-              type: 'button',
-              label: 'Eventos',
-              prompt: 'Quero saber sobre os eventos do Instituto Manduvi'
-            }
-          ]
+          label: 'Cursos EAD',
+          prompt: 'Quero conhecer os cursos EAD disponíveis'
         },
         {
-          type: 'row',
-          children: [
-            {
-              type: 'button',
-              label: 'Iniciativas & Projetos',
-              prompt: 'Quero conhecer as iniciativas e projetos do Instituto'
-            },
-            {
-              type: 'button',
-              label: 'Sobre o Instituto',
-              prompt: 'Quero saber mais sobre o Instituto Manduvi'
-            }
-          ]
+          label: 'Eventos',
+          prompt: 'Quero saber sobre os eventos do Instituto Manduvi'
+        },
+        {
+          label: 'Iniciativas & Projetos',
+          prompt: 'Quero conhecer as iniciativas e projetos do Instituto'
+        },
+        {
+          label: 'Sobre o Instituto',
+          prompt: 'Quero saber mais sobre o Instituto Manduvi'
         }
       ],
     },
@@ -164,10 +150,16 @@ const ManduviaChat = () => {
               <button
                 type="button"
                 className="ml-3 text-primary underline"
-                onClick={() => {
+                onClick={async () => {
                   setErrorMessage(null)
                   setStatus('booting')
-                  fetchUpdates?.()
+                  try {
+                    await fetchUpdates?.()
+                  } catch (error) {
+                    console.error('Erro ao tentar reconectar:', error)
+                    setStatus('error')
+                    setErrorMessage('Falha ao reconectar. Tente novamente.')
+                  }
                 }}
               >
                 Tentar novamente
