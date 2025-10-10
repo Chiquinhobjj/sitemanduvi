@@ -170,7 +170,7 @@ const ManduviaChat = () => {
     }
   }, [status])
 
-  // Ajustar altura do container dinamicamente
+  // Ajustar altura do container dinamicamente baseado no tipo de tela
   useEffect(() => {
     const adjustContainerHeight = () => {
       if (chatContainerRef.current && status === 'ready') {
@@ -179,18 +179,46 @@ const ManduviaChat = () => {
         
         if (startScreen) {
           const prompts = startScreen.querySelector('.chatkit-start-screen-prompts, div[role="group"]')
+          const greetingHeight = startScreen.querySelector('p, div')?.offsetHeight || 0
+          const padding = 60 // padding e margens
+          
+          // Detectar tipo de tela
+          const isMobile = window.innerWidth <= 640
+          const isTablet = window.innerWidth > 640 && window.innerWidth <= 1024
+          const isDesktop = window.innerWidth > 1024
+          
+          let baseHeight, maxHeightPercentage, minHeight
+          
+          if (isMobile) {
+            // Mobile: altura mais compacta
+            baseHeight = 200
+            maxHeightPercentage = 0.4 // 40% da tela
+            minHeight = 180
+          } else if (isTablet) {
+            // Tablet: altura intermediária
+            baseHeight = 280
+            maxHeightPercentage = 0.5 // 50% da tela
+            minHeight = 240
+          } else {
+            // Desktop: altura mais generosa
+            baseHeight = 320
+            maxHeightPercentage = 0.6 // 60% da tela
+            minHeight = 280
+          }
+          
           if (prompts) {
             // Calcular altura necessária para mostrar todos os prompts
             const promptsHeight = prompts.offsetHeight
-            const greetingHeight = startScreen.querySelector('p, div')?.offsetHeight || 0
-            const padding = 60 // padding e margens
-            
             const requiredHeight = Math.max(
               promptsHeight + greetingHeight + padding,
-              200 // altura mínima reduzida
+              minHeight
             )
             
-            const maxHeight = Math.min(requiredHeight, window.innerHeight * 0.5)
+            const maxHeight = Math.min(requiredHeight, window.innerHeight * maxHeightPercentage)
+            setContainerHeight(`${maxHeight}px`)
+          } else {
+            // Sem prompts, usar altura base
+            const maxHeight = Math.min(baseHeight, window.innerHeight * maxHeightPercentage)
             setContainerHeight(`${maxHeight}px`)
           }
         }
@@ -453,12 +481,19 @@ const ManduviaChat = () => {
               ) : (
                 <div 
                   ref={chatContainerRef}
-                  className="chat-container mt-2 sm:mt-3 w-full max-h-[50vh] sm:max-h-[55vh] lg:max-h-[60vh] overflow-y-auto relative"
-                  style={{ height: containerHeight }}
+                  className="chat-container mt-2 sm:mt-3 w-full overflow-y-auto relative"
+                  style={{ 
+                    height: containerHeight,
+                    maxHeight: '40vh' // Mobile first
+                  }}
                 >
                   <ChatKit 
                     control={control} 
-                    className="h-auto min-h-[200px] sm:min-h-[240px] md:min-h-[280px] lg:min-h-[320px] max-h-[45vh] sm:max-h-[50vh] lg:max-h-[55vh] w-full" 
+                    className="h-auto w-full" 
+                    style={{
+                      minHeight: '180px', // Mobile first
+                      maxHeight: '100%'
+                    }}
                   />
                   
                   {/* Botão de scroll para o final */}
