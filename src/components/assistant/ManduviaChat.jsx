@@ -104,22 +104,18 @@ const ManduviaChat = () => {
         'Olá! Sou a MirIA, anfitriã do Manduvi. Respondo rápido e te levo ao que você busca. Por onde começamos?',
       prompts: [
         { 
-          icon: 'graduation-cap', 
           label: 'Cursos EAD', 
           prompt: 'Quero conhecer os cursos EAD disponíveis' 
         },
         { 
-          icon: 'calendar', 
           label: 'Eventos', 
           prompt: 'Quero saber sobre os eventos do Instituto Manduvi' 
         },
         { 
-          icon: 'lightbulb', 
           label: 'Iniciativas & Projetos', 
           prompt: 'Quero conhecer as iniciativas e projetos do Instituto' 
         },
         { 
-          icon: 'info', 
           label: 'Sobre o Instituto', 
           prompt: 'Quero saber mais sobre o Instituto Manduvi' 
         },
