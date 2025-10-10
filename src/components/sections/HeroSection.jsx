@@ -392,11 +392,11 @@ const HeroSection = () => {
                   ) : (
                     <div 
                       ref={chatContainerRef}
-                      className="chat-container mt-3 sm:mt-4 w-full max-h-[70vh] overflow-y-auto relative"
+                      className="chat-container mt-3 sm:mt-4 w-full max-h-[85vh] sm:max-h-[70vh] overflow-y-auto relative"
                     >
                       <ChatKit 
                         control={control} 
-                        className="h-auto min-h-[280px] sm:min-h-[320px] lg:min-h-[360px] max-h-[65vh] w-full" 
+                        className="h-auto min-h-[450px] sm:min-h-[320px] lg:min-h-[360px] max-h-[80vh] sm:max-h-[65vh] w-full" 
                       />
                       
                       {showScrollButton && (
