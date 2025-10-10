@@ -105,7 +105,7 @@ export default defineConfig(({ mode }) => {
       port: 5175,
       strictPort: true,
       headers: {
-        'Content-Security-Policy': "default-src 'self'; connect-src 'self' https://api.openai.com https://chatgpt.com https://sentinel.openai.com https://*.oaiusercontent.com https://browser-intake-datadoghq.com https://api-js.mixpanel.com; frame-src 'self' https://chatgpt.com https://sentinel.openai.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://chatgpt.com https://sentinel.openai.com https://cdn.platform.openai.com; font-src 'self' https://cdn.openai.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; object-src 'none'; base-uri 'self'; form-action 'self';",
+        'Content-Security-Policy': "default-src 'self'; connect-src 'self' https://api.openai.com https://chatgpt.com https://sentinel.openai.com https://*.oaiusercontent.com https://browser-intake-datadoghq.com https://api-js.mixpanel.com https://cdn.platform.openai.com; frame-src 'self' https://chatgpt.com https://sentinel.openai.com https://cdn.platform.openai.com; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://chatgpt.com https://sentinel.openai.com https://cdn.platform.openai.com; font-src 'self' https://cdn.openai.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; object-src 'none'; base-uri 'self'; form-action 'self';",
         'Permissions-Policy': 'fullscreen=*'
       }
     },
