@@ -65,7 +65,7 @@ const HeroSection = () => {
   // ChatKit configuration com workflow personalizado
   const { control, fetchUpdates } = useChatKit({
     startScreen: {
-      greeting: 'Olá! Sou a MirIA, Anfitriã do Manduvi. Como posso te ajudar hoje?',
+      greeting: "Olá! Sou a MirIA, Anfitriã do Manduvi. Como posso te ajudar hoje?",
       prompts: [
         { label: 'Sobre o Instituto Manduvi', prompt: 'Conte-me sobre o Instituto Manduvi' },
         { label: 'Cursos e Formações', prompt: 'Quais cursos vocês oferecem?' },
