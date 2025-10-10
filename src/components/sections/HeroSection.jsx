@@ -25,7 +25,7 @@ const HeroSection = () => {
     return () => clearTimeout(timeout)
   }, [status])
 
-  // ChatKit configuration
+  // ChatKit configuration com workflow personalizado
   const { control, fetchUpdates } = useChatKit({
     api: {
       async getClientSecret() {
@@ -86,6 +86,10 @@ const HeroSection = () => {
         {
           label: 'Projetos',
           prompt: 'Quero conhecer os projetos do Instituto'
+        },
+        {
+          label: 'Super Ralinha',
+          prompt: 'Quero saber sobre o campeonato Super Ralinha'
         },
         {
           label: 'Sobre',
