@@ -382,18 +382,20 @@ const ManduviaChat = () => {
     <div className="w-full max-w-4xl mx-auto px-2 sm:px-4 lg:px-6">
       <div className="bg-white/95 backdrop-blur-lg border border-white/40 shadow-2xl rounded-[16px] sm:rounded-[20px] lg:rounded-[24px] overflow-hidden">
         <div className="px-2 sm:px-3 md:px-4 lg:px-6 pb-3 sm:pb-4 lg:pb-6 pt-1 sm:pt-2">
+          {/* Status de carregamento */}
           {status !== 'ready' && !errorMessage && (
             <div className="flex items-center gap-2 rounded-xl sm:rounded-2xl border border-primary/10 bg-white px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-foreground/70">
               <Sparkle className="h-3 w-3 sm:h-4 sm:w-4 animate-pulse text-primary" />
-                  <span className="truncate">
-                    {status === 'refreshing'
-                      ? 'Atualizando base de conhecimento...'
-                      : 'Conectando com a MirIA especialista...'}
-                  </span>
+              <span className="truncate">
+                {status === 'refreshing'
+                  ? 'Atualizando base de conhecimento...'
+                  : 'Conectando com a MirIA especialista...'}
+              </span>
             </div>
           )}
 
-          {errorMessage ? (
+          {/* Mensagem de erro */}
+          {errorMessage && (
             <div className="rounded-xl sm:rounded-2xl border border-red-200 bg-red-50 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-red-700">
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
                 <span className="flex-1">{errorMessage}</span>
@@ -403,41 +405,42 @@ const ManduviaChat = () => {
                   onClick={async () => {
                     setErrorMessage(null)
                     setStatus('booting')
-                        try {
-                          await fetchUpdates?.()
-                        } catch (error) {
-                          console.error('Erro ao tentar reconectar:', error)
-                          setStatus('error')
-                          setErrorMessage('Falha ao reconectar com a base de conhecimento. Tente novamente.')
-                        }
+                    try {
+                      await fetchUpdates?.()
+                    } catch (error) {
+                      console.error('Erro ao tentar reconectar:', error)
+                      setStatus('error')
+                      setErrorMessage('Falha ao reconectar com a base de conhecimento. Tente novamente.')
+                    }
                   }}
                 >
                   Tentar novamente
                 </button>
               </div>
             </div>
-              ) : (
-                <div 
-                  ref={chatContainerRef}
-                  className="chat-container mt-2 sm:mt-3 w-full"
-                >
-                  <ChatKit 
-                    control={control} 
-                    className="w-full" 
-                  />
-                  
-                  {/* Botão de scroll para o final */}
-                  {showScrollButton && (
-                    <button
-                      onClick={scrollToBottom}
-                      className="scroll-to-bottom-btn"
-                      title="Ir para o final da conversa"
-                    >
-                      <ArrowDown className="h-5 w-5" />
-                    </button>
-                  )}
-                </div>
-              )}
+          )}
+
+          {/* ChatKit - sempre renderizar */}
+          <div 
+            ref={chatContainerRef}
+            className="chat-container mt-2 sm:mt-3 w-full"
+          >
+            <ChatKit 
+              control={control} 
+              className="w-full" 
+            />
+            
+            {/* Botão de scroll para o final */}
+            {showScrollButton && (
+              <button
+                onClick={scrollToBottom}
+                className="scroll-to-bottom-btn"
+                title="Ir para o final da conversa"
+              >
+                <ArrowDown className="h-5 w-5" />
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
