@@ -371,10 +371,8 @@ const ManduviaChat = () => {
       radius: 'round',
       density: 'spacious',
       color: {
-        accent: {
-          primary: '#603813',
-          level: 1
-        }
+        grayscale: { hue: 0, tint: 0 },
+        accent: { primary: '#603813', level: 1 }
       },
       typography: {
         baseSize: 13,
