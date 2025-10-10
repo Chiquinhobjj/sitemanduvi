@@ -374,39 +374,33 @@ const ManduviaChat = () => {
       }
     },
     composer: {
-      placeholder: 'Pergunte sobre nossos projetos, cursos, eventos ou metodologia...',
+      placeholder: 'Dê-me uma missão...',
       attachments: {
-        enabled: false
-      }
+        enabled: true,
+        maxCount: 5,
+        maxSize: 10485760
+      },
+      tools: [
+        {
+          id: 'search_docs',
+          label: 'Search docs',
+          shortLabel: 'Docs',
+          placeholderOverride: 'Search documentation',
+          icon: 'book-open',
+          pinned: false
+        }
+      ],
+      models: [
+        {
+          id: 'crisp',
+          label: 'Crisp',
+          description: 'Concise and factual'
+        }
+      ]
     },
     startScreen: {
       greeting: 'Olá! Sou a MirIA, Anfitriã do Manduvi. Como posso te ajudar hoje?',
-      prompts: [
-        {
-          label: '🎓 Cursos',
-          prompt: 'Quero conhecer os cursos certificados e o Programa Meu Futuro'
-        },
-        {
-          label: '🏆 Superralinha',
-          prompt: 'Quero saber sobre o campeonato de futebol society'
-        },
-        {
-          label: '🚀 Nossas Iniciativas',
-          prompt: 'Quero conhecer os 7 projetos principais do Instituto'
-        },
-        {
-          label: '📖 Sobre o Instituto',
-          prompt: 'Quero saber mais sobre nossa missão, metodologia HEXA e história'
-        },
-        {
-          label: '🌐 Redes Sociais',
-          prompt: 'Quero acompanhar o Instituto nas redes sociais'
-        },
-        {
-          label: '📊 Transparência',
-          prompt: 'Quero ver relatórios de impacto e transparência'
-        }
-      ]
+      prompts: []
     },
     onError: (detail) => {
       const message =
