@@ -25,109 +25,41 @@ const HeroSection = () => {
     return () => clearTimeout(timeout)
   }, [status])
 
-  // ChatKit configuration
+  // ChatKit configuration - versão simplificada
   const { control, fetchUpdates } = useChatKit({
     api: {
-      async getClientSecret(existing) {
-        console.log('🚀 ChatKit: Iniciando criação de sessão...', { existing: !!existing })
+      async getClientSecret() {
+        console.log('🚀 ChatKit: Iniciando criação de sessão...')
         try {
-          if (existing) {
-            console.log('🔄 ChatKit: Refreshing existing session...')
-            // Implementar refresh de sessão se necessário
-            // Por enquanto, vamos criar uma nova sessão
-          }
-
-          const deviceId = crypto.randomUUID()
-          console.log('📱 ChatKit: Device ID gerado', deviceId)
-          
           const response = await fetch('/api/chatkit/session', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ deviceId })
+            body: JSON.stringify({ deviceId: crypto.randomUUID() })
           })
 
           console.log('📡 ChatKit: Resposta recebida', { 
             status: response.status, 
-            ok: response.ok,
-            url: response.url 
+            ok: response.ok
           })
           
-          const payload = await response.json().catch((parseError) => {
-            console.error('❌ ChatKit: Erro ao fazer parse do JSON', parseError)
-            return null
-          })
-          
+          const payload = await response.json()
           console.log('📡 ChatKit: Payload parseado', { 
-            hasClientSecret: !!payload?.client_secret,
-            sessionId: payload?.id,
-            status: payload?.status
+            hasClientSecret: !!payload?.client_secret
           })
 
           if (!response.ok || !payload?.client_secret) {
-            const message = payload?.error ?? 'Não foi possível iniciar uma sessão com o MirIA agora.'
-            console.error('❌ ChatKit: Erro na sessão', { message, payload, status: response.status })
-            throw new Error(message)
+            throw new Error(payload?.error ?? 'Erro ao criar sessão')
           }
 
-          console.log('✅ ChatKit: Sessão criada com sucesso!')
+          console.log('✅ ChatKit: Sessão criada!')
           return payload.client_secret
         } catch (error) {
-          console.error('❌ ChatKit: Erro geral', error)
+          console.error('❌ ChatKit: Erro', error)
           setStatus('error')
-          setErrorMessage(
-            error?.message ?? 'Falha ao conectar com o agente. Tente novamente em instantes.'
-          )
+          setErrorMessage('Erro ao conectar. Tente novamente.')
           throw error
         }
       },
-    },
-    theme: {
-      colorScheme: 'light',
-      radius: 'round',
-      density: 'compact',
-      color: {
-        accent: { primary: '#603813', level: 1 },
-      },
-      typography: {
-        baseSize: 15,
-      },
-    },
-    composer: {
-      placeholder: 'Pergunte sobre nossos projetos, cursos, eventos ou metodologia...',
-      attachments: { enabled: false },
-    },
-    startScreen: {
-      greeting: 'Olá! Sou a MirIA, anfitriã especialista do Instituto Manduvi. Como posso te ajudar hoje?',
-      prompts: [
-        {
-          label: 'Cursos',
-          prompt: 'Quero conhecer os cursos certificados'
-        },
-        {
-          label: 'Projetos',
-          prompt: 'Quero conhecer os projetos do Instituto'
-        },
-        {
-          label: 'Sobre',
-          prompt: 'Quero saber mais sobre o Instituto'
-        }
-      ],
-    },
-    onError: (detail) => {
-      console.error('❌ ChatKit: Erro no widget', detail)
-      setStatus('error')
-      setErrorMessage('Ocorreu um erro ao acessar a base de conhecimento. Tente novamente.')
-    },
-    onStatusChange: (newStatus) => {
-      console.log('📡 ChatKit: Status mudou', newStatus)
-      setStatus(newStatus)
-      if (newStatus === 'ready') {
-        setErrorMessage(null)
-        console.log('✅ ChatKit: Widget pronto!')
-      } else if (newStatus === 'error') {
-        console.error('❌ ChatKit: Widget com erro')
-        setErrorMessage('Erro ao carregar o chat. Tente recarregar a página.')
-      }
     },
   })
 
