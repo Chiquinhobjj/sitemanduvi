@@ -187,10 +187,10 @@ const ManduviaChat = () => {
             
             const requiredHeight = Math.max(
               promptsHeight + greetingHeight + padding,
-              280 // altura mínima
+              200 // altura mínima reduzida
             )
             
-            const maxHeight = Math.min(requiredHeight, window.innerHeight * 0.7)
+            const maxHeight = Math.min(requiredHeight, window.innerHeight * 0.5)
             setContainerHeight(`${maxHeight}px`)
           }
         }
@@ -379,7 +379,7 @@ const ManduviaChat = () => {
         },
     startScreen: {
       greeting:
-        'Olá! Sou a MirIA, anfitriã especialista do Instituto Manduvi. Tenho acesso a uma base de conhecimento completa sobre nossos projetos, metodologias e iniciativas. Como posso te ajudar hoje?',
+        'Olá! Sou a MirIA, anfitriã especialista do Instituto Manduvi. Como posso te ajudar hoje?',
       prompts: [
         {
           label: '🎓 Cursos',
@@ -458,12 +458,12 @@ const ManduviaChat = () => {
               ) : (
                 <div 
                   ref={chatContainerRef}
-                  className="chat-container mt-2 sm:mt-3 w-full max-h-[60vh] sm:max-h-[65vh] lg:max-h-[70vh] overflow-y-auto relative"
+                  className="chat-container mt-2 sm:mt-3 w-full max-h-[50vh] sm:max-h-[55vh] lg:max-h-[60vh] overflow-y-auto relative"
                   style={{ height: containerHeight }}
                 >
                   <ChatKit 
                     control={control} 
-                    className="h-auto min-h-[240px] sm:min-h-[280px] md:min-h-[320px] lg:min-h-[360px] max-h-[55vh] sm:max-h-[60vh] lg:max-h-[65vh] w-full" 
+                    className="h-auto min-h-[200px] sm:min-h-[240px] md:min-h-[280px] lg:min-h-[320px] max-h-[45vh] sm:max-h-[50vh] lg:max-h-[55vh] w-full" 
                   />
                   
                   {/* Botão de scroll para o final */}

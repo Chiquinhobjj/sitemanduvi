@@ -159,22 +159,22 @@ div[class*="prompt"] {
 /* Responsive height for different screen sizes */
 @media (max-width: 640px) {
   .chat-container {
-    min-height: 240px;
-    max-height: 55vh;
+    min-height: 200px;
+    max-height: 45vh;
   }
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
   .chat-container {
-    min-height: 280px;
-    max-height: 60vh;
+    min-height: 240px;
+    max-height: 50vh;
   }
 }
 
 @media (min-width: 1025px) {
   .chat-container {
-    min-height: 320px;
-    max-height: 65vh;
+    min-height: 280px;
+    max-height: 55vh;
   }
 }
 
@@ -221,19 +221,19 @@ div[class*="prompt"] {
 /* Responsive adjustments for start screen */
 @media (max-width: 640px) {
   .chatkit-start-screen {
-    min-height: 240px !important;
+    min-height: 200px !important;
   }
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
   .chatkit-start-screen {
-    min-height: 280px !important;
+    min-height: 240px !important;
   }
 }
 
 @media (min-width: 1025px) {
   .chatkit-start-screen {
-    min-height: 320px !important;
+    min-height: 280px !important;
   }
 }
 
