@@ -7,7 +7,37 @@
     <title>Instituto Manduvi - SocialTech que Transforma Vidas</title>
     <meta name="description" content="Instituto Manduvi - SocialTech que transforma vidas e comunidades. Inspirados na força da árvore Manduvi, desenvolvemos soluções sustentáveis com impacto duradouro no Pantanal e além." />
     <meta name="keywords" content="instituto manduvi, socialtech, impacto social, pantanal, cuiabá, mato grosso, sustentabilidade, inovação social" />
-    <script src="https://cdn.platform.openai.com/deployments/chatkit/chatkit.js" async></script>
+    <script>
+    // Aplicar polyfill ANTES do ChatKit carregar
+    (function() {
+      if (typeof window !== 'undefined') {
+        // Interceptar StorageType.persistent antes do ChatKit usar
+        if (window.StorageType) {
+          const originalStorageType = window.StorageType;
+          window.StorageType = new Proxy(originalStorageType, {
+            get(target, prop) {
+              if (prop === 'persistent') {
+                console.warn('🚫 StorageType.persistent interceptado - usando fallback');
+                return 'persistent';
+              }
+              return target[prop];
+            }
+          });
+        }
+        
+        // Garantir que navigator.storage existe
+        if (!window.navigator.storage) {
+          window.navigator.storage = {
+            persist: async () => true,
+            estimate: async () => ({ quota: 50000000, usage: 0 })
+          };
+        }
+        
+        console.log('🛡️ Storage polyfill aplicado antes do ChatKit');
+      }
+    })();
+  </script>
+  <script src="https://cdn.platform.openai.com/deployments/chatkit/chatkit.js" async></script>
   </head>
   <body>
     <div id="root"></div>

@@ -79,6 +79,10 @@ const HeroSection = () => {
     },
     storage: {
       type: 'session', // Usar session storage em vez de persistent
+      maxSize: 10 * 1024 * 1024, // 10MB
+    },
+    persistence: {
+      enabled: false, // Desabilitar persistência para evitar StorageType.persistent
     },
     api: {
       async getClientSecret() {
