@@ -81,6 +81,12 @@ const FloatingNav = () => {
               src="/images/M_manduvi.svg"
               alt="Logotipo Manduvi"
               className="w-10 h-10 object-contain"
+              style={{ 
+                display: 'block',
+                visibility: 'visible',
+                opacity: 1,
+                zIndex: 10
+              }}
             />
           </div>
 
