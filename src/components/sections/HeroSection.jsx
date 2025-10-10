@@ -12,27 +12,58 @@ const HeroSection = () => {
   const [showScrollButton, setShowScrollButton] = useState(false)
   const chatContainerRef = useRef(null)
 
+  // Timeout para evitar carregamento infinito
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (status === 'booting') {
+        console.warn('⚠️ ChatKit: Timeout - forçando status para error')
+        setStatus('error')
+        setErrorMessage('Timeout ao conectar com o chat. Tente recarregar a página.')
+      }
+    }, 15000) // 15 segundos
+
+    return () => clearTimeout(timeout)
+  }, [status])
+
   // ChatKit configuration
   const { control, fetchUpdates } = useChatKit({
     api: {
       async createSession() {
+        console.log('🚀 ChatKit: Iniciando criação de sessão...')
         try {
+          const deviceId = crypto.randomUUID()
+          console.log('📱 ChatKit: Device ID gerado', deviceId)
+          
           const response = await fetch('/api/chatkit/session', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ deviceId: crypto.randomUUID() })
+            body: JSON.stringify({ deviceId })
           })
 
-          console.log('📡 ChatKit: Resposta recebida', { status: response.status, ok: response.ok })
-          const payload = await response.json().catch(() => null)
-          console.log('📡 ChatKit: Payload parseado', { hasClientSecret: !!payload?.client_secret })
+          console.log('📡 ChatKit: Resposta recebida', { 
+            status: response.status, 
+            ok: response.ok,
+            url: response.url 
+          })
+          
+          const payload = await response.json().catch((parseError) => {
+            console.error('❌ ChatKit: Erro ao fazer parse do JSON', parseError)
+            return null
+          })
+          
+          console.log('📡 ChatKit: Payload parseado', { 
+            hasClientSecret: !!payload?.client_secret,
+            sessionId: payload?.id,
+            status: payload?.status
+          })
 
           if (!response.ok || !payload?.client_secret) {
             const message = payload?.error ?? 'Não foi possível iniciar uma sessão com o MirIA agora.'
-            console.error('❌ ChatKit: Erro na sessão', { message, payload })
+            console.error('❌ ChatKit: Erro na sessão', { message, payload, status: response.status })
             throw new Error(message)
           }
 
+          console.log('✅ ChatKit: Sessão criada com sucesso!')
           return { client_secret: payload.client_secret }
         } catch (error) {
           console.error('❌ ChatKit: Erro geral', error)
@@ -49,24 +80,10 @@ const HeroSection = () => {
       radius: 'round',
       density: 'compact',
       color: {
-        grayscale: { hue: 0, tint: 0 },
         accent: { primary: '#603813', level: 1 },
       },
       typography: {
         baseSize: 15,
-        fontFamily:
-          '"OpenAI Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif',
-        fontFamilyMono:
-          'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace',
-        fontSources: [
-          {
-            family: 'OpenAI Sans',
-            src: 'https://cdn.openai.com/common/fonts/openai-sans/v2/OpenAISans-Regular.woff2',
-            weight: 400,
-            style: 'normal',
-            display: 'swap',
-          },
-        ],
       },
     },
     composer: {
@@ -77,28 +94,16 @@ const HeroSection = () => {
       greeting: 'Olá! Sou a MirIA, anfitriã especialista do Instituto Manduvi. Como posso te ajudar hoje?',
       prompts: [
         {
-          label: '🎓 Cursos',
-          prompt: 'Quero conhecer os cursos certificados e o Programa Meu Futuro'
+          label: 'Cursos',
+          prompt: 'Quero conhecer os cursos certificados'
         },
         {
-          label: '🏆 Superralinha',
-          prompt: 'Quero saber sobre o campeonato de futebol society'
+          label: 'Projetos',
+          prompt: 'Quero conhecer os projetos do Instituto'
         },
         {
-          label: '🚀 Nossas Iniciativas',
-          prompt: 'Quero conhecer os 7 projetos principais do Instituto'
-        },
-        {
-          label: '📖 Sobre o Instituto',
-          prompt: 'Quero saber mais sobre nossa missão, metodologia HEXA e história'
-        },
-        {
-          label: '🌐 Redes Sociais',
-          prompt: 'Quero acompanhar o Instituto nas redes sociais'
-        },
-        {
-          label: '📊 Transparência',
-          prompt: 'Quero ver relatórios de impacto e transparência'
+          label: 'Sobre',
+          prompt: 'Quero saber mais sobre o Instituto'
         }
       ],
     },
@@ -112,6 +117,10 @@ const HeroSection = () => {
       setStatus(newStatus)
       if (newStatus === 'ready') {
         setErrorMessage(null)
+        console.log('✅ ChatKit: Widget pronto!')
+      } else if (newStatus === 'error') {
+        console.error('❌ ChatKit: Widget com erro')
+        setErrorMessage('Erro ao carregar o chat. Tente recarregar a página.')
       }
     },
   })
