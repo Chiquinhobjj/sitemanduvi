@@ -162,8 +162,35 @@ const HeroSection = () => {
 
   // Scroll functions
   const scrollToBottom = () => {
+    console.log('🔄 Tentando rolar para o final...')
+    
     if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
+      const container = chatContainerRef.current
+      console.log('📊 Scroll info:', {
+        scrollTop: container.scrollTop,
+        scrollHeight: container.scrollHeight,
+        clientHeight: container.clientHeight
+      })
+      
+      // Tentar rolar o container principal
+      container.scrollTop = container.scrollHeight
+      
+      // Também tentar rolar elementos internos do ChatKit
+      const chatKitElements = container.querySelectorAll('[data-testid*="scroll"], .chatkit-scroll, .scroll-container')
+      chatKitElements.forEach(element => {
+        console.log('🎯 Encontrado elemento scroll:', element)
+        element.scrollTop = element.scrollHeight
+      })
+      
+      // Forçar scroll suave
+      container.scrollTo({
+        top: container.scrollHeight,
+        behavior: 'smooth'
+      })
+      
+      console.log('✅ Scroll executado')
+    } else {
+      console.log('❌ Container não encontrado')
     }
   }
 
@@ -208,6 +235,12 @@ const HeroSection = () => {
     if (status === 'ready') {
       console.log('🎯 Chat pronto - mostrando botão de scroll')
       setShowScrollButton(true)
+      
+      // Aguardar um pouco para o ChatKit carregar completamente
+      setTimeout(() => {
+        console.log('⏰ Timeout - tentando scroll após carregamento')
+        scrollToBottom()
+      }, 1000)
     }
   }, [status])
 
