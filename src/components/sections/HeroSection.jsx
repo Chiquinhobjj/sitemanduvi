@@ -33,6 +33,18 @@ const HeroSection = () => {
     }
   }, [status])
 
+  // Timeout específico para quando sessão foi criada mas status não mudou
+  useEffect(() => {
+    if (sessionCreated && status === 'booting') {
+      const timeout = setTimeout(() => {
+        console.log('🔄 ChatKit: Forçando status para ready após sessão criada')
+        setStatus('ready')
+      }, 10000) // 10 segundos após sessão criada
+
+      return () => clearTimeout(timeout)
+    }
+  }, [sessionCreated, status])
+
   // ChatKit configuration com workflow personalizado
   const { control, fetchUpdates } = useChatKit({
     api: {
@@ -143,6 +155,8 @@ const HeroSection = () => {
       } else if (newStatus === 'booting') {
         console.log('🔄 ChatKit: Iniciando...')
         setErrorMessage(null)
+      } else {
+        console.log('📡 ChatKit: Status desconhecido', newStatus)
       }
     },
   })
