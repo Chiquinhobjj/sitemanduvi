@@ -6,64 +6,96 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Instituto Manduvi - SocialTech que Transforma Vidas</title>
     <meta name="description" content="Instituto Manduvi - SocialTech que transforma vidas e comunidades. Inspirados na força da árvore Manduvi, desenvolvemos soluções sustentáveis com impacto duradouro no Pantanal e além." />
-    <meta name="keywords" content="instituto manduvi, socialtech, impacto social, pantanal, cuiabá, mato grosso, sustentabilidade, inovação social" />
-    <script>
-    // Polyfill robusto para StorageType.persistent - executa IMEDIATAMENTE
+  <meta name="keywords" content="instituto manduvi, socialtech, impacto social, pantanal, cuiabá, mato grosso, sustentabilidade, inovação social" />
+  <script>
+    // Script de EMERGÊNCIA - executa ANTES de qualquer coisa
     (function() {
-      'use strict';
-      
-      // 1. Interceptar StorageType.persistent ANTES de qualquer coisa
+      // Bloquear StorageType.persistent IMEDIATAMENTE
       if (typeof window !== 'undefined') {
-        // Substituir StorageType completamente
-        const originalStorageType = window.StorageType;
         window.StorageType = {
           PERSISTENT: 'persistent',
           TEMPORARY: 'temporary',
-          persistent: 'persistent' // Fallback para compatibilidade
+          persistent: 'persistent'
+        };
+        console.log('🚨 EMERGÊNCIA: StorageType.persistent bloqueado');
+      }
+    })();
+  </script>
+  <script>
+    // Polyfill ULTRA agressivo - executa ANTES de qualquer coisa
+    (function() {
+      'use strict';
+      
+      // 1. Bloquear StorageType.persistent COMPLETAMENTE
+      if (typeof window !== 'undefined') {
+        // Substituir StorageType ANTES de qualquer acesso
+        window.StorageType = {
+          PERSISTENT: 'persistent',
+          TEMPORARY: 'temporary'
         };
         
-        // 2. Interceptar acessos a StorageType.persistent
-        Object.defineProperty(window.StorageType, 'persistent', {
-          get: function() {
-            console.warn('🚫 StorageType.persistent acessado - retornando fallback');
-            return 'persistent';
+        // 2. Interceptar TODOS os acessos a StorageType.persistent
+        let storageTypeProxy = new Proxy(window.StorageType, {
+          get(target, prop) {
+            if (prop === 'persistent') {
+              console.warn('🚫 StorageType.persistent BLOQUEADO - retornando fallback');
+              return 'persistent';
+            }
+            return target[prop];
           },
-          configurable: true
+          set(target, prop, value) {
+            if (prop === 'persistent') {
+              console.warn('🚫 Tentativa de definir StorageType.persistent BLOQUEADA');
+              return true;
+            }
+            target[prop] = value;
+            return true;
+          }
         });
         
-        // 3. Garantir que navigator.storage existe e funciona
-        if (!window.navigator.storage) {
-          window.navigator.storage = {};
-        }
+        window.StorageType = storageTypeProxy;
         
-        if (!window.navigator.storage.persist) {
-          window.navigator.storage.persist = function() {
-            console.log('🔄 navigator.storage.persist chamado - retornando true');
-            return Promise.resolve(true);
-          };
-        }
-        
-        if (!window.navigator.storage.estimate) {
-          window.navigator.storage.estimate = function() {
-            console.log('🔄 navigator.storage.estimate chamado');
-            return Promise.resolve({
-              quota: 50000000,
-              usage: 0
-            });
-          };
-        }
-        
-        // 4. Interceptar chamadas para StorageType.persistent em tempo real
+        // 3. Interceptar Object.defineProperty para StorageType
         const originalDefineProperty = Object.defineProperty;
         Object.defineProperty = function(obj, prop, descriptor) {
           if (obj === window.StorageType && prop === 'persistent') {
-            console.warn('🚫 Tentativa de definir StorageType.persistent bloqueada');
+            console.warn('🚫 defineProperty StorageType.persistent BLOQUEADO');
             return obj;
           }
           return originalDefineProperty.call(this, obj, prop, descriptor);
         };
         
-        console.log('🛡️ Storage polyfill aplicado com sucesso - ChatKit protegido');
+        // 4. Interceptar Object.getOwnPropertyDescriptor
+        const originalGetOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
+        Object.getOwnPropertyDescriptor = function(obj, prop) {
+          if (obj === window.StorageType && prop === 'persistent') {
+            console.warn('🚫 getOwnPropertyDescriptor StorageType.persistent BLOQUEADO');
+            return {
+              value: 'persistent',
+              writable: false,
+              enumerable: true,
+              configurable: false
+            };
+          }
+          return originalGetOwnPropertyDescriptor.call(this, obj, prop);
+        };
+        
+        // 5. Garantir navigator.storage
+        if (!window.navigator.storage) {
+          window.navigator.storage = {};
+        }
+        
+        window.navigator.storage.persist = function() {
+          console.log('🔄 navigator.storage.persist chamado - retornando true');
+          return Promise.resolve(true);
+        };
+        
+        window.navigator.storage.estimate = function() {
+          console.log('🔄 navigator.storage.estimate chamado');
+          return Promise.resolve({ quota: 50000000, usage: 0 });
+        };
+        
+        console.log('🛡️ Storage polyfill ULTRA agressivo aplicado');
       }
     })();
   </script>
