@@ -47,6 +47,15 @@ const HeroSection = () => {
 
   // ChatKit configuration com workflow personalizado
   const { control, fetchUpdates } = useChatKit({
+    startScreen: {
+      greeting: 'Olá! Sou a MirIA, Anfitriã do Manduvi. Como posso te ajudar hoje?',
+      prompts: [
+        { label: 'Sobre o Instituto Manduvi', prompt: 'Conte-me sobre o Instituto Manduvi' },
+        { label: 'Cursos e Formações', prompt: 'Quais cursos vocês oferecem?' },
+        { label: 'Projetos e Iniciativas', prompt: 'Mostre-me os projetos do Manduvi' },
+        { label: 'Como entrar em contato', prompt: 'Como posso entrar em contato?' }
+      ],
+    },
     api: {
       async getClientSecret() {
         console.log('🚀 ChatKit: Iniciando criação de sessão...')
@@ -72,6 +81,8 @@ const HeroSection = () => {
           }
 
           console.log('✅ ChatKit: Sessão criada!')
+          console.log('🔍 Workflow ID:', payload.workflow?.id)
+          console.log('🔍 Workflow State:', payload.workflow?.state_variables)
           setSessionCreated(true)
           return payload.client_secret
         } catch (error) {
@@ -82,62 +93,12 @@ const HeroSection = () => {
         }
       },
     },
-    theme: {
-      colorScheme: 'light',
-      radius: 'pill',
-      density: 'spacious',
-      color: {
-        grayscale: { hue: 30, tint: 7 },
-        accent: { primary: '#603813', level: 1 },
-        // Removido surface.background/foreground para deixar o ChatKit controlar
-      },
-      typography: {
-        baseSize: 14,
-        fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
-        fontFamilyMono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace',
-      },
-    },
     composer: {
       placeholder: 'Dê-me uma missão...',
-      attachments: {
-        enabled: true,
-        maxCount: 5,
-        maxSize: 10_485_760,
-      },
-      tools: [
-        {
-          id: 'search_docs',
-          label: 'Search docs',
-          shortLabel: 'Docs',
-          placeholderOverride: 'Search documentation',
-          icon: 'book-open',
-          pinned: false,
-        },
-      ],
-    },
-    startScreen: {
-      greeting: 'Olá! Sou a MirIA, Anfitriã do Manduvi. Como posso te ajudar hoje?',
-      prompts: [
-        {
-          label: 'Sobre o Instituto Manduvi',
-          prompt: 'Conte-me sobre o Instituto Manduvi'
-        },
-        {
-          label: 'Cursos e Formações',
-          prompt: 'Quais cursos vocês oferecem?'
-        },
-        {
-          label: 'Projetos e Iniciativas',
-          prompt: 'Mostre-me os projetos do Manduvi'
-        },
-        {
-          label: 'Como entrar em contato',
-          prompt: 'Como posso entrar em contato?'
-        }
-      ],
     },
     onError: (detail) => {
       console.error('❌ ChatKit: Erro no widget', detail)
+      console.error('❌ Detalhes do erro:', JSON.stringify(detail, null, 2))
       setStatus('error')
       setErrorMessage('Ocorreu um erro ao acessar a base de conhecimento. Tente novamente.')
     },
@@ -148,6 +109,7 @@ const HeroSection = () => {
         setErrorMessage(null)
         setSessionCreated(true)
         console.log('✅ ChatKit: Widget pronto!')
+        console.log('🔍 ChatKit: Verificando se há mensagens...')
       } else if (newStatus === 'error') {
         console.error('❌ ChatKit: Widget com erro')
         setErrorMessage('Erro ao carregar o chat. Tente recarregar a página.')
@@ -157,6 +119,16 @@ const HeroSection = () => {
       } else {
         console.log('📡 ChatKit: Status desconhecido', newStatus)
       }
+    },
+    onMessage: (message) => {
+      console.log('💬 ChatKit: Nova mensagem recebida', message)
+      console.log('💬 Tipo:', message.type)
+      console.log('💬 Conteúdo:', message.content)
+    },
+    onThreadUpdate: (thread) => {
+      console.log('🧵 ChatKit: Thread atualizada', thread)
+      console.log('🧵 Mensagens:', thread.messages?.length)
+      console.log('🧵 Última mensagem:', thread.messages?.[thread.messages.length - 1])
     },
   })
 
