@@ -30,7 +30,7 @@ const ManduviaChat = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [deviceId] = useState(() => resolveDeviceId())
   const [showScrollButton, setShowScrollButton] = useState(false)
-  const [containerHeight, setContainerHeight] = useState('auto')
+  // Remover estado de altura - usar configuração padrão do ChatKit
   const chatContainerRef = useRef(null)
 
   // Aplicar estilos CSS personalizados após o ChatKit ser renderizado
@@ -170,77 +170,7 @@ const ManduviaChat = () => {
     }
   }, [status])
 
-  // Ajustar altura do container dinamicamente baseado no tipo de tela
-  useEffect(() => {
-    const adjustContainerHeight = () => {
-      if (chatContainerRef.current && status === 'ready') {
-        const container = chatContainerRef.current
-        const startScreen = container.querySelector('[data-chatkit-start-screen], .chatkit-start-screen')
-        
-        if (startScreen) {
-          const prompts = startScreen.querySelector('.chatkit-start-screen-prompts, div[role="group"]')
-          const greetingHeight = startScreen.querySelector('p, div')?.offsetHeight || 0
-          const padding = 60 // padding e margens
-          
-          // Detectar tipo de tela
-          const isMobile = window.innerWidth <= 640
-          const isTablet = window.innerWidth > 640 && window.innerWidth <= 1024
-          const isDesktop = window.innerWidth > 1024
-          
-          let baseHeight, maxHeightPercentage, minHeight
-          
-          if (isMobile) {
-            // Mobile: altura muito compacta
-            baseHeight = 150
-            maxHeightPercentage = 0.25 // 25% da tela
-            minHeight = 120
-          } else if (isTablet) {
-            // Tablet: altura moderada
-            baseHeight = 200
-            maxHeightPercentage = 0.35 // 35% da tela
-            minHeight = 160
-          } else {
-            // Desktop: altura controlada
-            baseHeight = 250
-            maxHeightPercentage = 0.4 // 40% da tela
-            minHeight = 200
-          }
-          
-          if (prompts) {
-            // Calcular altura necessária para mostrar todos os prompts
-            const promptsHeight = prompts.offsetHeight
-            const requiredHeight = Math.max(
-              promptsHeight + greetingHeight + padding,
-              minHeight
-            )
-            
-            const maxHeight = Math.min(requiredHeight, window.innerHeight * maxHeightPercentage)
-            setContainerHeight(`${maxHeight}px`)
-          } else {
-            // Sem prompts, usar altura base
-            const maxHeight = Math.min(baseHeight, window.innerHeight * maxHeightPercentage)
-            setContainerHeight(`${maxHeight}px`)
-          }
-        }
-      }
-    }
-
-    // Ajustar altura quando o status muda para ready
-    if (status === 'ready') {
-      setTimeout(adjustContainerHeight, 500)
-      setTimeout(adjustContainerHeight, 1000)
-    }
-
-    // Ajustar altura quando a janela é redimensionada
-    const handleResize = () => {
-      if (status === 'ready') {
-        adjustContainerHeight()
-      }
-    }
-
-    window.addEventListener('resize', handleResize)
-    return () => window.removeEventListener('resize', handleResize)
-  }, [status])
+  // Remover ajustes de altura - usar configuração padrão do ChatKit
 
   // Função para scroll ao final (apenas dentro do chat)
   const scrollToBottom = () => {
@@ -481,19 +411,11 @@ const ManduviaChat = () => {
               ) : (
                 <div 
                   ref={chatContainerRef}
-                  className="chat-container mt-2 sm:mt-3 w-full overflow-y-auto relative"
-                  style={{ 
-                    height: containerHeight,
-                    maxHeight: '25vh' // Mobile first - muito mais compacto
-                  }}
+                  className="chat-container mt-2 sm:mt-3 w-full"
                 >
                   <ChatKit 
                     control={control} 
-                    className="h-auto w-full" 
-                    style={{
-                      minHeight: '120px', // Mobile first - muito mais compacto
-                      maxHeight: '100%'
-                    }}
+                    className="w-full" 
                   />
                   
                   {/* Botão de scroll para o final */}
