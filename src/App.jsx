@@ -13,6 +13,7 @@ const ContactSection = lazy(() => import('./components/sections/ContactSection')
 const InitiativeDetail = lazy(() => import('./components/sections/InitiativeDetail'))
 const EventsSection = lazy(() => import('./components/sections/EventsSection'))
 const SuperralinhaEvent = lazy(() => import('./components/sections/SuperralinhaEvent'))
+const RedesSection = lazy(() => import('./components/sections/RedesSection'))
 const Footer = lazy(() => import('./components/layout/Footer'))
 
 const SectionFallback = ({ height = '40vh' }) => (
@@ -107,6 +108,14 @@ const InitiativeDetailPage = () => (
   </PageSection>
 )
 
+const RedesPage = () => (
+  <PageSection>
+    <Suspense fallback={<SectionFallback height="60vh" />}>
+      <RedesSection />
+    </Suspense>
+  </PageSection>
+)
+
 function App() {
   return (
     <div className="min-h-screen bg-background text-foreground overflow-x-hidden flex flex-col">
@@ -121,6 +130,7 @@ function App() {
           <Route path="/projects/:initiativeId" element={<InitiativeDetailPage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/events/superralinha" element={<SuperralinhaPage />} />
+          <Route path="/redes" element={<RedesPage />} />
           <Route path="/achievements" element={<AchievementsPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />

@@ -18,17 +18,33 @@ const FloatingNav = () => {
       id: 'projects',
       name: 'Iniciativas',
       path: '/projects',
-      children: initiatives.map(({ id, name }) => ({ id, name, path: `/projects/${id}` }))
+      children: [
+        { id: 'projects-home', name: 'Iniciativas', path: '/projects' },
+        ...initiatives.map(({ id, name }) => ({ id, name, path: `/projects/${id}` }))
+      ]
     },
     {
       id: 'events',
       name: 'Eventos',
       path: '/events',
       children: [
+        { id: 'events-home', name: 'Eventos', path: '/events' },
         { id: 'superralinha', name: 'Superralinha', path: '/events/superralinha' }
       ]
     },
     { id: 'achievements', name: 'Conquistas', path: '/achievements' },
+    {
+      id: 'redes',
+      name: 'Redes',
+      path: '/redes',
+      children: [
+        { id: 'redes-home', name: 'Redes', path: '/redes' },
+        { id: 'instagram', name: 'Instagram', path: '/redes/instagram' },
+        { id: 'facebook', name: 'Facebook', path: '/redes/facebook' },
+        { id: 'linkedin', name: 'LinkedIn', path: '/redes/linkedin' },
+        { id: 'youtube', name: 'YouTube', path: '/redes/youtube' }
+      ]
+    },
     { id: 'contact', name: 'Contato', path: '/contact' }
   ]
 
@@ -109,17 +125,24 @@ const FloatingNav = () => {
                           className="absolute left-1/2 top-full mt-2 w-56 -translate-x-1/2 rounded-2xl border border-border bg-white/95 shadow-lg backdrop-blur-md"
                         >
                           <ul className="py-2">
-                            {item.children.map((child) => (
-                              <li key={child.id}>
-                                <button
-                                  type="button"
-                                  onClick={() => handleNavigate(child.path)}
-                                  className="block w-full px-4 py-2 text-left text-sm text-foreground/80 hover:bg-primary/10 hover:text-primary transition-colors"
-                                >
-                                  {child.name}
-                                </button>
-                              </li>
-                            ))}
+                            {item.children.map((child) => {
+                              const isHomeOption = child.id === 'projects-home' || child.id === 'events-home' || child.id === 'redes-home'
+                              return (
+                                <li key={child.id}>
+                                  <button
+                                    type="button"
+                                    onClick={() => handleNavigate(child.path)}
+                                    className={`block w-full px-4 py-2 text-left text-sm transition-colors ${
+                                      isHomeOption
+                                        ? 'bg-primary/10 text-primary font-semibold border-b border-primary/20'
+                                        : 'text-foreground/80 hover:bg-primary/10 hover:text-primary'
+                                    }`}
+                                  >
+                                    {child.name}
+                                  </button>
+                                </li>
+                              )
+                            })}
                           </ul>
                         </motion.div>
                       )}
@@ -201,17 +224,24 @@ const FloatingNav = () => {
                             className="overflow-hidden"
                           >
                             <ul className="py-2 bg-white/95">
-                              {item.children.map((child) => (
-                                <li key={child.id}>
-                                  <button
-                                    type="button"
-                                    onClick={() => handleNavigate(child.path)}
-                                    className="block w-full text-left px-4 py-2 text-sm text-foreground/80 hover:bg-primary/10 hover:text-primary transition-colors"
-                                  >
-                                    {child.name}
-                                  </button>
-                                </li>
-                              ))}
+                              {item.children.map((child) => {
+                                const isHomeOption = child.id === 'projects-home' || child.id === 'events-home' || child.id === 'redes-home'
+                                return (
+                                  <li key={child.id}>
+                                    <button
+                                      type="button"
+                                      onClick={() => handleNavigate(child.path)}
+                                      className={`block w-full text-left px-4 py-2 text-sm transition-colors ${
+                                        isHomeOption
+                                          ? 'bg-primary/10 text-primary font-semibold border-b border-primary/20'
+                                          : 'text-foreground/80 hover:bg-primary/10 hover:text-primary'
+                                      }`}
+                                    >
+                                      {child.name}
+                                    </button>
+                                  </li>
+                                )
+                              })}
                             </ul>
                           </motion.div>
                         )}
