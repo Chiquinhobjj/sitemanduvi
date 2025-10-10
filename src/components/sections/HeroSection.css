@@ -30,27 +30,29 @@
   right: 20px;
   width: 44px;
   height: 44px;
-  background: rgba(96, 56, 19, 0.9);
-  color: white;
-  border: none;
+  background: white;
+  color: #374151;
+  border: 1px solid #e5e7eb;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
   z-index: 1000;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   transition: all 0.2s ease;
 }
 
 .scroll-to-bottom-btn:hover {
-  background: rgba(96, 56, 19, 1);
+  background: #f9fafb;
+  border-color: #d1d5db;
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
 .scroll-to-bottom-btn:active {
   transform: translateY(0);
+  background: #f3f4f6;
 }
 
 /* ChatKit prompt buttons - Microajustes seguindo padrão ouro */
