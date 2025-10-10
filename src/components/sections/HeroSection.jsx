@@ -73,17 +73,6 @@ const HeroSection = () => {
         { label: 'Como entrar em contato', prompt: 'Como posso entrar em contato?' }
       ],
     },
-    history: {
-      enabled: true,
-      maxThreads: 10,
-    },
-    storage: {
-      type: 'session', // Usar session storage em vez de persistent
-      maxSize: 10 * 1024 * 1024, // 10MB
-    },
-    persistence: {
-      enabled: false, // Desabilitar persistência para evitar StorageType.persistent
-    },
     api: {
       async getClientSecret() {
         console.log('🚀 ChatKit: Iniciando criação de sessão...')
@@ -123,10 +112,6 @@ const HeroSection = () => {
     },
     composer: {
       placeholder: 'Dê-me uma missão...',
-      autoFocus: false,
-    },
-    fileUpload: {
-      enabled: false,
     },
     onError: (detail) => {
       console.error('❌ ChatKit: Erro no widget', detail)
