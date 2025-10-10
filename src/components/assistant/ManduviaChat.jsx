@@ -102,37 +102,23 @@ const ManduviaChat = () => {
     startScreen: {
       greeting:
         'Olá! Sou a MirIA, anfitriã do Manduvi. Respondo rápido e te levo ao que você busca. Por onde começamos?',
-      widgets: [
-        {
-          type: 'row',
-          children: [
-            {
-              type: 'button',
-              label: 'Cursos EAD',
-              prompt: 'Quero conhecer os cursos EAD disponíveis'
-            },
-            {
-              type: 'button',
-              label: 'Eventos',
-              prompt: 'Quero saber sobre os eventos do Instituto Manduvi'
-            }
-          ]
+      prompts: [
+        { 
+          label: 'Cursos EAD', 
+          prompt: 'Quero conhecer os cursos EAD disponíveis'
         },
-        {
-          type: 'row',
-          children: [
-            {
-              type: 'button',
-              label: 'Iniciativas & Projetos',
-              prompt: 'Quero conhecer as iniciativas e projetos do Instituto'
-            },
-            {
-              type: 'button',
-              label: 'Sobre o Instituto',
-              prompt: 'Quero saber mais sobre o Instituto Manduvi'
-            }
-          ]
-        }
+        { 
+          label: 'Eventos', 
+          prompt: 'Quero saber sobre os eventos do Instituto Manduvi'
+        },
+        { 
+          label: 'Iniciativas & Projetos', 
+          prompt: 'Quero conhecer as iniciativas e projetos do Instituto'
+        },
+        { 
+          label: 'Sobre o Instituto', 
+          prompt: 'Quero saber mais sobre o Instituto Manduvi'
+        },
       ],
     },
     onError: (detail) => {
