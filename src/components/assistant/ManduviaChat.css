@@ -4,8 +4,8 @@
 .chatkit-start-screen-prompts {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
-  gap: 12px !important;
-  margin-top: 16px !important;
+  gap: 8px !important;
+  margin-top: 12px !important;
   width: 100% !important;
 }
 
@@ -48,21 +48,21 @@
 @media (max-width: 640px) {
   .chatkit-start-screen-prompts {
     grid-template-columns: 1fr !important;
-    gap: 8px !important;
+    gap: 6px !important;
   }
 }
 
 @media (min-width: 641px) and (max-width: 1024px) {
   .chatkit-start-screen-prompts {
     grid-template-columns: 1fr 1fr !important;
-    gap: 10px !important;
+    gap: 8px !important;
   }
 }
 
 @media (min-width: 1025px) {
   .chatkit-start-screen-prompts {
     grid-template-columns: 1fr 1fr !important;
-    gap: 12px !important;
+    gap: 8px !important;
   }
 }
 
@@ -73,7 +73,7 @@ div[data-chatkit-start-screen] .chatkit-start-screen-prompts,
 div.chatkit-start-screen .chatkit-start-screen-prompts {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
-  gap: 12px !important;
+  gap: 8px !important;
   width: 100% !important;
 }
 
@@ -113,7 +113,7 @@ div[data-testid*="prompt"],
 div[class*="prompt"] {
   display: grid !important;
   grid-template-columns: 1fr 1fr !important;
-  gap: 12px !important;
+  gap: 8px !important;
   width: 100% !important;
 }
 

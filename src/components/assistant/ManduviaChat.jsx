@@ -62,9 +62,9 @@ const ManduviaChat = () => {
             // Forçar estilos inline para garantir grid layout
             promptsContainer.style.display = 'grid'
             promptsContainer.style.gridTemplateColumns = '1fr 1fr'
-            promptsContainer.style.gap = '12px'
+            promptsContainer.style.gap = '8px'
             promptsContainer.style.width = '100%'
-            promptsContainer.style.marginTop = '16px'
+            promptsContainer.style.marginTop = '12px'
             
             // Aplicar estilos aos botões
             const buttons = promptsContainer.querySelectorAll('button, [role="button"]')
@@ -111,7 +111,7 @@ const ManduviaChat = () => {
         if (container.querySelector('button, [role="button"]')) {
           container.style.display = 'grid'
           container.style.gridTemplateColumns = '1fr 1fr'
-          container.style.gap = '12px'
+          container.style.gap = '8px'
           container.style.width = '100%'
           container.classList.add('chatkit-start-screen-prompts')
         }
@@ -242,8 +242,8 @@ const ManduviaChat = () => {
         'Olá! Sou a MirIA, anfitriã do Manduvi. Respondo rápido e te levo ao que você busca. Por onde começamos?',
       prompts: [
         {
-          label: 'Cursos EAD',
-          prompt: 'Quero conhecer os cursos EAD disponíveis'
+          label: 'Cursos',
+          prompt: 'Quero conhecer os cursos disponíveis'
         },
         {
           label: 'Eventos',
