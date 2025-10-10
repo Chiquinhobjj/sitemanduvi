@@ -280,8 +280,21 @@ const ManduviaChat = () => {
     const handleScroll = () => {
       if (chatContainerRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current
-        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10
-        setShowScrollButton(!isAtBottom)
+        // Aumentar threshold para mostrar botão mais facilmente
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 30
+        const hasScrollableContent = scrollHeight > clientHeight
+        
+        // Mostrar botão se há conteúdo scrollável e não está no final
+        const shouldShow = hasScrollableContent && !isAtBottom
+        console.log('🔍 Scroll Debug:', { 
+          scrollTop, 
+          scrollHeight, 
+          clientHeight, 
+          hasScrollableContent, 
+          isAtBottom, 
+          shouldShow 
+        })
+        setShowScrollButton(shouldShow)
       }
     }
 
@@ -289,6 +302,10 @@ const ManduviaChat = () => {
       chatContainerRef.current.addEventListener('scroll', handleScroll)
       // Verificar estado inicial
       handleScroll()
+      
+      // Verificar novamente após um delay para garantir que o conteúdo foi renderizado
+      setTimeout(handleScroll, 1000)
+      setTimeout(handleScroll, 2000)
     }
 
     return () => {
@@ -450,11 +467,15 @@ const ManduviaChat = () => {
                   />
                   
                   {/* Botão de scroll para o final */}
-                  {showScrollButton && (
+                  {(showScrollButton || status === 'ready') && (
                     <button
                       onClick={scrollToBottom}
                       className="scroll-to-bottom-btn"
                       title="Ir para o final da conversa"
+                      style={{ 
+                        opacity: showScrollButton ? 1 : 0.3,
+                        pointerEvents: showScrollButton ? 'auto' : 'none'
+                      }}
                     >
                       <ArrowDown className="h-5 w-5" />
                     </button>
