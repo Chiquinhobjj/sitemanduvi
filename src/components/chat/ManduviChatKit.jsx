@@ -4,7 +4,6 @@ import { useState } from 'react';
 const ManduviChatKit = () => {
   const [status, setStatus] = useState('booting');
   const [errorMessage, setErrorMessage] = useState(null);
-  const [chatKey, setChatKey] = useState(0);
 
   const { control } = useChatKit({
     startScreen: {
@@ -19,14 +18,6 @@ Como posso te ajudar hoje?`,
     },
     composer: {
       placeholder: 'Dê-me uma missão...',
-    },
-    theme: {
-      radius: 'pill',
-      density: 'spacious',
-      grayscale: { hue: 30, tint: 7 },
-      baseSize: 15,
-      fontFamily: 'OpenAI Sans, system-ui, sans-serif',
-      fontSources: ['https://cdn.openai.com/fonts/openai-sans.css']
     },
     api: {
       async getClientSecret(existing) {
@@ -92,27 +83,13 @@ Como posso te ajudar hoje?`,
 
       {errorMessage && (
         <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700 mb-4">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-            <span className="flex-1">{errorMessage}</span>
-            <button
-              type="button"
-              className="text-primary underline text-xs sm:text-sm font-medium hover:text-primary/80 transition-colors"
-              onClick={() => {
-                setErrorMessage(null);
-                setStatus('booting');
-                setChatKey(prev => prev + 1);
-              }}
-            >
-              Tentar novamente
-            </button>
-          </div>
+          {errorMessage}
         </div>
       )}
 
       {/* ChatKit Component */}
       <div className="bg-stone-100 shadow-2xl rounded-[20px] sm:rounded-[24px] lg:rounded-[28px] overflow-hidden">
         <ChatKit 
-          key={chatKey}
           control={control} 
           className="h-[600px] w-full"
         />

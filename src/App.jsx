@@ -14,6 +14,10 @@ const InitiativeDetail = lazy(() => import('./components/sections/InitiativeDeta
 const EventsSection = lazy(() => import('./components/sections/EventsSection'))
 const SuperralinhaEvent = lazy(() => import('./components/sections/SuperralinhaEvent'))
 const RedesSection = lazy(() => import('./components/sections/RedesSection'))
+const InstagramPage = lazy(() => import('./components/sections/InstagramPage'))
+const FacebookPage = lazy(() => import('./components/sections/FacebookPage'))
+const LinkedInPage = lazy(() => import('./components/sections/LinkedInPage'))
+const YouTubePage = lazy(() => import('./components/sections/YouTubePage'))
 const Footer = lazy(() => import('./components/layout/Footer'))
 
 const SectionFallback = ({ height = '40vh' }) => (
@@ -131,6 +135,10 @@ function App() {
           <Route path="/events" element={<EventsPage />} />
           <Route path="/events/superralinha" element={<SuperralinhaPage />} />
           <Route path="/redes" element={<RedesPage />} />
+          <Route path="/redes/instagram" element={<InstagramPage />} />
+          <Route path="/redes/facebook" element={<FacebookPage />} />
+          <Route path="/redes/linkedin" element={<LinkedInPage />} />
+          <Route path="/redes/youtube" element={<YouTubePage />} />
           <Route path="/achievements" element={<AchievementsPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
