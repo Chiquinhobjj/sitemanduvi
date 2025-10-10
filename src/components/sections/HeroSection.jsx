@@ -82,31 +82,6 @@ const HeroSection = () => {
         }
       },
     },
-    startScreen: {
-      greeting: 'Olá! Sou a MirIA, Anfitriã do Manduvi. Como posso te ajudar hoje?',
-      prompts: [
-        {
-          id: 'sobre-manduvi',
-          label: 'Sobre o Instituto Manduvi',
-          prompt: 'Conte-me sobre o Instituto Manduvi'
-        },
-        {
-          id: 'cursos',
-          label: 'Cursos e Formações',
-          prompt: 'Quais cursos vocês oferecem?'
-        },
-        {
-          id: 'projetos',
-          label: 'Projetos e Iniciativas',
-          prompt: 'Mostre-me os projetos do Manduvi'
-        },
-        {
-          id: 'contato',
-          label: 'Como entrar em contato',
-          prompt: 'Como posso entrar em contato?'
-        }
-      ],
-    },
     theme: {
       colorScheme: 'light',
       radius: 'pill',
@@ -138,6 +113,31 @@ const HeroSection = () => {
           icon: 'book-open',
           pinned: false,
         },
+      ],
+    },
+    startScreen: {
+      greeting: 'Olá! Sou a MirIA, Anfitriã do Manduvi. Como posso te ajudar hoje?',
+      prompts: [
+        {
+          id: 'sobre-manduvi',
+          label: 'Sobre o Instituto Manduvi',
+          prompt: 'Conte-me sobre o Instituto Manduvi'
+        },
+        {
+          id: 'cursos',
+          label: 'Cursos e Formações',
+          prompt: 'Quais cursos vocês oferecem?'
+        },
+        {
+          id: 'projetos',
+          label: 'Projetos e Iniciativas',
+          prompt: 'Mostre-me os projetos do Manduvi'
+        },
+        {
+          id: 'contato',
+          label: 'Como entrar em contato',
+          prompt: 'Como posso entrar em contato?'
+        }
       ],
     },
     onError: (detail) => {
