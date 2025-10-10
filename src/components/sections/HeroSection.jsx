@@ -1,50 +1,115 @@
 import { motion } from 'framer-motion'
 import Marquee from 'react-fast-marquee'
+import { ChatKit, useChatKit } from '@openai/chatkit-react'
 import { useState, useEffect, useRef } from 'react'
-import { Sparkle, ArrowDown, MessageCircle } from 'lucide-react'
+import { Sparkle, ArrowDown } from 'lucide-react'
 import './HeroSection.css'
 
 const HeroSection = () => {
-  // Chat state
-  const [status, setStatus] = useState('ready')
+  // ChatKit state
+  const [status, setStatus] = useState('booting')
   const [errorMessage, setErrorMessage] = useState(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
   const chatContainerRef = useRef(null)
-  const [messages, setMessages] = useState([
-    {
-      id: 1,
-      text: 'Olá! Sou a MirIA, anfitriã especialista do Instituto Manduvi. Como posso te ajudar hoje?',
-      sender: 'bot',
-      timestamp: new Date()
-    }
-  ])
-  const [inputValue, setInputValue] = useState('')
 
-  // Handle send message
-  const handleSendMessage = () => {
-    if (!inputValue.trim()) return
-
-    const newMessage = {
-      id: messages.length + 1,
-      text: inputValue,
-      sender: 'user',
-      timestamp: new Date()
-    }
-
-    setMessages(prev => [...prev, newMessage])
-    setInputValue('')
-
-    // Simulate bot response
-    setTimeout(() => {
-      const botResponse = {
-        id: messages.length + 2,
-        text: 'Obrigado pela sua mensagem! Em breve implementaremos a integração completa com a IA.',
-        sender: 'bot',
-        timestamp: new Date()
+  // Timeout para evitar carregamento infinito
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      if (status === 'booting') {
+        console.warn('⚠️ ChatKit: Timeout - forçando status para error')
+        setStatus('error')
+        setErrorMessage('Timeout ao conectar com o chat. Tente recarregar a página.')
       }
-      setMessages(prev => [...prev, botResponse])
-    }, 1000)
-  }
+    }, 15000) // 15 segundos
+
+    return () => clearTimeout(timeout)
+  }, [status])
+
+  // ChatKit configuration
+  const { control, fetchUpdates } = useChatKit({
+    api: {
+      async getClientSecret() {
+        console.log('🚀 ChatKit: Iniciando criação de sessão...')
+        try {
+          const response = await fetch('/api/chatkit/session', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ deviceId: crypto.randomUUID() })
+          })
+
+          console.log('📡 ChatKit: Resposta recebida', { 
+            status: response.status, 
+            ok: response.ok
+          })
+          
+          const payload = await response.json()
+          console.log('📡 ChatKit: Payload parseado', { 
+            hasClientSecret: !!payload?.client_secret
+          })
+
+          if (!response.ok || !payload?.client_secret) {
+            throw new Error(payload?.error ?? 'Erro ao criar sessão')
+          }
+
+          console.log('✅ ChatKit: Sessão criada!')
+          return payload.client_secret
+        } catch (error) {
+          console.error('❌ ChatKit: Erro', error)
+          setStatus('error')
+          setErrorMessage('Erro ao conectar. Tente novamente.')
+          throw error
+        }
+      },
+    },
+    theme: {
+      colorScheme: 'light',
+      radius: 'round',
+      density: 'compact',
+      color: {
+        accent: { primary: '#603813', level: 1 },
+      },
+      typography: {
+        baseSize: 15,
+      },
+    },
+    composer: {
+      placeholder: 'Pergunte sobre nossos projetos, cursos, eventos ou metodologia...',
+      attachments: { enabled: false },
+    },
+    startScreen: {
+      greeting: 'Olá! Sou a MirIA, anfitriã especialista do Instituto Manduvi. Como posso te ajudar hoje?',
+      prompts: [
+        {
+          label: 'Cursos',
+          prompt: 'Quero conhecer os cursos certificados'
+        },
+        {
+          label: 'Projetos',
+          prompt: 'Quero conhecer os projetos do Instituto'
+        },
+        {
+          label: 'Sobre',
+          prompt: 'Quero saber mais sobre o Instituto'
+        }
+      ],
+    },
+    onError: (detail) => {
+      console.error('❌ ChatKit: Erro no widget', detail)
+      setStatus('error')
+      setErrorMessage('Ocorreu um erro ao acessar a base de conhecimento. Tente novamente.')
+    },
+    onStatusChange: (newStatus) => {
+      console.log('📡 ChatKit: Status mudou', newStatus)
+      setStatus(newStatus)
+      if (newStatus === 'ready') {
+        setErrorMessage(null)
+        console.log('✅ ChatKit: Widget pronto!')
+      } else if (newStatus === 'error') {
+        console.error('❌ ChatKit: Widget com erro')
+        setErrorMessage('Erro ao carregar o chat. Tente recarregar a página.')
+      }
+    },
+  })
 
   // Scroll functions
   const scrollToBottom = () => {
@@ -274,55 +339,12 @@ const HeroSection = () => {
                   ) : (
                     <div 
                       ref={chatContainerRef}
-                      className="chat-container mt-3 sm:mt-4 w-full max-h-[70vh] overflow-y-auto relative bg-white rounded-lg"
+                      className="chat-container mt-3 sm:mt-4 w-full max-h-[70vh] overflow-y-auto relative"
                     >
-                      {/* Messages */}
-                      <div className="p-4 space-y-4">
-                        {messages.map((message) => (
-                          <div
-                            key={message.id}
-                            className={`flex ${message.sender === 'bot' ? 'justify-start' : 'justify-end'}`}
-                          >
-                            <div
-                              className={`max-w-[80%] p-3 rounded-lg ${
-                                message.sender === 'bot'
-                                  ? 'bg-gray-100 text-gray-800'
-                                  : 'bg-blue-500 text-white'
-                              }`}
-                            >
-                              <p className="text-sm">{message.text}</p>
-                              <p className="text-xs opacity-70 mt-1">
-                                {message.timestamp.toLocaleTimeString()}
-                              </p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      
-                      {/* Input */}
-                      <div className="p-4 border-t border-gray-200">
-                        <div className="flex gap-2">
-                          <input
-                            type="text"
-                            value={inputValue}
-                            onChange={(e) => setInputValue(e.target.value)}
-                            placeholder="Digite sua mensagem..."
-                            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                            onKeyPress={(e) => {
-                              if (e.key === 'Enter' && inputValue.trim()) {
-                                handleSendMessage()
-                              }
-                            }}
-                          />
-                          <button
-                            onClick={handleSendMessage}
-                            disabled={!inputValue.trim()}
-                            className="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 disabled:opacity-50 disabled:cursor-not-allowed"
-                          >
-                            <MessageCircle className="h-4 w-4" />
-                          </button>
-                        </div>
-                      </div>
+                      <ChatKit 
+                        control={control} 
+                        className="h-auto min-h-[280px] sm:min-h-[320px] lg:min-h-[360px] max-h-[65vh] w-full" 
+                      />
                       
                       {showScrollButton && (
                         <button
