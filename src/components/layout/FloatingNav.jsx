@@ -69,18 +69,18 @@ const FloatingNav = () => {
 
   return (
     <motion.nav
-      className="fixed top-2 sm:top-4 left-1/2 -translate-x-1/2 z-50 w-[calc(100vw-16px)] sm:w-auto max-w-6xl"
+      className="fixed top-4 left-1/2 -translate-x-1/2 z-50"
       initial={{ y: -60, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.5, ease: 'easeOut' }}
     >
-      <div className="bg-white/90 backdrop-blur-md border border-border rounded-2xl shadow-lg px-2 sm:px-3 py-2">
-        <div className="flex items-center gap-2 sm:gap-3">
-          <div className="flex items-center justify-center px-2 sm:px-3">
+      <div className="bg-white/90 backdrop-blur-md border border-border rounded-2xl shadow-lg px-3 py-2">
+        <div className="flex items-center gap-3">
+          <div className="flex items-center justify-center px-3">
             <img
               src="/images/M_manduvi.svg"
               alt="Logotipo Manduvi"
-              className="w-8 h-8 sm:w-10 sm:h-10 object-contain"
+              className="w-10 h-10 object-contain"
             />
           </div>
 
@@ -168,10 +168,10 @@ const FloatingNav = () => {
           <button
             type="button"
             onClick={() => setMobileOpen((prev) => !prev)}
-            className="lg:hidden inline-flex items-center justify-center rounded-xl px-2 sm:px-3 py-2 text-foreground/80 hover:text-primary hover:bg-primary/10 transition-colors flex-shrink-0"
+            className="lg:hidden inline-flex items-center justify-center rounded-xl px-3 py-2 text-foreground/80 hover:text-primary hover:bg-primary/10 transition-colors"
             aria-label="Abrir menu"
           >
-            <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
+            <Menu className="h-5 w-5" />
           </button>
         </div>
 
@@ -182,7 +182,7 @@ const FloatingNav = () => {
               animate={{ opacity: 1, height: 'auto' }}
               exit={{ opacity: 0, height: 0 }}
               transition={{ duration: 0.2 }}
-              className="lg:hidden mt-3 border-t border-border pt-3 max-h-[70vh] overflow-y-auto"
+              className="lg:hidden mt-3 border-t border-border pt-3"
             >
               <nav className="flex flex-col gap-2">
                 {navItems.map((item) => {

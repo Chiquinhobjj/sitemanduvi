@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ChatKit, useChatKit } from '@openai/chatkit-react'
 import { Sparkle, ArrowDown } from 'lucide-react'
 import './ManduviaChat.css'
@@ -16,7 +16,7 @@ const resolveDeviceId = () => {
       return existing
     }
 
-    const generated = window.crypto?.randomUUID?.() || Math.random().toString(36).slice(2)
+    const generated = crypto.randomUUID()
     window.localStorage.setItem(DEVICE_STORAGE_KEY, generated)
     return generated
   } catch (error) {
@@ -124,10 +124,12 @@ const ManduviaChat = () => {
     // Aplicar estilos imediatamente
     applyCustomStyles()
 
-    // Aplicar estilos com delays para garantir renderização
+    // Aplicar estilos com múltiplos delays para garantir renderização
     const timeouts = [
       setTimeout(applyCustomStyles, 500),
-      setTimeout(applyCustomStyles, 1500)
+      setTimeout(applyCustomStyles, 1000),
+      setTimeout(applyCustomStyles, 2000),
+      setTimeout(applyCustomStyles, 3000)
     ]
 
     // Observer mais agressivo para detectar mudanças no DOM
@@ -185,10 +187,10 @@ const ManduviaChat = () => {
             
             const requiredHeight = Math.max(
               promptsHeight + greetingHeight + padding,
-              200 // altura mínima reduzida
+              280 // altura mínima
             )
             
-            const maxHeight = Math.min(requiredHeight, window.innerHeight * 0.5)
+            const maxHeight = Math.min(requiredHeight, window.innerHeight * 0.7)
             setContainerHeight(`${maxHeight}px`)
           }
         }
@@ -213,12 +215,12 @@ const ManduviaChat = () => {
   }, [status])
 
   // Função para scroll ao final (apenas dentro do chat)
-  const scrollToBottom = useCallback(() => {
+  const scrollToBottom = () => {
     if (chatContainerRef.current) {
       // Scroll apenas dentro do container do chat
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
     }
-  }, [])
+  }
 
   // Scroll automático para manter a última interação visível (apenas quando necessário)
   useEffect(() => {
@@ -322,32 +324,14 @@ const ManduviaChat = () => {
             body: JSON.stringify({ deviceId }),
           })
 
-          console.log('📡 ChatKit: Resposta recebida', { 
-            status: response.status, 
-            ok: response.ok,
-            statusText: response.statusText,
-            headers: Object.fromEntries(response.headers.entries())
-          })
-          
-          const payload = await response.json().catch((parseError) => {
-            console.error('❌ ChatKit: Erro ao fazer parse do JSON', parseError)
-            return null
-          })
-          
-          console.log('📡 ChatKit: Payload parseado', { 
-            hasClientSecret: !!payload?.client_secret,
-            payload: payload
-          })
+          console.log('📡 ChatKit: Resposta recebida', { status: response.status, ok: response.ok })
+          const payload = await response.json().catch(() => null)
+          console.log('📡 ChatKit: Payload parseado', { hasClientSecret: !!payload?.client_secret })
 
-          if (!response.ok) {
-            const message = payload?.error ?? `Erro HTTP ${response.status}: ${response.statusText}`
-            console.error('❌ ChatKit: Erro na resposta HTTP', { message, payload, status: response.status })
-            throw new Error(message)
-          }
-
-          if (!payload?.client_secret) {
-            const message = 'Resposta inválida: client_secret não encontrado'
-            console.error('❌ ChatKit: Client secret não encontrado', { payload })
+          if (!response.ok || !payload?.client_secret) {
+            const message =
+              payload?.error ?? 'Não foi possível iniciar uma sessão com o MirIA agora.'
+            console.error('❌ ChatKit: Erro na sessão', { message, payload })
             throw new Error(message)
           }
 
@@ -356,34 +340,72 @@ const ManduviaChat = () => {
           return payload.client_secret
         } catch (error) {
           console.error('❌ ChatKit: Erro geral', error)
-          const errorMsg = error?.message ?? 'Falha ao conectar com o agente. Tente novamente em instantes.'
           setStatus('error')
-          setErrorMessage(errorMsg)
-          // Não fazer throw para evitar duplo disparo do onError
-          return null
+          setErrorMessage(
+            error?.message ?? 'Falha ao conectar com o agente. Tente novamente em instantes.'
+          )
+          throw error
         }
       },
     },
     theme: {
       colorScheme: 'light',
-      radius: 'md',
+      radius: 'round',
       density: 'compact',
       color: {
-        accent: { primary: '#603813', level: 1 }
+        grayscale: { hue: 0, tint: 0 },
+        accent: { primary: '#603813', level: 1 },
       },
       typography: {
-        baseSize: 14
-      }
+        baseSize: 12,
+        fontFamily:
+          '"OpenAI Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif',
+        fontFamilyMono:
+          'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace',
+        fontSources: [
+          {
+            family: 'OpenAI Sans',
+            src: 'https://cdn.openai.com/common/fonts/openai-sans/v2/OpenAISans-Regular.woff2',
+            weight: 400,
+            style: 'normal',
+            display: 'swap',
+          },
+        ],
+      },
     },
-    composer: {
-      placeholder: 'Pergunte sobre nossos projetos, cursos, eventos ou metodologia...',
-      attachments: {
-        enabled: false
-      }
-    },
+        composer: {
+          placeholder: 'Pergunte sobre nossos projetos, cursos, eventos ou metodologia...',
+          attachments: { enabled: false },
+        },
     startScreen: {
-      greeting: 'Olá! Sou a MirIA, Anfitriã do Manduvi. Como posso te ajudar hoje?',
-      prompts: []
+      greeting:
+        'Olá! Sou a MirIA, anfitriã especialista do Instituto Manduvi. Como posso te ajudar hoje?',
+      prompts: [
+        {
+          label: '🎓 Cursos',
+          prompt: 'Quero conhecer os cursos certificados e o Programa Meu Futuro'
+        },
+        {
+          label: '🏆 Superralinha',
+          prompt: 'Quero saber sobre o campeonato de futebol society'
+        },
+        {
+          label: '🚀 Nossas Iniciativas',
+          prompt: 'Quero conhecer os 7 projetos principais do Instituto'
+        },
+        {
+          label: '📖 Sobre o Instituto',
+          prompt: 'Quero saber mais sobre nossa missão, metodologia HEXA e história'
+        },
+        {
+          label: '🌐 Redes Sociais',
+          prompt: 'Quero acompanhar o Instituto nas redes sociais'
+        },
+        {
+          label: '📊 Transparência',
+          prompt: 'Quero ver relatórios de impacto e transparência'
+        }
+      ],
     },
     onError: (detail) => {
       const message =
@@ -397,60 +419,51 @@ const ManduviaChat = () => {
 
   return (
     <div className="w-full max-w-4xl mx-auto px-2 sm:px-4 lg:px-6">
-      <div className="bg-white/95 backdrop-blur-lg border border-white/40 shadow-2xl rounded-[16px] sm:rounded-[20px] lg:rounded-[24px] overflow-hidden">
-        <div className="px-2 sm:px-3 md:px-4 lg:px-6 pb-3 sm:pb-4 lg:pb-6 pt-1 sm:pt-2">
+      <div className="bg-white/95 backdrop-blur-lg border border-white/40 shadow-2xl rounded-[20px] sm:rounded-[24px] lg:rounded-[28px] overflow-hidden">
+        <div className="px-3 sm:px-4 lg:px-6 pb-4 sm:pb-6 pt-1 sm:pt-2">
           {status !== 'ready' && !errorMessage && (
             <div className="flex items-center gap-2 rounded-xl sm:rounded-2xl border border-primary/10 bg-white px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-foreground/70">
               <Sparkle className="h-3 w-3 sm:h-4 sm:w-4 animate-pulse text-primary" />
                   <span className="truncate">
                     {status === 'refreshing'
                       ? 'Atualizando base de conhecimento...'
-                      : 'Conectando com a MirIA...'}
+                      : 'Conectando com a MirIA especialista...'}
                   </span>
             </div>
           )}
 
           {errorMessage ? (
-            <div className="rounded-xl sm:rounded-2xl border border-red-200 bg-red-50 px-3 sm:px-4 py-3 sm:py-4 text-xs sm:text-sm text-red-700">
-              <div className="flex flex-col gap-3">
-                <div className="flex items-start gap-2">
-                  <div className="w-5 h-5 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0 mt-0.5">
-                    <span className="text-red-600 text-xs">⚠️</span>
-                  </div>
-                  <div className="flex-1">
-                    <p className="font-medium text-red-800 mb-1">Conexão perdida</p>
-                    <p className="text-red-700">{errorMessage}</p>
-                  </div>
-                </div>
+            <div className="rounded-xl sm:rounded-2xl border border-red-200 bg-red-50 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-red-700">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                <span className="flex-1">{errorMessage}</span>
                 <button
                   type="button"
-                  className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-colors"
+                  className="text-primary underline text-xs sm:text-sm font-medium hover:text-primary/80 transition-colors"
                   onClick={async () => {
                     setErrorMessage(null)
                     setStatus('booting')
-                    try {
-                      await fetchUpdates?.()
-                    } catch (error) {
-                      console.error('Erro ao tentar reconectar:', error)
-                      setStatus('error')
-                      setErrorMessage('Falha ao reconectar com a base de conhecimento. Tente novamente.')
-                    }
+                        try {
+                          await fetchUpdates?.()
+                        } catch (error) {
+                          console.error('Erro ao tentar reconectar:', error)
+                          setStatus('error')
+                          setErrorMessage('Falha ao reconectar com a base de conhecimento. Tente novamente.')
+                        }
                   }}
                 >
-                  <Sparkle className="h-4 w-4" />
-                  Reconectar com a MirIA
+                  Tentar novamente
                 </button>
               </div>
             </div>
               ) : (
                 <div 
                   ref={chatContainerRef}
-                  className="chat-container mt-2 sm:mt-3 w-full max-h-[50vh] sm:max-h-[55vh] lg:max-h-[60vh] overflow-y-auto relative"
+                  className="chat-container mt-3 sm:mt-4 w-full max-h-[70vh] overflow-y-auto relative"
                   style={{ height: containerHeight }}
                 >
                   <ChatKit 
                     control={control} 
-                    className="h-auto min-h-[200px] sm:min-h-[240px] md:min-h-[280px] lg:min-h-[320px] max-h-[45vh] sm:max-h-[50vh] lg:max-h-[55vh] w-full" 
+                    className="h-auto min-h-[280px] sm:min-h-[320px] lg:min-h-[360px] max-h-[65vh] w-full" 
                   />
                   
                   {/* Botão de scroll para o final */}
@@ -458,7 +471,6 @@ const ManduviaChat = () => {
                     <button
                       onClick={scrollToBottom}
                       className="scroll-to-bottom-btn"
-                      aria-label="Ir para o final da conversa"
                       title="Ir para o final da conversa"
                     >
                       <ArrowDown className="h-5 w-5" />
