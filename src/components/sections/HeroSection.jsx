@@ -92,7 +92,7 @@ const HeroSection = () => {
         // Removido surface.background/foreground para deixar o ChatKit controlar
       },
       typography: {
-        baseSize: 15,
+        baseSize: 14,
         fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
         fontFamilyMono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace',
       },
@@ -112,13 +112,6 @@ const HeroSection = () => {
           placeholderOverride: 'Search documentation',
           icon: 'book-open',
           pinned: false,
-        },
-      ],
-      models: [
-        {
-          id: 'crisp',
-          label: 'Crisp',
-          description: 'Concise and factual',
         },
       ],
     },
