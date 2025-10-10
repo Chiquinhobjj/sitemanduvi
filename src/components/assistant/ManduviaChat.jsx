@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
-import { ChatKit } from '@openai/chatkit-react'
-import { Sparkle } from 'lucide-react'
+import { useState, useEffect, useRef } from 'react'
+import { ChatKit, useChatKit } from '@openai/chatkit-react'
+import { Sparkle, ArrowDown } from 'lucide-react'
+import './ManduviaChat.css'
 
 const DEVICE_STORAGE_KEY = 'manduvia-chat-device-id'
 
@@ -28,10 +29,285 @@ const ManduviaChat = () => {
   const [status, setStatus] = useState('booting')
   const [errorMessage, setErrorMessage] = useState(null)
   const [deviceId] = useState(() => resolveDeviceId())
-  const [clientSecret, setClientSecret] = useState(null)
+  const [showScrollButton, setShowScrollButton] = useState(false)
+  const [containerHeight, setContainerHeight] = useState('auto')
+  const chatContainerRef = useRef(null)
 
-  // Configuração do ChatKit seguindo documentação oficial
-  const options = {
+  // Aplicar estilos CSS personalizados após o ChatKit ser renderizado
+  useEffect(() => {
+    const applyCustomStyles = () => {
+      // Buscar containers do ChatKit com múltiplos seletores
+      const chatContainers = [
+        document.querySelector('[data-chatkit-start-screen]'),
+        document.querySelector('.chatkit-start-screen'),
+        document.querySelector('[data-testid*="start-screen"]'),
+        document.querySelector('[class*="start-screen"]'),
+        document.querySelector('[class*="chatkit"]')
+      ].filter(Boolean)
+
+      chatContainers.forEach(chatContainer => {
+        // Buscar containers de prompts com múltiplos seletores
+        const promptsContainers = [
+          chatContainer.querySelector('div[role="group"]'),
+          chatContainer.querySelector('.chatkit-start-screen-prompts'),
+          chatContainer.querySelector('[data-testid*="prompt"]'),
+          chatContainer.querySelector('[class*="prompt"]'),
+          Array.from(chatContainer.children).find(child => 
+            child.querySelector('button') || child.querySelector('[role="button"]')
+          )
+        ].filter(Boolean)
+
+        promptsContainers.forEach(promptsContainer => {
+          if (promptsContainer) {
+            // Adicionar classe CSS
+            promptsContainer.classList.add('chatkit-start-screen-prompts')
+            
+            // Forçar estilos inline para garantir grid layout
+            promptsContainer.style.display = 'grid'
+            promptsContainer.style.gridTemplateColumns = '1fr 1fr'
+            promptsContainer.style.gap = '8px'
+            promptsContainer.style.width = '100%'
+            promptsContainer.style.marginTop = '12px'
+            
+            // Aplicar estilos aos botões
+            const buttons = promptsContainer.querySelectorAll('button, [role="button"]')
+            buttons.forEach((button, index) => {
+              // Forçar estilos inline
+              button.style.display = 'block'
+              button.style.width = '100%'
+              button.style.margin = '0'
+              button.style.padding = '12px 16px'
+              button.style.borderRadius = '12px'
+              button.style.border = '1px solid #e5e7eb'
+              button.style.background = '#ffffff'
+              button.style.color = '#374151'
+              button.style.fontSize = '14px'
+              button.style.fontWeight = '500'
+              button.style.textAlign = 'center'
+              button.style.cursor = 'pointer'
+              button.style.transition = 'all 0.2s ease'
+              button.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)'
+              
+              // Adicionar atributo para identificação
+              button.setAttribute('data-custom-button', 'true')
+            })
+
+            // Aplicar estilos a qualquer elemento filho que possa ser um botão
+            const allChildren = promptsContainer.querySelectorAll('*')
+            allChildren.forEach(child => {
+              if (child.tagName === 'BUTTON' || child.getAttribute('role') === 'button') {
+                child.style.display = 'block'
+                child.style.width = '100%'
+                child.style.margin = '0'
+              }
+            })
+          }
+        })
+      })
+
+      // Buscar e aplicar estilos a qualquer container de prompts no documento
+      const allPromptContainers = document.querySelectorAll(
+        'div[role="group"], [data-testid*="prompt"], [class*="prompt"]'
+      )
+      
+      allPromptContainers.forEach(container => {
+        if (container.querySelector('button, [role="button"]')) {
+          container.style.display = 'grid'
+          container.style.gridTemplateColumns = '1fr 1fr'
+          container.style.gap = '8px'
+          container.style.width = '100%'
+          container.classList.add('chatkit-start-screen-prompts')
+        }
+      })
+    }
+
+    // Aplicar estilos imediatamente
+    applyCustomStyles()
+
+    // Aplicar estilos com múltiplos delays para garantir renderização
+    const timeouts = [
+      setTimeout(applyCustomStyles, 500),
+      setTimeout(applyCustomStyles, 1000),
+      setTimeout(applyCustomStyles, 2000),
+      setTimeout(applyCustomStyles, 3000)
+    ]
+
+    // Observer mais agressivo para detectar mudanças no DOM
+    const observer = new MutationObserver((mutations) => {
+      let shouldApply = false
+      mutations.forEach(mutation => {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+          mutation.addedNodes.forEach(node => {
+            if (node.nodeType === 1) { // Element node
+              if (node.querySelector && (
+                node.querySelector('button') || 
+                node.querySelector('[role="button"]') ||
+                node.classList?.contains('chatkit') ||
+                node.getAttribute?.('data-chatkit-start-screen')
+              )) {
+                shouldApply = true
+              }
+            }
+          })
+        }
+      })
+      
+      if (shouldApply) {
+        setTimeout(applyCustomStyles, 100)
+      }
+    })
+
+    observer.observe(document.body, { 
+      childList: true, 
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class', 'data-testid']
+    })
+
+    return () => {
+      timeouts.forEach(clearTimeout)
+      observer.disconnect()
+    }
+  }, [status])
+
+  // Ajustar altura do container dinamicamente
+  useEffect(() => {
+    const adjustContainerHeight = () => {
+      if (chatContainerRef.current && status === 'ready') {
+        const container = chatContainerRef.current
+        const startScreen = container.querySelector('[data-chatkit-start-screen], .chatkit-start-screen')
+        
+        if (startScreen) {
+          const prompts = startScreen.querySelector('.chatkit-start-screen-prompts, div[role="group"]')
+          if (prompts) {
+            // Calcular altura necessária para mostrar todos os prompts
+            const promptsHeight = prompts.offsetHeight
+            const greetingHeight = startScreen.querySelector('p, div')?.offsetHeight || 0
+            const padding = 60 // padding e margens
+            
+            const requiredHeight = Math.max(
+              promptsHeight + greetingHeight + padding,
+              200 // altura mínima reduzida
+            )
+            
+            const maxHeight = Math.min(requiredHeight, window.innerHeight * 0.5)
+            setContainerHeight(`${maxHeight}px`)
+          }
+        }
+      }
+    }
+
+    // Ajustar altura quando o status muda para ready
+    if (status === 'ready') {
+      setTimeout(adjustContainerHeight, 500)
+      setTimeout(adjustContainerHeight, 1000)
+    }
+
+    // Ajustar altura quando a janela é redimensionada
+    const handleResize = () => {
+      if (status === 'ready') {
+        adjustContainerHeight()
+      }
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [status])
+
+  // Função para scroll ao final (apenas dentro do chat)
+  const scrollToBottom = () => {
+    if (chatContainerRef.current) {
+      // Scroll apenas dentro do container do chat
+      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
+    }
+  }
+
+  // Scroll automático para manter a última interação visível (apenas quando necessário)
+  useEffect(() => {
+    // Não fazer scroll automático no carregamento inicial
+    // Só fazer scroll quando há mudanças reais no conteúdo
+
+    // Observer para detectar mudanças no conteúdo do chat
+    const observer = new MutationObserver((mutations) => {
+      let shouldScroll = false
+      mutations.forEach(mutation => {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+          mutation.addedNodes.forEach(node => {
+            if (node.nodeType === 1) { // Element node
+              // Verificar se é uma nova mensagem ou interação
+              if (node.querySelector && (
+                node.querySelector('[data-message]') ||
+                node.querySelector('.message') ||
+                node.querySelector('[class*="message"]') ||
+                node.querySelector('[class*="chat"]') ||
+                node.textContent?.includes('MirIA') ||
+                node.textContent?.includes('Olá') ||
+                node.textContent?.includes('Entendi') ||
+                node.textContent?.includes('Pensou')
+              )) {
+                shouldScroll = true
+              }
+            }
+          })
+        }
+      })
+      
+      // Só fazer scroll se não estiver no final e houver mudanças
+      if (shouldScroll && chatContainerRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 50
+        
+        if (!isAtBottom) {
+          setTimeout(scrollToBottom, 200)
+        }
+      }
+    })
+
+    if (chatContainerRef.current) {
+      observer.observe(chatContainerRef.current, { 
+        childList: true, 
+        subtree: true 
+      })
+    }
+
+    return () => {
+      observer.disconnect()
+    }
+  }, [status])
+
+  // Detectar scroll para mostrar/esconder botão
+  useEffect(() => {
+    const handleScroll = () => {
+      if (chatContainerRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current
+        // Aumentar threshold para mostrar botão mais facilmente
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 30
+        const hasScrollableContent = scrollHeight > clientHeight
+        
+        // Mostrar botão se há conteúdo scrollável e não está no final
+        const shouldShow = hasScrollableContent && !isAtBottom
+        setShowScrollButton(shouldShow)
+      }
+    }
+
+    if (chatContainerRef.current) {
+      chatContainerRef.current.addEventListener('scroll', handleScroll)
+      // Verificar estado inicial
+      handleScroll()
+      
+      // Verificar novamente após um delay para garantir que o conteúdo foi renderizado
+      setTimeout(handleScroll, 1000)
+      setTimeout(handleScroll, 2000)
+    }
+
+    return () => {
+      if (chatContainerRef.current) {
+        chatContainerRef.current.removeEventListener('scroll', handleScroll)
+      }
+    }
+  }, [status])
+
+  const { control, fetchUpdates } = useChatKit({
     api: {
       async getClientSecret(existing) {
         console.log('🔄 ChatKit: Iniciando getClientSecret', { existing, deviceId })
@@ -61,7 +337,6 @@ const ManduviaChat = () => {
 
           console.log('✅ ChatKit: Sessão criada com sucesso')
           setStatus('ready')
-          setClientSecret(payload.client_secret)
           return payload.client_secret
         } catch (error) {
           console.error('❌ ChatKit: Erro geral', error)
@@ -78,21 +353,13 @@ const ManduviaChat = () => {
       radius: 'round',
       density: 'spacious',
       color: {
-        grayscale: {
-          hue: 0,
-          tint: 0
-        },
         accent: {
           primary: '#603813',
           level: 1
-        },
-        surface: {
-          background: '#ffffff',
-          foreground: '#ffffff'
         }
       },
       typography: {
-        baseSize: 14,
+        baseSize: 13,
         fontFamily: '"OpenAI Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif',
         fontFamilyMono: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace',
         fontSources: [
@@ -107,33 +374,21 @@ const ManduviaChat = () => {
       }
     },
     composer: {
-      placeholder: 'Dê-me uma missão...',
+      placeholder: 'Pergunte sobre nossos projetos, cursos, eventos ou metodologia...',
       attachments: {
-        enabled: true,
-        maxCount: 5,
-        maxSize: 10485760
-      },
-      tools: [
-        {
-          id: 'search_docs',
-          label: 'Search docs',
-          shortLabel: 'Docs',
-          placeholderOverride: 'Search documentation',
-          icon: 'book-open',
-          pinned: false
-        }
-      ],
-      models: [
-        {
-          id: 'crisp',
-          label: 'Crisp',
-          description: 'Concise and factual'
-        }
-      ]
+        enabled: false
+      }
     },
     startScreen: {
       greeting: 'Olá! Sou a MirIA, Anfitriã do Manduvi. Como posso te ajudar hoje?',
-      prompts: []
+      prompts: [
+        'Quero conhecer os cursos certificados e o Programa Meu Futuro',
+        'Quero saber sobre o campeonato de futebol society',
+        'Quero conhecer os 7 projetos principais do Instituto',
+        'Quero saber mais sobre nossa missão, metodologia HEXA e história',
+        'Quero acompanhar o Instituto nas redes sociais',
+        'Quero ver relatórios de impacto e transparência'
+      ]
     },
     onError: (detail) => {
       const message =
@@ -143,49 +398,69 @@ const ManduviaChat = () => {
       setStatus('error')
       setErrorMessage(message)
     },
-  }
+  })
 
   return (
     <div className="w-full max-w-4xl mx-auto px-2 sm:px-4 lg:px-6">
       <div className="bg-white/95 backdrop-blur-lg border border-white/40 shadow-2xl rounded-[16px] sm:rounded-[20px] lg:rounded-[24px] overflow-hidden">
         <div className="px-2 sm:px-3 md:px-4 lg:px-6 pb-3 sm:pb-4 lg:pb-6 pt-1 sm:pt-2">
-          {/* Status de carregamento */}
           {status !== 'ready' && !errorMessage && (
             <div className="flex items-center gap-2 rounded-xl sm:rounded-2xl border border-primary/10 bg-white px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-foreground/70">
               <Sparkle className="h-3 w-3 sm:h-4 sm:w-4 animate-pulse text-primary" />
-              <span className="truncate">
-                {status === 'refreshing'
-                  ? 'Atualizando base de conhecimento...'
-                  : 'Conectando com a MirIA especialista...'}
-              </span>
+                  <span className="truncate">
+                    {status === 'refreshing'
+                      ? 'Atualizando base de conhecimento...'
+                      : 'Conectando com a MirIA especialista...'}
+                  </span>
             </div>
           )}
 
-          {/* Mensagem de erro */}
-          {errorMessage && (
+          {errorMessage ? (
             <div className="rounded-xl sm:rounded-2xl border border-red-200 bg-red-50 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-red-700">
               <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
                 <span className="flex-1">{errorMessage}</span>
                 <button
                   type="button"
                   className="text-primary underline text-xs sm:text-sm font-medium hover:text-primary/80 transition-colors"
-                  onClick={() => {
+                  onClick={async () => {
                     setErrorMessage(null)
                     setStatus('booting')
-                    setClientSecret(null)
+                        try {
+                          await fetchUpdates?.()
+                        } catch (error) {
+                          console.error('Erro ao tentar reconectar:', error)
+                          setStatus('error')
+                          setErrorMessage('Falha ao reconectar com a base de conhecimento. Tente novamente.')
+                        }
                   }}
                 >
                   Tentar novamente
                 </button>
               </div>
             </div>
-          )}
-
-          {/* ChatKit - abordagem direta seguindo documentação oficial */}
-          <ChatKit 
-            options={options}
-            className="w-full" 
-          />
+              ) : (
+                <div 
+                  ref={chatContainerRef}
+                  className="chat-container mt-2 sm:mt-3 w-full max-h-[50vh] sm:max-h-[55vh] lg:max-h-[60vh] overflow-y-auto relative"
+                  style={{ height: containerHeight }}
+                >
+                  <ChatKit 
+                    control={control} 
+                    className="h-auto min-h-[200px] sm:min-h-[240px] md:min-h-[280px] lg:min-h-[320px] max-h-[45vh] sm:max-h-[50vh] lg:max-h-[55vh] w-full" 
+                  />
+                  
+                  {/* Botão de scroll para o final */}
+                  {showScrollButton && (
+                    <button
+                      onClick={scrollToBottom}
+                      className="scroll-to-bottom-btn"
+                      title="Ir para o final da conversa"
+                    >
+                      <ArrowDown className="h-5 w-5" />
+                    </button>
+                  )}
+                </div>
+              )}
         </div>
       </div>
     </div>
