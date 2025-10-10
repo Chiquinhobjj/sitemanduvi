@@ -6,6 +6,19 @@ const ManduviChatKit = () => {
   const [errorMessage, setErrorMessage] = useState(null);
 
   const { control } = useChatKit({
+    startScreen: {
+      greeting: `Olá! Sou a MirIA, Anfitriã do Instituto Manduvi.
+Como posso te ajudar hoje?`,
+      prompts: [
+        { label: 'Sobre o Instituto Manduvi', prompt: 'Conte-me sobre o Instituto Manduvi' },
+        { label: 'Cursos e Formações', prompt: 'Quais cursos vocês oferecem?' },
+        { label: 'Projetos e Iniciativas', prompt: 'Mostre-me os projetos do Manduvi' },
+        { label: 'Como entrar em contato', prompt: 'Como posso entrar em contato?' }
+      ],
+    },
+    composer: {
+      placeholder: 'Dê-me uma missão...',
+    },
     api: {
       async getClientSecret(existing) {
         console.log('🚀 ChatKit: Iniciando criação de sessão...');
@@ -41,19 +54,6 @@ const ManduviChatKit = () => {
           throw error;
         }
       },
-    },
-    startScreen: {
-      greeting: `Olá! Sou a MirIA, Anfitriã do Instituto Manduvi.
-Como posso te ajudar hoje?`,
-      prompts: [
-        { label: 'Sobre o Instituto Manduvi', prompt: 'Conte-me sobre o Instituto Manduvi' },
-        { label: 'Cursos e Formações', prompt: 'Quais cursos vocês oferecem?' },
-        { label: 'Projetos e Iniciativas', prompt: 'Mostre-me os projetos do Manduvi' },
-        { label: 'Como entrar em contato', prompt: 'Como posso entrar em contato?' }
-      ],
-    },
-    composer: {
-      placeholder: 'Dê-me uma missão...',
     },
     onError: (detail) => {
       console.error('❌ ChatKit: Erro no widget', detail);
