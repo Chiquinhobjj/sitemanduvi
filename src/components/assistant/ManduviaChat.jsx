@@ -31,7 +31,6 @@ const ManduviaChat = () => {
   const [deviceId] = useState(() => resolveDeviceId())
   const [showScrollButton, setShowScrollButton] = useState(false)
   const chatContainerRef = useRef(null)
-  const bottomRef = useRef(null)
 
   // Aplicar estilos CSS personalizados após o ChatKit ser renderizado
   useEffect(() => {
@@ -170,24 +169,20 @@ const ManduviaChat = () => {
     }
   }, [status])
 
-  // Função para scroll ao final
+  // Função para scroll ao final (apenas dentro do chat)
   const scrollToBottom = () => {
     if (chatContainerRef.current) {
+      // Scroll apenas dentro do container do chat
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
-    }
-    if (bottomRef.current) {
-      bottomRef.current.scrollIntoView({ behavior: 'smooth' })
     }
   }
 
-  // Scroll automático para manter a última interação visível
+  // Scroll automático para manter a última interação visível (apenas quando necessário)
   useEffect(() => {
-    // Scroll quando o status muda para 'ready'
-    if (status === 'ready') {
-      setTimeout(scrollToBottom, 500)
-    }
+    // Não fazer scroll automático no carregamento inicial
+    // Só fazer scroll quando há mudanças reais no conteúdo
 
-    // Observer mais agressivo para detectar mudanças no conteúdo do chat
+    // Observer para detectar mudanças no conteúdo do chat
     const observer = new MutationObserver((mutations) => {
       let shouldScroll = false
       mutations.forEach(mutation => {
@@ -212,8 +207,14 @@ const ManduviaChat = () => {
         }
       })
       
-      if (shouldScroll) {
-        setTimeout(scrollToBottom, 300)
+      // Só fazer scroll se não estiver no final e houver mudanças
+      if (shouldScroll && chatContainerRef.current) {
+        const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current
+        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 50
+        
+        if (!isAtBottom) {
+          setTimeout(scrollToBottom, 200)
+        }
       }
     })
 
@@ -401,7 +402,6 @@ const ManduviaChat = () => {
                     control={control} 
                     className="h-[240px] sm:h-[280px] lg:h-[320px] min-h-[240px] sm:min-h-[280px] lg:min-h-[320px] w-full" 
                   />
-                  <div ref={bottomRef} />
                   
                   {/* Botão de scroll para o final */}
                   {showScrollButton && (
