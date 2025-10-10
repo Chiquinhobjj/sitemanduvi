@@ -1,5 +1,5 @@
-import { useState } from 'react'
-import { ChatKit, useChatKit } from '@openai/chatkit-react'
+import { useState, useEffect } from 'react'
+import { ChatKit } from '@openai/chatkit-react'
 import { Sparkle } from 'lucide-react'
 
 const DEVICE_STORAGE_KEY = 'manduvia-chat-device-id'
@@ -28,10 +28,10 @@ const ManduviaChat = () => {
   const [status, setStatus] = useState('booting')
   const [errorMessage, setErrorMessage] = useState(null)
   const [deviceId] = useState(() => resolveDeviceId())
+  const [clientSecret, setClientSecret] = useState(null)
 
-  // Usar configuração padrão do ChatKit - sem customizações complexas
-
-  const { control, fetchUpdates } = useChatKit({
+  // Configuração do ChatKit seguindo documentação oficial
+  const options = {
     api: {
       async getClientSecret(existing) {
         console.log('🔄 ChatKit: Iniciando getClientSecret', { existing, deviceId })
@@ -61,6 +61,7 @@ const ManduviaChat = () => {
 
           console.log('✅ ChatKit: Sessão criada com sucesso')
           setStatus('ready')
+          setClientSecret(payload.client_secret)
           return payload.client_secret
         } catch (error) {
           console.error('❌ ChatKit: Erro geral', error)
@@ -142,7 +143,7 @@ const ManduviaChat = () => {
       setStatus('error')
       setErrorMessage(message)
     },
-  })
+  }
 
   return (
     <div className="w-full max-w-4xl mx-auto px-2 sm:px-4 lg:px-6">
@@ -168,16 +169,10 @@ const ManduviaChat = () => {
                 <button
                   type="button"
                   className="text-primary underline text-xs sm:text-sm font-medium hover:text-primary/80 transition-colors"
-                  onClick={async () => {
+                  onClick={() => {
                     setErrorMessage(null)
                     setStatus('booting')
-                    try {
-                      await fetchUpdates?.()
-                    } catch (error) {
-                      console.error('Erro ao tentar reconectar:', error)
-                      setStatus('error')
-                      setErrorMessage('Falha ao reconectar com a base de conhecimento. Tente novamente.')
-                    }
+                    setClientSecret(null)
                   }}
                 >
                   Tentar novamente
@@ -186,9 +181,9 @@ const ManduviaChat = () => {
             </div>
           )}
 
-          {/* ChatKit - configuração padrão */}
+          {/* ChatKit - abordagem direta seguindo documentação oficial */}
           <ChatKit 
-            control={control} 
+            options={options}
             className="w-full" 
           />
         </div>
