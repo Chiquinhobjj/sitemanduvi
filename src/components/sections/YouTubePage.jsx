@@ -76,11 +76,38 @@ const YouTubePage = () => {
             
             {/* YouTube Channel Embed */}
             <div className="p-6">
-              <div className="aspect-video max-w-4xl mx-auto bg-gradient-to-br from-red-100 to-orange-100 rounded-xl flex items-center justify-center">
-                <div className="text-center">
-                  <Youtube className="w-16 h-16 text-red-500 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Canal do YouTube</h3>
-                  <p className="text-gray-600 mb-4">Vídeos educativos e conteúdo exclusivo</p>
+              <div className="max-w-4xl mx-auto">
+                {/* YouTube Channel Widget */}
+                <div className="bg-white rounded-xl shadow-lg overflow-hidden">
+                  <div className="aspect-video">
+                    <iframe
+                      width="100%"
+                      height="100%"
+                      src="https://www.youtube.com/embed?listType=user_uploads&list=@institutomanduvi"
+                      title="Canal do Instituto Manduvi"
+                      frameBorder="0"
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                      allowFullScreen
+                      className="rounded-xl"
+                    ></iframe>
+                  </div>
+                </div>
+                
+                {/* YouTube Subscribe Button */}
+                <div className="mt-6 text-center">
+                  <div className="inline-block">
+                    <script src="https://apis.google.com/js/platform.js"></script>
+                    <div 
+                      className="g-ytsubscribe" 
+                      data-channelid="UCinstitutomanduvi" 
+                      data-layout="default" 
+                      data-count="default"
+                    ></div>
+                  </div>
+                </div>
+                
+                {/* Fallback para quando o widget não carregar */}
+                <div className="mt-4 text-center">
                   <a
                     href="https://www.youtube.com/@institutomanduvi"
                     target="_blank"

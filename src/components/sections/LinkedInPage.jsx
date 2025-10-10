@@ -76,11 +76,50 @@ const LinkedInPage = () => {
             
             {/* LinkedIn Company Page Embed */}
             <div className="p-6">
-              <div className="aspect-video max-w-2xl mx-auto bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center">
-                <div className="text-center">
-                  <Linkedin className="w-16 h-16 text-blue-700 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Página da Empresa</h3>
-                  <p className="text-gray-600 mb-4">Conteúdo profissional em tempo real</p>
+              <div className="max-w-2xl mx-auto">
+                {/* LinkedIn Company Page Widget */}
+                <div 
+                  className="LI-profile-badge" 
+                  data-version="v1" 
+                  data-size="large" 
+                  data-locale="pt_BR" 
+                  data-type="horizontal" 
+                  data-theme="light" 
+                  data-vanity="instituto-manduvi"
+                >
+                  <a 
+                    className="LI-simple-link" 
+                    href="https://br.linkedin.com/in/instituto-manduvi?trk=profile-badge"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    Instituto Manduvi
+                  </a>
+                </div>
+                
+                {/* LinkedIn Company Updates Feed */}
+                <div className="mt-6">
+                  <div 
+                    className="LI-company-updates" 
+                    data-version="v1" 
+                    data-size="large" 
+                    data-locale="pt_BR" 
+                    data-theme="light" 
+                    data-vanity="instituto-manduvi"
+                  >
+                    <a 
+                      className="LI-simple-link" 
+                      href="https://br.linkedin.com/company/instituto-manduvi?trk=company-updates-badge"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      Atualizações da Empresa
+                    </a>
+                  </div>
+                </div>
+                
+                {/* Fallback para quando o widget não carregar */}
+                <div className="mt-4 text-center">
                   <a
                     href="https://www.linkedin.com/company/instituto-manduvi/"
                     target="_blank"

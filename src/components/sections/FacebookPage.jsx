@@ -76,11 +76,29 @@ const FacebookPage = () => {
             
             {/* Facebook Page Embed */}
             <div className="p-6">
-              <div className="aspect-video max-w-2xl mx-auto bg-gradient-to-br from-blue-100 to-indigo-100 rounded-xl flex items-center justify-center">
-                <div className="text-center">
-                  <Facebook className="w-16 h-16 text-blue-600 mx-auto mb-4" />
-                  <h3 className="text-xl font-semibold text-gray-900 mb-2">Página do Facebook</h3>
-                  <p className="text-gray-600 mb-4">Conteúdo em tempo real das nossas publicações</p>
+              <div className="max-w-2xl mx-auto">
+                {/* Facebook Page Plugin */}
+                <div 
+                  className="fb-page" 
+                  data-href="https://www.facebook.com/institutomanduvi"
+                  data-tabs="timeline,events,messages"
+                  data-width="500"
+                  data-height="600"
+                  data-small-header="false"
+                  data-adapt-container-width="true"
+                  data-hide-cover="false"
+                  data-show-facepile="true"
+                >
+                  <blockquote 
+                    cite="https://www.facebook.com/institutomanduvi" 
+                    className="fb-xfbml-parse-ignore"
+                  >
+                    <a href="https://www.facebook.com/institutomanduvi">Instituto Manduvi</a>
+                  </blockquote>
+                </div>
+                
+                {/* Fallback para quando o widget não carregar */}
+                <div className="mt-4 text-center">
                   <a
                     href="https://www.facebook.com/institutomanduvi"
                     target="_blank"
