@@ -11,6 +11,7 @@ const HeroSection = () => {
   const [errorMessage, setErrorMessage] = useState(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
   const [sessionCreated, setSessionCreated] = useState(false)
+  const [isWaitingForResponse, setIsWaitingForResponse] = useState(false)
   const chatContainerRef = useRef(null)
 
   // Timeout para evitar carregamento infinito
@@ -45,6 +46,22 @@ const HeroSection = () => {
     }
   }, [sessionCreated, status])
 
+  // Timeout para detectar respostas que demoram muito
+  useEffect(() => {
+    let responseTimeout
+    if (isWaitingForResponse) {
+      responseTimeout = setTimeout(() => {
+        console.log('⚠️ ChatKit: Resposta demorou mais de 30 segundos')
+        setIsWaitingForResponse(false)
+        setErrorMessage('A resposta está demorando mais que o esperado. Tente novamente.')
+      }, 30000) // 30 segundos
+    }
+    
+    return () => {
+      if (responseTimeout) clearTimeout(responseTimeout)
+    }
+  }, [isWaitingForResponse])
+
   // ChatKit configuration com workflow personalizado
   const { control, fetchUpdates } = useChatKit({
     startScreen: {
@@ -55,6 +72,13 @@ const HeroSection = () => {
         { label: 'Projetos e Iniciativas', prompt: 'Mostre-me os projetos do Manduvi' },
         { label: 'Como entrar em contato', prompt: 'Como posso entrar em contato?' }
       ],
+    },
+    history: {
+      enabled: true,
+      maxThreads: 10,
+    },
+    storage: {
+      type: 'session', // Usar session storage em vez de persistent
     },
     api: {
       async getClientSecret() {
@@ -95,6 +119,10 @@ const HeroSection = () => {
     },
     composer: {
       placeholder: 'Dê-me uma missão...',
+      autoFocus: false,
+    },
+    fileUpload: {
+      enabled: false,
     },
     onError: (detail) => {
       console.error('❌ ChatKit: Erro no widget', detail)
@@ -124,11 +152,38 @@ const HeroSection = () => {
       console.log('💬 ChatKit: Nova mensagem recebida', message)
       console.log('💬 Tipo:', message.type)
       console.log('💬 Conteúdo:', message.content)
+      console.log('💬 Status:', message.status)
+      console.log('💬 ID:', message.id)
+      
+      // Detectar se é uma mensagem do usuário
+      if (message.role === 'user') {
+        console.log('👤 Usuário enviou mensagem, aguardando resposta...')
+        setIsWaitingForResponse(true)
+      }
+      
+      // Detectar se é uma resposta do assistente
+      if (message.role === 'assistant') {
+        console.log('🤖 Assistente respondeu!')
+        setIsWaitingForResponse(false)
+      }
     },
     onThreadUpdate: (thread) => {
       console.log('🧵 ChatKit: Thread atualizada', thread)
       console.log('🧵 Mensagens:', thread.messages?.length)
       console.log('🧵 Última mensagem:', thread.messages?.[thread.messages.length - 1])
+      
+      // Verificar se há mensagens incompletas
+      const lastMessage = thread.messages?.[thread.messages.length - 1]
+      if (lastMessage && lastMessage.role === 'assistant') {
+        console.log('🤖 ChatKit: Resposta do assistente detectada')
+        console.log('🤖 Status da resposta:', lastMessage.status)
+        console.log('🤖 Conteúdo da resposta:', lastMessage.content)
+      }
+    },
+    onMessageUpdate: (message) => {
+      console.log('🔄 ChatKit: Mensagem atualizada', message)
+      console.log('🔄 Status:', message.status)
+      console.log('🔄 Conteúdo:', message.content)
     },
   })
 
@@ -327,13 +382,15 @@ const HeroSection = () => {
                     <div className="flex items-center gap-2 rounded-xl sm:rounded-2xl border border-primary/10 bg-white px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-foreground/70">
                       <Sparkle className="h-4 w-4 animate-spin text-primary" />
                       <span>
-                        {status === 'refreshing'
-                          ? 'Atualizando base de conhecimento...'
-                          : status === 'booting' && sessionCreated
-                          ? 'Carregando interface do chat...'
-                          : status === 'booting'
-                          ? 'Inicializando MirIA...'
-                          : 'Conectando com a MirIA especialista...'}
+        {isWaitingForResponse
+          ? 'MirIA está pensando...'
+          : status === 'refreshing'
+          ? 'Atualizando base de conhecimento...'
+          : status === 'booting' && sessionCreated
+          ? 'Carregando interface do chat...'
+          : status === 'booting'
+          ? 'Inicializando MirIA...'
+          : 'Conectando com a MirIA especialista...'}
                       </span>
                     </div>
                   )}
