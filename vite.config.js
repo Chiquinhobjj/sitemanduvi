@@ -21,7 +21,7 @@ const chatkitSessionPlugin = (env) => ({
 
       const workflowId =
         env.OPENAI_CHATKIT_WORKFLOW_ID ??
-        'wf_68e6a6d819d88190aee60893b4b8ef660de2547f19c73575'
+        'wf_68e7f0e0f918819099b3578d9c9108bb0ab6dcf1de6f1b58'
       const apiKey = env.OPENAI_API_KEY
 
       if (!workflowId) {
