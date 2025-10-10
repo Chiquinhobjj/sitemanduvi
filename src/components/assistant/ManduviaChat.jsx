@@ -102,22 +102,36 @@ const ManduviaChat = () => {
     startScreen: {
       greeting:
         'Olá! Sou a MirIA, anfitriã do Manduvi. Respondo rápido e te levo ao que você busca. Por onde começamos?',
-      prompts: [
+      widgets: [
         {
-          label: 'Cursos EAD',
-          prompt: 'Quero conhecer os cursos EAD disponíveis'
+          type: 'row',
+          children: [
+            {
+              type: 'button',
+              label: 'Cursos EAD',
+              prompt: 'Quero conhecer os cursos EAD disponíveis'
+            },
+            {
+              type: 'button',
+              label: 'Eventos',
+              prompt: 'Quero saber sobre os eventos do Instituto Manduvi'
+            }
+          ]
         },
         {
-          label: 'Eventos',
-          prompt: 'Quero saber sobre os eventos do Instituto Manduvi'
-        },
-        {
-          label: 'Iniciativas & Projetos',
-          prompt: 'Quero conhecer as iniciativas e projetos do Instituto'
-        },
-        {
-          label: 'Sobre o Instituto',
-          prompt: 'Quero saber mais sobre o Instituto Manduvi'
+          type: 'row',
+          children: [
+            {
+              type: 'button',
+              label: 'Iniciativas & Projetos',
+              prompt: 'Quero conhecer as iniciativas e projetos do Instituto'
+            },
+            {
+              type: 'button',
+              label: 'Sobre o Instituto',
+              prompt: 'Quero saber mais sobre o Instituto Manduvi'
+            }
+          ]
         }
       ],
     },
@@ -132,42 +146,49 @@ const ManduviaChat = () => {
   })
 
   return (
-    <div className="w-full max-w-3xl mx-auto px-4 sm:px-6">
-      <div className="bg-white/95 backdrop-blur-lg border border-white/40 shadow-2xl rounded-[28px] overflow-hidden">
-        <div className="px-4 sm:px-6 pb-6 pt-4">
+    <div className="w-full max-w-4xl mx-auto px-2 sm:px-4 lg:px-6">
+      <div className="bg-white/95 backdrop-blur-lg border border-white/40 shadow-2xl rounded-[20px] sm:rounded-[24px] lg:rounded-[28px] overflow-hidden">
+        <div className="px-3 sm:px-4 lg:px-6 pb-4 sm:pb-6 pt-3 sm:pt-4">
           {status !== 'ready' && !errorMessage && (
-            <div className="flex items-center gap-2 rounded-2xl border border-primary/10 bg-white px-4 py-3 text-sm text-foreground/70">
-              <Sparkle className="h-4 w-4 animate-pulse text-primary" />
-              {status === 'refreshing'
-                ? 'Atualizando sua sessão...'
-                : 'Conectando com a MirIA...'}
+            <div className="flex items-center gap-2 rounded-xl sm:rounded-2xl border border-primary/10 bg-white px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-foreground/70">
+              <Sparkle className="h-3 w-3 sm:h-4 sm:w-4 animate-pulse text-primary" />
+              <span className="truncate">
+                {status === 'refreshing'
+                  ? 'Atualizando sua sessão...'
+                  : 'Conectando com a MirIA...'}
+              </span>
             </div>
           )}
 
           {errorMessage ? (
-            <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-              {errorMessage}
-              <button
-                type="button"
-                className="ml-3 text-primary underline"
-                onClick={async () => {
-                  setErrorMessage(null)
-                  setStatus('booting')
-                  try {
-                    await fetchUpdates?.()
-                  } catch (error) {
-                    console.error('Erro ao tentar reconectar:', error)
-                    setStatus('error')
-                    setErrorMessage('Falha ao reconectar. Tente novamente.')
-                  }
-                }}
-              >
-                Tentar novamente
-              </button>
+            <div className="rounded-xl sm:rounded-2xl border border-red-200 bg-red-50 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-red-700">
+              <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
+                <span className="flex-1">{errorMessage}</span>
+                <button
+                  type="button"
+                  className="text-primary underline text-xs sm:text-sm font-medium hover:text-primary/80 transition-colors"
+                  onClick={async () => {
+                    setErrorMessage(null)
+                    setStatus('booting')
+                    try {
+                      await fetchUpdates?.()
+                    } catch (error) {
+                      console.error('Erro ao tentar reconectar:', error)
+                      setStatus('error')
+                      setErrorMessage('Falha ao reconectar. Tente novamente.')
+                    }
+                  }}
+                >
+                  Tentar novamente
+                </button>
+              </div>
             </div>
-          ) : (
-            <ChatKit control={control} className="mt-4 h-[280px] min-h-[280px] max-h-[600px] w-full" />
-          )}
+              ) : (
+                <ChatKit 
+                  control={control} 
+                  className="mt-3 sm:mt-4 h-[240px] sm:h-[280px] lg:h-[320px] min-h-[240px] sm:min-h-[280px] lg:min-h-[320px] max-h-[500px] sm:max-h-[600px] lg:max-h-[700px] w-full" 
+                />
+              )}
         </div>
       </div>
     </div>
