@@ -64,24 +64,39 @@ const ManduviaChat = () => {
       },
     },
     theme: {
+      colorScheme: 'light',
       radius: 'round',
+      density: 'compact',
       color: {
-        accent: {
-          primary: '#0D9488',
-          level: 3,
-        },
+        grayscale: { hue: 0, tint: 0 },
+        accent: { primary: '#603813', level: 1 },
+      },
+      typography: {
+        baseSize: 15,
+        fontFamily:
+          '"OpenAI Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif',
+        fontFamilyMono:
+          'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "DejaVu Sans Mono", "Courier New", monospace',
+        fontSources: [
+          {
+            family: 'OpenAI Sans',
+            src: 'https://cdn.openai.com/common/fonts/openai-sans/v2/OpenAISans-Regular.woff2',
+            weight: 400,
+            style: 'normal',
+            display: 'swap',
+          },
+        ],
       },
     },
     composer: {
-      placeholder: 'Escreva sua pergunta para o ManduvIA',
+      placeholder: 'Dê-me uma missão...',
+      attachments: { enabled: false },
     },
     startScreen: {
-      greeting: 'Como posso ajudar você hoje?',
+      greeting:
+        'Olá! Sou a MirIA, anfitriã do Manduvi. Respondo rápido e te levo ao que você busca. Por onde começamos?',
       prompts: [
-        { label: 'Conhecer iniciativas', prompt: 'Quais são as iniciativas?' },
-        { label: 'Participar como beneficiário', prompt: 'Como posso participar?' },
-        { label: 'Apoiar financeiramente', prompt: 'Como posso doar?' },
-        { label: 'Solicitar acolhimento', prompt: 'Como solicitar acolhimento?' },
+        { icon: 'circle-question', label: 'What is ChatKit?', prompt: 'What is ChatKit?' },
       ],
     },
     onError: (detail) => {
