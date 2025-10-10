@@ -1,5 +1,6 @@
-/* ChatKit Integration Styles */
+/* ChatKit Integration Styles - Padrão Ouro */
 .chat-container {
+  /* Scrollbar personalizada seguindo identidade visual */
   scrollbar-width: thin;
   scrollbar-color: rgba(96, 56, 19, 0.3) transparent;
 }
@@ -15,6 +16,7 @@
 .chat-container::-webkit-scrollbar-thumb {
   background-color: rgba(96, 56, 19, 0.3);
   border-radius: 3px;
+  transition: background-color 0.2s ease;
 }
 
 .chat-container::-webkit-scrollbar-thumb:hover {
@@ -51,59 +53,54 @@
   transform: translateY(0);
 }
 
-/* ChatKit prompt buttons styling */
+/* ChatKit prompt buttons - Microajustes seguindo padrão ouro */
 .chatkit-start-screen-prompts {
-  display: grid !important;
-  grid-template-columns: 1fr 1fr 1fr !important;
-  gap: 12px !important;
-  margin-top: 16px !important;
-  padding: 0 !important;
-  width: 100% !important;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 16px;
+  padding: 0;
+  width: 100%;
 }
 
 .chatkit-start-screen-prompts button {
-  padding: 12px 16px !important;
-  font-size: 14px !important;
-  line-height: 1.4 !important;
-  min-height: 48px !important;
-  max-height: none !important;
-  border-radius: 12px !important;
-  border: 1px solid rgba(96, 56, 19, 0.2) !important;
-  background: rgba(255, 255, 255, 0.9) !important;
-  color: #603813 !important;
-  transition: all 0.2s ease !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  text-align: center !important;
-  white-space: nowrap !important;
-  overflow: hidden !important;
-  text-overflow: ellipsis !important;
+  /* Microajustes de espaçamento e interação */
+  padding: 12px 16px;
+  font-size: 14px;
+  line-height: 1.4;
+  min-height: 48px;
+  border-radius: 12px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .chatkit-start-screen-prompts button:hover {
-  background: rgba(96, 56, 19, 0.1) !important;
-  border-color: rgba(96, 56, 19, 0.4) !important;
-  transform: translateY(-1px) !important;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .chatkit-start-screen-prompts button:active {
-  transform: translateY(0) !important;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(0);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-/* Mobile responsiveness */
+/* Responsividade otimizada */
 @media (max-width: 768px) {
   .chatkit-start-screen-prompts {
-    grid-template-columns: 1fr !important;
-    gap: 8px !important;
+    grid-template-columns: 1fr;
+    gap: 8px;
   }
   
   .chatkit-start-screen-prompts button {
-    padding: 10px 12px !important;
-    font-size: 13px !important;
-    min-height: 44px !important;
+    padding: 10px 12px;
+    font-size: 13px;
+    min-height: 44px;
   }
   
   .scroll-to-bottom-btn {
@@ -116,35 +113,34 @@
 
 @media (max-width: 480px) {
   .chatkit-start-screen-prompts button {
-    padding: 8px 10px !important;
-    font-size: 12px !important;
-    min-height: 40px !important;
+    padding: 8px 10px;
+    font-size: 12px;
+    min-height: 40px;
   }
 }
 
-/* Hide ChatKit's native scroll buttons */
+/* Ocultar botões nativos de scroll do ChatKit */
 .chatkit-scroll-to-bottom,
 .chatkit-scroll-button,
 [data-testid="scroll-to-bottom"],
 button[aria-label*="scroll"],
 button[title*="scroll"],
 button[class*="scroll"] {
-  display: none !important;
+  display: none;
 }
 
-/* Additional ChatKit styling overrides */
+/* Microajustes de layout - apenas onde necessário */
 .chatkit-start-screen {
-  display: flex !important;
-  flex-direction: column !important;
-  height: 100% !important;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
 
 .chatkit-start-screen-prompts {
-  flex-shrink: 0 !important;
+  flex-shrink: 0;
 }
 
-/* Ensure proper spacing */
 .chatkit-start-screen-greeting {
-  margin-bottom: 16px !important;
-  padding: 0 !important;
+  margin-bottom: 16px;
+  padding: 0;
 }

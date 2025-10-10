@@ -72,18 +72,15 @@ const HeroSection = () => {
     },
     theme: {
       colorScheme: 'light',
-      radius: 'round',
+      radius: 'pill',
       density: 'spacious',
       color: {
-        grayscale: { hue: 0, tint: 0 },
+        grayscale: { hue: 30, tint: 7 },
         accent: { primary: '#603813', level: 1 },
-        surface: {
-          background: '#ffffff',
-          foreground: '#ffffff',
-        },
+        // Removido surface.background/foreground para deixar o ChatKit controlar
       },
       typography: {
-        baseSize: 14,
+        baseSize: 15,
         fontFamily:
           '"OpenAI Sans", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif',
         fontFamilyMono:
