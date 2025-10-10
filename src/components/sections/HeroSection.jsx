@@ -20,9 +20,16 @@ const HeroSection = () => {
         setStatus('error')
         setErrorMessage('Timeout ao conectar com o chat. Tente recarregar a página.')
       }
-    }, 15000) // 15 segundos
+    }, 45000) // 45 segundos - mais tempo para o ChatKit carregar
 
     return () => clearTimeout(timeout)
+  }, [status])
+
+  // Reset timeout quando status muda para ready
+  useEffect(() => {
+    if (status === 'ready') {
+      console.log('✅ ChatKit: Widget carregado com sucesso!')
+    }
   }, [status])
 
   // ChatKit configuration com workflow personalizado
@@ -133,6 +140,9 @@ const HeroSection = () => {
       } else if (newStatus === 'error') {
         console.error('❌ ChatKit: Widget com erro')
         setErrorMessage('Erro ao carregar o chat. Tente recarregar a página.')
+      } else if (newStatus === 'booting') {
+        console.log('🔄 ChatKit: Iniciando...')
+        setErrorMessage(null)
       }
     },
   })
@@ -334,6 +344,8 @@ const HeroSection = () => {
                       <span>
                         {status === 'refreshing'
                           ? 'Atualizando base de conhecimento...'
+                          : status === 'booting'
+                          ? 'Inicializando ChatKit...'
                           : 'Conectando com a MirIA especialista...'}
                       </span>
                     </div>
