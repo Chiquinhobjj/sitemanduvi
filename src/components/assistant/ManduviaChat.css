@@ -262,14 +262,23 @@ div[class*="prompt"] {
 }
 
 /* Esconder botões de scroll do ChatKit para evitar sobreposição */
-[data-chatkit-scroll-to-bottom],
-.chatkit-scroll-to-bottom,
-button[aria-label*="scroll"],
-button[title*="scroll"] {
+.chat-container [data-chatkit-scroll-to-bottom],
+.chat-container .chatkit-scroll-to-bottom,
+.chat-container button[aria-label*="scroll"],
+.chat-container button[title*="scroll"],
+.chat-container button[aria-label*="Scroll"],
+.chat-container button[title*="Scroll"] {
   display: none !important;
 }
 
-/* Esconder qualquer botão que possa estar sobrepondo */
-.chat-container button[style*="position: absolute"]:not(.scroll-to-bottom-btn) {
+/* Esconder botões específicos do ChatKit que podem sobrepor */
+.chat-container button[style*="position: absolute"]:not(.scroll-to-bottom-btn),
+.chat-container button[style*="position:fixed"]:not(.scroll-to-bottom-btn) {
+  display: none !important;
+}
+
+/* Esconder botões com ícones de seta para cima */
+.chat-container button svg[data-testid*="arrow-up"],
+.chat-container button svg[data-testid*="chevron-up"] {
   display: none !important;
 }

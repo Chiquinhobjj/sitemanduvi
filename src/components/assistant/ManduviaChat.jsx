@@ -376,7 +376,6 @@ const ManduviaChat = () => {
         composer: {
           placeholder: 'Dê-me uma missão...',
           attachments: { enabled: false },
-          showScrollToBottom: false, // Desabilitar botão de scroll do ChatKit
         },
     startScreen: {
       greeting:
