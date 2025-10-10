@@ -137,7 +137,7 @@ const ManduviaChat = () => {
               <Sparkle className="h-4 w-4 animate-pulse text-primary" />
               {status === 'refreshing'
                 ? 'Atualizando sua sessão...'
-                : 'Conectando com o MirIA...'}
+                : 'Conectando com a MirIA...'}
             </div>
           )}
 
