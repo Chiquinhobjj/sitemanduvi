@@ -28,9 +28,15 @@ const HeroSection = () => {
   // ChatKit configuration
   const { control, fetchUpdates } = useChatKit({
     api: {
-      async createSession() {
-        console.log('🚀 ChatKit: Iniciando criação de sessão...')
+      async getClientSecret(existing) {
+        console.log('🚀 ChatKit: Iniciando criação de sessão...', { existing: !!existing })
         try {
+          if (existing) {
+            console.log('🔄 ChatKit: Refreshing existing session...')
+            // Implementar refresh de sessão se necessário
+            // Por enquanto, vamos criar uma nova sessão
+          }
+
           const deviceId = crypto.randomUUID()
           console.log('📱 ChatKit: Device ID gerado', deviceId)
           
@@ -64,7 +70,7 @@ const HeroSection = () => {
           }
 
           console.log('✅ ChatKit: Sessão criada com sucesso!')
-          return { client_secret: payload.client_secret }
+          return payload.client_secret
         } catch (error) {
           console.error('❌ ChatKit: Erro geral', error)
           setStatus('error')
