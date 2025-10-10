@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, useCallback } from 'react'
 import { ChatKit, useChatKit } from '@openai/chatkit-react'
 import { Sparkle, ArrowDown } from 'lucide-react'
 import './ManduviaChat.css'
@@ -16,7 +16,7 @@ const resolveDeviceId = () => {
       return existing
     }
 
-    const generated = crypto.randomUUID()
+    const generated = window.crypto?.randomUUID?.() || Math.random().toString(36).slice(2)
     window.localStorage.setItem(DEVICE_STORAGE_KEY, generated)
     return generated
   } catch (error) {
@@ -124,12 +124,10 @@ const ManduviaChat = () => {
     // Aplicar estilos imediatamente
     applyCustomStyles()
 
-    // Aplicar estilos com múltiplos delays para garantir renderização
+    // Aplicar estilos com delays para garantir renderização
     const timeouts = [
       setTimeout(applyCustomStyles, 500),
-      setTimeout(applyCustomStyles, 1000),
-      setTimeout(applyCustomStyles, 2000),
-      setTimeout(applyCustomStyles, 3000)
+      setTimeout(applyCustomStyles, 1500)
     ]
 
     // Observer mais agressivo para detectar mudanças no DOM
@@ -215,12 +213,12 @@ const ManduviaChat = () => {
   }, [status])
 
   // Função para scroll ao final (apenas dentro do chat)
-  const scrollToBottom = () => {
+  const scrollToBottom = useCallback(() => {
     if (chatContainerRef.current) {
       // Scroll apenas dentro do container do chat
       chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
     }
-  }
+  }, [])
 
   // Scroll automático para manter a última interação visível (apenas quando necessário)
   useEffect(() => {
@@ -358,11 +356,11 @@ const ManduviaChat = () => {
           return payload.client_secret
         } catch (error) {
           console.error('❌ ChatKit: Erro geral', error)
+          const errorMsg = error?.message ?? 'Falha ao conectar com o agente. Tente novamente em instantes.'
           setStatus('error')
-          setErrorMessage(
-            error?.message ?? 'Falha ao conectar com o agente. Tente novamente em instantes.'
-          )
-          throw error
+          setErrorMessage(errorMsg)
+          // Não fazer throw para evitar duplo disparo do onError
+          return null
         }
       },
     },
@@ -463,6 +461,7 @@ const ManduviaChat = () => {
                     <button
                       onClick={scrollToBottom}
                       className="scroll-to-bottom-btn"
+                      aria-label="Ir para o final da conversa"
                       title="Ir para o final da conversa"
                     >
                       <ArrowDown className="h-5 w-5" />
