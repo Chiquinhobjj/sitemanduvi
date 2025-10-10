@@ -143,6 +143,8 @@ const HeroSection = () => {
       console.log('💬 Conteúdo:', message.content)
       console.log('💬 Status:', message.status)
       console.log('💬 ID:', message.id)
+      console.log('💬 Role:', message.role)
+      console.log('💬 Timestamp:', new Date().toISOString())
       
       // Detectar se é uma mensagem do usuário
       if (message.role === 'user') {
@@ -153,6 +155,7 @@ const HeroSection = () => {
       // Detectar se é uma resposta do assistente
       if (message.role === 'assistant') {
         console.log('🤖 Assistente respondeu!')
+        console.log('🤖 Resposta completa:', message.content)
         setIsWaitingForResponse(false)
       }
     },

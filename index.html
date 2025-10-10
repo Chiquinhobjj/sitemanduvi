@@ -8,36 +8,82 @@
     <meta name="description" content="Instituto Manduvi - SocialTech que transforma vidas e comunidades. Inspirados na força da árvore Manduvi, desenvolvemos soluções sustentáveis com impacto duradouro no Pantanal e além." />
     <meta name="keywords" content="instituto manduvi, socialtech, impacto social, pantanal, cuiabá, mato grosso, sustentabilidade, inovação social" />
     <script>
-    // Aplicar polyfill ANTES do ChatKit carregar
+    // Polyfill robusto para StorageType.persistent - executa IMEDIATAMENTE
     (function() {
+      'use strict';
+      
+      // 1. Interceptar StorageType.persistent ANTES de qualquer coisa
       if (typeof window !== 'undefined') {
-        // Interceptar StorageType.persistent antes do ChatKit usar
-        if (window.StorageType) {
-          const originalStorageType = window.StorageType;
-          window.StorageType = new Proxy(originalStorageType, {
-            get(target, prop) {
-              if (prop === 'persistent') {
-                console.warn('🚫 StorageType.persistent interceptado - usando fallback');
-                return 'persistent';
-              }
-              return target[prop];
-            }
-          });
+        // Substituir StorageType completamente
+        const originalStorageType = window.StorageType;
+        window.StorageType = {
+          PERSISTENT: 'persistent',
+          TEMPORARY: 'temporary',
+          persistent: 'persistent' // Fallback para compatibilidade
+        };
+        
+        // 2. Interceptar acessos a StorageType.persistent
+        Object.defineProperty(window.StorageType, 'persistent', {
+          get: function() {
+            console.warn('🚫 StorageType.persistent acessado - retornando fallback');
+            return 'persistent';
+          },
+          configurable: true
+        });
+        
+        // 3. Garantir que navigator.storage existe e funciona
+        if (!window.navigator.storage) {
+          window.navigator.storage = {};
         }
         
-        // Garantir que navigator.storage existe
-        if (!window.navigator.storage) {
-          window.navigator.storage = {
-            persist: async () => true,
-            estimate: async () => ({ quota: 50000000, usage: 0 })
+        if (!window.navigator.storage.persist) {
+          window.navigator.storage.persist = function() {
+            console.log('🔄 navigator.storage.persist chamado - retornando true');
+            return Promise.resolve(true);
           };
         }
         
-        console.log('🛡️ Storage polyfill aplicado antes do ChatKit');
+        if (!window.navigator.storage.estimate) {
+          window.navigator.storage.estimate = function() {
+            console.log('🔄 navigator.storage.estimate chamado');
+            return Promise.resolve({
+              quota: 50000000,
+              usage: 0
+            });
+          };
+        }
+        
+        // 4. Interceptar chamadas para StorageType.persistent em tempo real
+        const originalDefineProperty = Object.defineProperty;
+        Object.defineProperty = function(obj, prop, descriptor) {
+          if (obj === window.StorageType && prop === 'persistent') {
+            console.warn('🚫 Tentativa de definir StorageType.persistent bloqueada');
+            return obj;
+          }
+          return originalDefineProperty.call(this, obj, prop, descriptor);
+        };
+        
+        console.log('🛡️ Storage polyfill aplicado com sucesso - ChatKit protegido');
       }
     })();
   </script>
   <script src="https://cdn.platform.openai.com/deployments/chatkit/chatkit.js" async></script>
+  <script>
+    // Script adicional para garantir que o polyfill seja aplicado após o ChatKit carregar
+    window.addEventListener('load', function() {
+      // Re-aplicar polyfill se necessário
+      if (window.StorageType && window.StorageType.persistent) {
+        console.log('🔄 Re-aplicando polyfill após carregamento');
+        Object.defineProperty(window.StorageType, 'persistent', {
+          get: function() {
+            console.warn('🚫 StorageType.persistent acessado após carregamento - retornando fallback');
+            return 'persistent';
+          },
+          configurable: true
+        });
+      }
+    });
+  </script>
   </head>
   <body>
     <div id="root"></div>
