@@ -102,22 +102,27 @@ const ManduviaChat = () => {
     startScreen: {
       greeting:
         'Olá! Sou a MirIA, anfitriã do Manduvi. Respondo rápido e te levo ao que você busca. Por onde começamos?',
+      layout: 'grid',
       prompts: [
         { 
           label: 'Cursos EAD', 
-          prompt: 'Quero conhecer os cursos EAD disponíveis' 
+          prompt: 'Quero conhecer os cursos EAD disponíveis',
+          style: 'card'
         },
         { 
           label: 'Eventos', 
-          prompt: 'Quero saber sobre os eventos do Instituto Manduvi' 
+          prompt: 'Quero saber sobre os eventos do Instituto Manduvi',
+          style: 'card'
         },
         { 
           label: 'Iniciativas & Projetos', 
-          prompt: 'Quero conhecer as iniciativas e projetos do Instituto' 
+          prompt: 'Quero conhecer as iniciativas e projetos do Instituto',
+          style: 'card'
         },
         { 
           label: 'Sobre o Instituto', 
-          prompt: 'Quero saber mais sobre o Instituto Manduvi' 
+          prompt: 'Quero saber mais sobre o Instituto Manduvi',
+          style: 'card'
         },
       ],
     },
