@@ -1,6 +1,7 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { ChatKit, useChatKit } from '@openai/chatkit-react'
 import { Sparkle } from 'lucide-react'
+import './ManduviaChat.css'
 
 const DEVICE_STORAGE_KEY = 'manduvia-chat-device-id'
 
@@ -28,6 +29,61 @@ const ManduviaChat = () => {
   const [status, setStatus] = useState('booting')
   const [errorMessage, setErrorMessage] = useState(null)
   const [deviceId] = useState(() => resolveDeviceId())
+
+  // Aplicar estilos CSS personalizados após o ChatKit ser renderizado
+  useEffect(() => {
+    const applyCustomStyles = () => {
+      const chatContainer = document.querySelector('[data-chatkit-start-screen]') || 
+                           document.querySelector('.chatkit-start-screen')
+      
+      if (chatContainer) {
+        const promptsContainer = chatContainer.querySelector('div[role="group"]') ||
+                                chatContainer.querySelector('.chatkit-start-screen-prompts') ||
+                                Array.from(chatContainer.children).find(child => 
+                                  child.querySelector('button') || child.querySelector('[role="button"]')
+                                )
+        
+        if (promptsContainer) {
+          promptsContainer.classList.add('chatkit-start-screen-prompts')
+          
+          // Aplicar estilos aos botões
+          const buttons = promptsContainer.querySelectorAll('button, [role="button"]')
+          buttons.forEach(button => {
+            button.style.flex = '1 1 calc(50% - 4px)'
+            button.style.minWidth = '140px'
+            button.style.maxWidth = '200px'
+            button.style.margin = '0'
+            button.style.padding = '12px 16px'
+            button.style.borderRadius = '12px'
+            button.style.border = '1px solid #e5e7eb'
+            button.style.background = '#ffffff'
+            button.style.color = '#374151'
+            button.style.fontSize = '14px'
+            button.style.fontWeight = '500'
+            button.style.textAlign = 'center'
+            button.style.cursor = 'pointer'
+            button.style.transition = 'all 0.2s ease'
+            button.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)'
+          })
+        }
+      }
+    }
+
+    // Aplicar estilos imediatamente
+    applyCustomStyles()
+
+    // Aplicar estilos após um delay para garantir que o ChatKit foi renderizado
+    const timeoutId = setTimeout(applyCustomStyles, 1000)
+
+    // Observer para detectar mudanças no DOM
+    const observer = new MutationObserver(applyCustomStyles)
+    observer.observe(document.body, { childList: true, subtree: true })
+
+    return () => {
+      clearTimeout(timeoutId)
+      observer.disconnect()
+    }
+  }, [status])
 
   const { control, fetchUpdates } = useChatKit({
     api: {
@@ -102,36 +158,22 @@ const ManduviaChat = () => {
     startScreen: {
       greeting:
         'Olá! Sou a MirIA, anfitriã do Manduvi. Respondo rápido e te levo ao que você busca. Por onde começamos?',
-      widgets: [
+      prompts: [
         {
-          type: 'row',
-          children: [
-            {
-              type: 'button',
-              label: 'Cursos EAD',
-              prompt: 'Quero conhecer os cursos EAD disponíveis'
-            },
-            {
-              type: 'button',
-              label: 'Eventos',
-              prompt: 'Quero saber sobre os eventos do Instituto Manduvi'
-            }
-          ]
+          label: 'Cursos EAD',
+          prompt: 'Quero conhecer os cursos EAD disponíveis'
         },
         {
-          type: 'row',
-          children: [
-            {
-              type: 'button',
-              label: 'Iniciativas & Projetos',
-              prompt: 'Quero conhecer as iniciativas e projetos do Instituto'
-            },
-            {
-              type: 'button',
-              label: 'Sobre o Instituto',
-              prompt: 'Quero saber mais sobre o Instituto Manduvi'
-            }
-          ]
+          label: 'Eventos',
+          prompt: 'Quero saber sobre os eventos do Instituto Manduvi'
+        },
+        {
+          label: 'Iniciativas & Projetos',
+          prompt: 'Quero conhecer as iniciativas e projetos do Instituto'
+        },
+        {
+          label: 'Sobre o Instituto',
+          prompt: 'Quero saber mais sobre o Instituto Manduvi'
         }
       ],
     },

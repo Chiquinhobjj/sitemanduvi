@@ -1,0 +1,103 @@
+/* ChatKit Custom Styles for Horizontal Button Layout */
+
+/* Container para os prompts do ChatKit */
+.chatkit-start-screen-prompts {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  justify-content: space-between !important;
+  margin-top: 16px !important;
+}
+
+/* Botões dos prompts */
+.chatkit-start-screen-prompts button,
+.chatkit-start-screen-prompts [role="button"] {
+  flex: 1 1 calc(50% - 4px) !important;
+  min-width: 140px !important;
+  max-width: 200px !important;
+  margin: 0 !important;
+  padding: 12px 16px !important;
+  border-radius: 12px !important;
+  border: 1px solid #e5e7eb !important;
+  background: #ffffff !important;
+  color: #374151 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Hover effect */
+.chatkit-start-screen-prompts button:hover,
+.chatkit-start-screen-prompts [role="button"]:hover {
+  background: #f9fafb !important;
+  border-color: #d1d5db !important;
+  transform: translateY(-1px) !important;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Active state */
+.chatkit-start-screen-prompts button:active,
+.chatkit-start-screen-prompts [role="button"]:active {
+  transform: translateY(0) !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .chatkit-start-screen-prompts {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  
+  .chatkit-start-screen-prompts button,
+  .chatkit-start-screen-prompts [role="button"] {
+    flex: 1 1 100% !important;
+    max-width: none !important;
+    width: 100% !important;
+  }
+}
+
+@media (min-width: 641px) and (max-width: 1024px) {
+  .chatkit-start-screen-prompts button,
+  .chatkit-start-screen-prompts [role="button"] {
+    flex: 1 1 calc(50% - 4px) !important;
+  }
+}
+
+@media (min-width: 1025px) {
+  .chatkit-start-screen-prompts button,
+  .chatkit-start-screen-prompts [role="button"] {
+    flex: 1 1 calc(50% - 4px) !important;
+  }
+}
+
+/* Override ChatKit default styles */
+[data-chatkit-start-screen] .chatkit-start-screen-prompts,
+.chatkit-start-screen .chatkit-start-screen-prompts {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+}
+
+/* Ensure buttons are styled correctly */
+[data-chatkit-start-screen] button,
+.chatkit-start-screen button {
+  flex: 1 1 calc(50% - 4px) !important;
+  min-width: 140px !important;
+  max-width: 200px !important;
+  margin: 0 !important;
+  padding: 12px 16px !important;
+  border-radius: 12px !important;
+  border: 1px solid #e5e7eb !important;
+  background: #ffffff !important;
+  color: #374151 !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  text-align: center !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1) !important;
+}
