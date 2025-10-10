@@ -33,54 +33,136 @@ const ManduviaChat = () => {
   // Aplicar estilos CSS personalizados após o ChatKit ser renderizado
   useEffect(() => {
     const applyCustomStyles = () => {
-      const chatContainer = document.querySelector('[data-chatkit-start-screen]') || 
-                           document.querySelector('.chatkit-start-screen')
+      // Buscar containers do ChatKit com múltiplos seletores
+      const chatContainers = [
+        document.querySelector('[data-chatkit-start-screen]'),
+        document.querySelector('.chatkit-start-screen'),
+        document.querySelector('[data-testid*="start-screen"]'),
+        document.querySelector('[class*="start-screen"]'),
+        document.querySelector('[class*="chatkit"]')
+      ].filter(Boolean)
+
+      chatContainers.forEach(chatContainer => {
+        // Buscar containers de prompts com múltiplos seletores
+        const promptsContainers = [
+          chatContainer.querySelector('div[role="group"]'),
+          chatContainer.querySelector('.chatkit-start-screen-prompts'),
+          chatContainer.querySelector('[data-testid*="prompt"]'),
+          chatContainer.querySelector('[class*="prompt"]'),
+          Array.from(chatContainer.children).find(child => 
+            child.querySelector('button') || child.querySelector('[role="button"]')
+          )
+        ].filter(Boolean)
+
+        promptsContainers.forEach(promptsContainer => {
+          if (promptsContainer) {
+            // Adicionar classe CSS
+            promptsContainer.classList.add('chatkit-start-screen-prompts')
+            
+            // Forçar estilos inline para garantir grid layout
+            promptsContainer.style.display = 'grid'
+            promptsContainer.style.gridTemplateColumns = '1fr 1fr'
+            promptsContainer.style.gap = '12px'
+            promptsContainer.style.width = '100%'
+            promptsContainer.style.marginTop = '16px'
+            
+            // Aplicar estilos aos botões
+            const buttons = promptsContainer.querySelectorAll('button, [role="button"]')
+            buttons.forEach((button, index) => {
+              // Forçar estilos inline
+              button.style.display = 'block'
+              button.style.width = '100%'
+              button.style.margin = '0'
+              button.style.padding = '12px 16px'
+              button.style.borderRadius = '12px'
+              button.style.border = '1px solid #e5e7eb'
+              button.style.background = '#ffffff'
+              button.style.color = '#374151'
+              button.style.fontSize = '14px'
+              button.style.fontWeight = '500'
+              button.style.textAlign = 'center'
+              button.style.cursor = 'pointer'
+              button.style.transition = 'all 0.2s ease'
+              button.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)'
+              
+              // Adicionar atributo para identificação
+              button.setAttribute('data-custom-button', 'true')
+            })
+
+            // Aplicar estilos a qualquer elemento filho que possa ser um botão
+            const allChildren = promptsContainer.querySelectorAll('*')
+            allChildren.forEach(child => {
+              if (child.tagName === 'BUTTON' || child.getAttribute('role') === 'button') {
+                child.style.display = 'block'
+                child.style.width = '100%'
+                child.style.margin = '0'
+              }
+            })
+          }
+        })
+      })
+
+      // Buscar e aplicar estilos a qualquer container de prompts no documento
+      const allPromptContainers = document.querySelectorAll(
+        'div[role="group"], [data-testid*="prompt"], [class*="prompt"]'
+      )
       
-      if (chatContainer) {
-        const promptsContainer = chatContainer.querySelector('div[role="group"]') ||
-                                chatContainer.querySelector('.chatkit-start-screen-prompts') ||
-                                Array.from(chatContainer.children).find(child => 
-                                  child.querySelector('button') || child.querySelector('[role="button"]')
-                                )
-        
-        if (promptsContainer) {
-          promptsContainer.classList.add('chatkit-start-screen-prompts')
-          
-          // Aplicar estilos aos botões
-          const buttons = promptsContainer.querySelectorAll('button, [role="button"]')
-          buttons.forEach(button => {
-            button.style.flex = '1 1 calc(50% - 4px)'
-            button.style.minWidth = '140px'
-            button.style.maxWidth = '200px'
-            button.style.margin = '0'
-            button.style.padding = '12px 16px'
-            button.style.borderRadius = '12px'
-            button.style.border = '1px solid #e5e7eb'
-            button.style.background = '#ffffff'
-            button.style.color = '#374151'
-            button.style.fontSize = '14px'
-            button.style.fontWeight = '500'
-            button.style.textAlign = 'center'
-            button.style.cursor = 'pointer'
-            button.style.transition = 'all 0.2s ease'
-            button.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.1)'
-          })
+      allPromptContainers.forEach(container => {
+        if (container.querySelector('button, [role="button"]')) {
+          container.style.display = 'grid'
+          container.style.gridTemplateColumns = '1fr 1fr'
+          container.style.gap = '12px'
+          container.style.width = '100%'
+          container.classList.add('chatkit-start-screen-prompts')
         }
-      }
+      })
     }
 
     // Aplicar estilos imediatamente
     applyCustomStyles()
 
-    // Aplicar estilos após um delay para garantir que o ChatKit foi renderizado
-    const timeoutId = setTimeout(applyCustomStyles, 1000)
+    // Aplicar estilos com múltiplos delays para garantir renderização
+    const timeouts = [
+      setTimeout(applyCustomStyles, 500),
+      setTimeout(applyCustomStyles, 1000),
+      setTimeout(applyCustomStyles, 2000),
+      setTimeout(applyCustomStyles, 3000)
+    ]
 
-    // Observer para detectar mudanças no DOM
-    const observer = new MutationObserver(applyCustomStyles)
-    observer.observe(document.body, { childList: true, subtree: true })
+    // Observer mais agressivo para detectar mudanças no DOM
+    const observer = new MutationObserver((mutations) => {
+      let shouldApply = false
+      mutations.forEach(mutation => {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+          mutation.addedNodes.forEach(node => {
+            if (node.nodeType === 1) { // Element node
+              if (node.querySelector && (
+                node.querySelector('button') || 
+                node.querySelector('[role="button"]') ||
+                node.classList?.contains('chatkit') ||
+                node.getAttribute?.('data-chatkit-start-screen')
+              )) {
+                shouldApply = true
+              }
+            }
+          })
+        }
+      })
+      
+      if (shouldApply) {
+        setTimeout(applyCustomStyles, 100)
+      }
+    })
+
+    observer.observe(document.body, { 
+      childList: true, 
+      subtree: true,
+      attributes: true,
+      attributeFilter: ['class', 'data-testid']
+    })
 
     return () => {
-      clearTimeout(timeoutId)
+      timeouts.forEach(clearTimeout)
       observer.disconnect()
     }
   }, [status])
