@@ -166,29 +166,67 @@ const HeroSection = () => {
     
     if (chatContainerRef.current) {
       const container = chatContainerRef.current
-      console.log('📊 Scroll info:', {
-        scrollTop: container.scrollTop,
-        scrollHeight: container.scrollHeight,
-        clientHeight: container.clientHeight
-      })
+      console.log('📊 Container principal:', container)
       
-      // Tentar rolar o container principal
+      // Estratégia 1: Rolar o container principal
       container.scrollTop = container.scrollHeight
-      
-      // Também tentar rolar elementos internos do ChatKit
-      const chatKitElements = container.querySelectorAll('[data-testid*="scroll"], .chatkit-scroll, .scroll-container')
-      chatKitElements.forEach(element => {
-        console.log('🎯 Encontrado elemento scroll:', element)
-        element.scrollTop = element.scrollHeight
-      })
-      
-      // Forçar scroll suave
       container.scrollTo({
         top: container.scrollHeight,
         behavior: 'smooth'
       })
       
-      console.log('✅ Scroll executado')
+      // Estratégia 2: Procurar por todos os elementos scrolláveis possíveis
+      const scrollSelectors = [
+        '[data-testid*="scroll"]',
+        '.chatkit-scroll',
+        '.scroll-container',
+        '[class*="scroll"]',
+        '[class*="messages"]',
+        '[class*="conversation"]',
+        '[class*="chat"]',
+        'div[style*="overflow"]',
+        'div[style*="scroll"]'
+      ]
+      
+      scrollSelectors.forEach(selector => {
+        const elements = container.querySelectorAll(selector)
+        elements.forEach(element => {
+          console.log('🎯 Elemento encontrado:', selector, element)
+          if (element.scrollHeight > element.clientHeight) {
+            element.scrollTop = element.scrollHeight
+            element.scrollTo({
+              top: element.scrollHeight,
+              behavior: 'smooth'
+            })
+          }
+        })
+      })
+      
+      // Estratégia 3: Procurar em toda a árvore DOM
+      const allDivs = container.querySelectorAll('div')
+      allDivs.forEach(div => {
+        const style = window.getComputedStyle(div)
+        if (style.overflow === 'auto' || style.overflow === 'scroll' || style.overflowY === 'auto' || style.overflowY === 'scroll') {
+          console.log('🎯 Div scrollável encontrada:', div)
+          if (div.scrollHeight > div.clientHeight) {
+            div.scrollTop = div.scrollHeight
+            div.scrollTo({
+              top: div.scrollHeight,
+              behavior: 'smooth'
+            })
+          }
+        }
+      })
+      
+      // Estratégia 4: Usar window.scrollTo como último recurso
+      setTimeout(() => {
+        window.scrollTo({
+          top: document.body.scrollHeight,
+          behavior: 'smooth'
+        })
+      }, 100)
+      
+      console.log('✅ Todas as estratégias de scroll executadas')
     } else {
       console.log('❌ Container não encontrado')
     }
@@ -447,31 +485,60 @@ const HeroSection = () => {
                       />
                       
                       {showScrollButton && (
-                        <button
-                          onClick={scrollToBottom}
-                          className="scroll-to-bottom-btn"
-                          title="Ir para o final da conversa"
-                          style={{ 
-                            position: 'absolute', 
-                            bottom: '80px', 
-                            right: '20px', 
-                            width: '32px', 
-                            height: '32px',
-                            background: 'rgba(255, 255, 255, 0.9)',
-                            border: '1px solid rgba(229, 231, 235, 0.6)',
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            cursor: 'pointer',
-                            zIndex: 1000,
-                            boxShadow: '0 1px 4px rgba(0, 0, 0, 0.1)',
-                            backdropFilter: 'blur(4px)',
-                            transition: 'all 0.2s ease'
-                          }}
-                        >
-                          <ArrowDown className="h-4 w-4" style={{ color: '#6b7280' }} />
-                        </button>
+                        <>
+                          <button
+                            onClick={scrollToBottom}
+                            className="scroll-to-bottom-btn"
+                            title="Ir para o final da conversa"
+                            style={{ 
+                              position: 'absolute', 
+                              bottom: '80px', 
+                              right: '20px', 
+                              width: '32px', 
+                              height: '32px',
+                              background: 'rgba(255, 255, 255, 0.9)',
+                              border: '1px solid rgba(229, 231, 235, 0.6)',
+                              borderRadius: '50%',
+                              display: 'flex',
+                              alignItems: 'center',
+                              justifyContent: 'center',
+                              cursor: 'pointer',
+                              zIndex: 1000,
+                              boxShadow: '0 1px 4px rgba(0, 0, 0, 0.1)',
+                              backdropFilter: 'blur(4px)',
+                              transition: 'all 0.2s ease'
+                            }}
+                          >
+                            <ArrowDown className="h-4 w-4" style={{ color: '#6b7280' }} />
+                          </button>
+                          
+                          {/* Botão de teste temporário */}
+                          <button
+                            onClick={() => {
+                              console.log('🧪 Botão de teste clicado!')
+                              console.log('📊 Status:', status)
+                              console.log('📊 showScrollButton:', showScrollButton)
+                              console.log('📊 chatContainerRef:', chatContainerRef.current)
+                              scrollToBottom()
+                            }}
+                            style={{ 
+                              position: 'absolute', 
+                              bottom: '120px', 
+                              right: '20px', 
+                              width: '60px', 
+                              height: '30px',
+                              background: 'red',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: '4px',
+                              cursor: 'pointer',
+                              zIndex: 1001,
+                              fontSize: '10px'
+                            }}
+                          >
+                            TEST
+                          </button>
+                        </>
                       )}
                     </div>
                   )}
