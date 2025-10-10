@@ -9,7 +9,7 @@ const HeroSection = () => {
   // ChatKit state
   const [status, setStatus] = useState('booting')
   const [errorMessage, setErrorMessage] = useState(null)
-  const [showScrollButton, setShowScrollButton] = useState(false)
+  const [showScrollButton, setShowScrollButton] = useState(true)
   const [sessionCreated, setSessionCreated] = useState(false)
   const chatContainerRef = useRef(null)
 
@@ -191,7 +191,8 @@ const HeroSection = () => {
       if (chatContainerRef.current) {
         const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current
         const isAtBottom = scrollTop + clientHeight >= scrollHeight - 30
-        setShowScrollButton(!isAtBottom && scrollHeight > clientHeight)
+        // Mostrar botão se não estiver no final ou se há conteúdo para rolar
+        setShowScrollButton(!isAtBottom || scrollHeight > clientHeight)
       }
     }
 
@@ -201,6 +202,19 @@ const HeroSection = () => {
       return () => container.removeEventListener('scroll', handleScroll)
     }
   }, [status])
+
+  // Mostrar botão quando chat estiver pronto
+  useEffect(() => {
+    if (status === 'ready') {
+      console.log('🎯 Chat pronto - mostrando botão de scroll')
+      setShowScrollButton(true)
+    }
+  }, [status])
+
+  // Debug do estado do botão
+  useEffect(() => {
+    console.log('🔍 showScrollButton:', showScrollButton, 'status:', status)
+  }, [showScrollButton, status])
 
   const palette = {
     primary: { bg: 'rgba(242, 139, 48, 0.68)', text: '#2f1a08' },
@@ -404,8 +418,24 @@ const HeroSection = () => {
                           onClick={scrollToBottom}
                           className="scroll-to-bottom-btn"
                           title="Ir para o final da conversa"
+                          style={{ 
+                            position: 'absolute', 
+                            bottom: '20px', 
+                            right: '20px', 
+                            width: '44px', 
+                            height: '44px',
+                            background: 'white',
+                            border: '1px solid #e5e7eb',
+                            borderRadius: '50%',
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            cursor: 'pointer',
+                            zIndex: 1000,
+                            boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)'
+                          }}
                         >
-                          <ArrowDown className="h-5 w-5" />
+                          <ArrowDown className="h-5 w-5" style={{ color: '#374151' }} />
                         </button>
                       )}
                     </div>
