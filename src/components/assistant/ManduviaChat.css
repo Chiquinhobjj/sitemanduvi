@@ -125,3 +125,37 @@ div[class*="prompt"] {
     grid-template-columns: 1fr !important;
   }
 }
+
+/* Chat container scroll styles */
+.chat-container {
+  scrollbar-width: thin;
+  scrollbar-color: #d1d5db #f9fafb;
+}
+
+.chat-container::-webkit-scrollbar {
+  width: 6px;
+}
+
+.chat-container::-webkit-scrollbar-track {
+  background: #f9fafb;
+  border-radius: 3px;
+}
+
+.chat-container::-webkit-scrollbar-thumb {
+  background: #d1d5db;
+  border-radius: 3px;
+}
+
+.chat-container::-webkit-scrollbar-thumb:hover {
+  background: #9ca3af;
+}
+
+/* Smooth scrolling for chat content */
+.chat-container {
+  scroll-behavior: smooth;
+}
+
+/* Ensure chat content fills available space */
+.chat-container > div {
+  min-height: 100%;
+}

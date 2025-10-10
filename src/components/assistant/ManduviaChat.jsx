@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { ChatKit, useChatKit } from '@openai/chatkit-react'
 import { Sparkle } from 'lucide-react'
 import './ManduviaChat.css'
@@ -29,6 +29,8 @@ const ManduviaChat = () => {
   const [status, setStatus] = useState('booting')
   const [errorMessage, setErrorMessage] = useState(null)
   const [deviceId] = useState(() => resolveDeviceId())
+  const chatContainerRef = useRef(null)
+  const bottomRef = useRef(null)
 
   // Aplicar estilos CSS personalizados após o ChatKit ser renderizado
   useEffect(() => {
@@ -163,6 +165,57 @@ const ManduviaChat = () => {
 
     return () => {
       timeouts.forEach(clearTimeout)
+      observer.disconnect()
+    }
+  }, [status])
+
+  // Scroll automático para manter a última interação visível
+  useEffect(() => {
+    const scrollToBottom = () => {
+      if (bottomRef.current) {
+        bottomRef.current.scrollIntoView({ behavior: 'smooth' })
+      }
+    }
+
+    // Scroll quando o status muda para 'ready'
+    if (status === 'ready') {
+      setTimeout(scrollToBottom, 100)
+    }
+
+    // Observer para detectar mudanças no conteúdo do chat
+    const observer = new MutationObserver((mutations) => {
+      let shouldScroll = false
+      mutations.forEach(mutation => {
+        if (mutation.type === 'childList' && mutation.addedNodes.length > 0) {
+          mutation.addedNodes.forEach(node => {
+            if (node.nodeType === 1) { // Element node
+              // Verificar se é uma nova mensagem ou interação
+              if (node.querySelector && (
+                node.querySelector('[data-message]') ||
+                node.querySelector('.message') ||
+                node.textContent?.includes('MirIA') ||
+                node.textContent?.includes('Olá')
+              )) {
+                shouldScroll = true
+              }
+            }
+          })
+        }
+      })
+      
+      if (shouldScroll) {
+        setTimeout(scrollToBottom, 200)
+      }
+    })
+
+    if (chatContainerRef.current) {
+      observer.observe(chatContainerRef.current, { 
+        childList: true, 
+        subtree: true 
+      })
+    }
+
+    return () => {
       observer.disconnect()
     }
   }, [status])
@@ -308,10 +361,16 @@ const ManduviaChat = () => {
               </div>
             </div>
               ) : (
-                <ChatKit 
-                  control={control} 
-                  className="mt-3 sm:mt-4 h-[240px] sm:h-[280px] lg:h-[320px] min-h-[240px] sm:min-h-[280px] lg:min-h-[320px] max-h-[500px] sm:max-h-[600px] lg:max-h-[700px] w-full" 
-                />
+                <div 
+                  ref={chatContainerRef}
+                  className="chat-container mt-3 sm:mt-4 w-full max-h-[60vh] overflow-y-auto"
+                >
+                  <ChatKit 
+                    control={control} 
+                    className="h-[240px] sm:h-[280px] lg:h-[320px] min-h-[240px] sm:min-h-[280px] lg:min-h-[320px] w-full" 
+                  />
+                  <div ref={bottomRef} />
+                </div>
               )}
         </div>
       </div>
