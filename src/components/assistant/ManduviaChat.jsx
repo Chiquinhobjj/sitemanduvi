@@ -48,7 +48,7 @@ const ManduviaChat = () => {
 
           if (!response.ok || !payload?.client_secret) {
             const message =
-              payload?.error ?? 'Não foi possível iniciar uma sessão com o ManduvIA agora.'
+              payload?.error ?? 'Não foi possível iniciar uma sessão com o MirIA agora.'
             throw new Error(message)
           }
 
@@ -137,7 +137,7 @@ const ManduviaChat = () => {
               <Sparkle className="h-4 w-4 animate-pulse text-primary" />
               {status === 'refreshing'
                 ? 'Atualizando sua sessão...'
-                : 'Conectando com o ManduvIA...'}
+                : 'Conectando com o MirIA...'}
             </div>
           )}
 
