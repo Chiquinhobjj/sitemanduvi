@@ -87,24 +87,31 @@ const HeroSection = () => {
         >
           <motion.div
             variants={itemVariants}
-            className="text-center text-5xl sm:text-[3.75rem] lg:text-[4.5rem] font-black tracking-tight text-foreground/90 leading-tight"
+            className="text-center text-3xl sm:text-4xl md:text-5xl lg:text-[3.75rem] xl:text-[4.5rem] font-black tracking-tight text-foreground/90 leading-tight px-4"
           >
             Oi, nós somos o
           </motion.div>
 
-          <motion.div variants={itemVariants} className="flex justify-center px-4">
+          <motion.div variants={itemVariants} className="flex justify-center px-4 mb-2">
             <img
               src="/images/logo-manduvi.svg"
               alt="Instituto Manduvi"
-              className="w-[min(90vw,420px)] md:w-[min(60vw,500px)] lg:w-[min(50vw,560px)] max-w-4xl h-auto drop-shadow-2xl"
+              className="w-[min(85vw,380px)] sm:w-[min(80vw,420px)] md:w-[min(60vw,500px)] lg:w-[min(50vw,560px)] max-w-4xl h-auto drop-shadow-2xl"
             />
           </motion.div>
 
           <motion.div
-            variants={containerVariants}
-            className="flex flex-wrap justify-center overflow-hidden"
+            variants={itemVariants}
+            className="text-center text-sm sm:text-base md:text-lg lg:text-xl text-foreground/80 px-4 max-w-2xl mx-auto"
           >
-            <Marquee direction="left" className="py-1 w-full max-w-full" speed={30} autoFill>
+            A SocialTech que une afeto, tecnologia e acolhimento para transformar vidas no Pantanal, no Brasil e além.
+          </motion.div>
+
+          <motion.div
+            variants={containerVariants}
+            className="flex flex-wrap justify-center overflow-hidden px-4"
+          >
+            <Marquee direction="left" className="py-1 w-full max-w-full" speed={25} autoFill>
               {achievements.slice(0, Math.ceil(achievements.length / 2)).map((achievement, index) => {
                 const paletteEntry = palette[achievement.palette]
 
@@ -112,20 +119,20 @@ const HeroSection = () => {
                   <motion.div
                     key={index}
                     variants={badgeVariants}
-                    className="px-5 sm:px-7 py-3 sm:py-3.5 rounded-full text-base sm:text-lg font-semibold flex items-center gap-3 transition-transform duration-300 hover:-translate-y-0.5 flex-shrink-0 border border-white/20"
+                    className="px-3 sm:px-5 md:px-7 py-2 sm:py-3 md:py-3.5 rounded-full text-sm sm:text-base md:text-lg font-semibold flex items-center gap-2 sm:gap-3 transition-transform duration-300 hover:-translate-y-0.5 flex-shrink-0 border border-white/20"
                     style={{
                       backgroundColor: paletteEntry.bg,
                       color: paletteEntry.text,
-                      margin: '0 6px'
+                      margin: '0 4px'
                     }}
                   >
-                    <span className="text-lg sm:text-xl">{achievement.icon}</span>
+                    <span className="text-base sm:text-lg md:text-xl">{achievement.icon}</span>
                     <span className="whitespace-nowrap">{achievement.text}</span>
                   </motion.div>
                 )
               })}
             </Marquee>
-            <Marquee direction="right" className="py-1 w-full max-w-full mt-1" speed={30} autoFill>
+            <Marquee direction="right" className="py-1 w-full max-w-full mt-1" speed={25} autoFill>
               {achievements.slice(Math.ceil(achievements.length / 2)).map((achievement, index) => {
                 const paletteEntry = palette[achievement.palette]
 
@@ -133,14 +140,14 @@ const HeroSection = () => {
                   <motion.div
                     key={index}
                     variants={badgeVariants}
-                    className="px-5 sm:px-7 py-3 sm:py-3.5 rounded-full text-base sm:text-lg font-semibold flex items-center gap-3 transition-transform duration-300 hover:-translate-y-0.5 flex-shrink-0 border border-white/20"
+                    className="px-3 sm:px-5 md:px-7 py-2 sm:py-3 md:py-3.5 rounded-full text-sm sm:text-base md:text-lg font-semibold flex items-center gap-2 sm:gap-3 transition-transform duration-300 hover:-translate-y-0.5 flex-shrink-0 border border-white/20"
                     style={{
                       backgroundColor: paletteEntry.bg,
                       color: paletteEntry.text,
-                      margin: '0 6px'
+                      margin: '0 4px'
                     }}
                   >
-                    <span className="text-lg sm:text-xl">{achievement.icon}</span>
+                    <span className="text-base sm:text-lg md:text-xl">{achievement.icon}</span>
                     <span className="whitespace-nowrap">{achievement.text}</span>
                   </motion.div>
                 )
@@ -148,7 +155,7 @@ const HeroSection = () => {
             </Marquee>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="mt-12">
+          <motion.div variants={itemVariants} className="mt-6 sm:mt-8 lg:mt-12">
             <ManduviaChat />
           </motion.div>
         </motion.div>

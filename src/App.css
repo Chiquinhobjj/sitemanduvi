@@ -123,6 +123,34 @@
   }
 }
 
+/* Mobile-specific improvements */
+@media (max-width: 640px) {
+  .hero-with-background {
+    min-height: 100vh;
+    padding: 0 8px;
+  }
+  
+  .hero-with-background .mx-auto {
+    padding: 0 4px;
+  }
+  
+  /* Ensure proper spacing on mobile */
+  .space-y-8 > * + * {
+    margin-top: 1.5rem;
+  }
+  
+  /* Better text sizing for mobile */
+  .text-3xl {
+    font-size: 1.875rem;
+    line-height: 2.25rem;
+  }
+  
+  /* Improve button touch targets */
+  button {
+    min-height: 44px;
+  }
+}
+
 .hero-with-background {
   position: relative;
   overflow: hidden;
