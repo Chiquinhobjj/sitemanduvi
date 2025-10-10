@@ -32,10 +32,12 @@ const ManduviaChat = () => {
   const { control, fetchUpdates } = useChatKit({
     api: {
       async getClientSecret(existing) {
+        console.log('🔄 ChatKit: Iniciando getClientSecret', { existing, deviceId })
         setErrorMessage(null)
         setStatus(existing ? 'refreshing' : 'booting')
 
         try {
+          console.log('📡 ChatKit: Fazendo requisição para /api/chatkit/session')
           const response = await fetch('/api/chatkit/session', {
             method: 'POST',
             headers: {
@@ -44,17 +46,22 @@ const ManduviaChat = () => {
             body: JSON.stringify({ deviceId }),
           })
 
+          console.log('📡 ChatKit: Resposta recebida', { status: response.status, ok: response.ok })
           const payload = await response.json().catch(() => null)
+          console.log('📡 ChatKit: Payload parseado', { hasClientSecret: !!payload?.client_secret })
 
           if (!response.ok || !payload?.client_secret) {
             const message =
               payload?.error ?? 'Não foi possível iniciar uma sessão com o MirIA agora.'
+            console.error('❌ ChatKit: Erro na sessão', { message, payload })
             throw new Error(message)
           }
 
+          console.log('✅ ChatKit: Sessão criada com sucesso')
           setStatus('ready')
           return payload.client_secret
         } catch (error) {
+          console.error('❌ ChatKit: Erro geral', error)
           setStatus('error')
           setErrorMessage(
             error?.message ?? 'Falha ao conectar com o agente. Tente novamente em instantes.'
