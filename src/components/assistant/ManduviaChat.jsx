@@ -138,7 +138,7 @@ const ManduviaChat = () => {
               </button>
             </div>
           ) : (
-            <ChatKit control={control} className="mt-4 h-[440px] w-full" />
+            <ChatKit control={control} className="mt-4 h-[280px] min-h-[280px] max-h-[600px] w-full" />
           )}
         </div>
       </div>
