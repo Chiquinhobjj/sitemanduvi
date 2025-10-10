@@ -391,12 +391,30 @@ const ManduviaChat = () => {
     startScreen: {
       greeting: 'Olá! Sou a MirIA, Anfitriã do Manduvi. Como posso te ajudar hoje?',
       prompts: [
-        'Quero conhecer os cursos certificados e o Programa Meu Futuro',
-        'Quero saber sobre o campeonato de futebol society',
-        'Quero conhecer os 7 projetos principais do Instituto',
-        'Quero saber mais sobre nossa missão, metodologia HEXA e história',
-        'Quero acompanhar o Instituto nas redes sociais',
-        'Quero ver relatórios de impacto e transparência'
+        {
+          label: 'Cursos',
+          prompt: 'Quero conhecer os cursos certificados e o Programa Meu Futuro'
+        },
+        {
+          label: 'Superralinha',
+          prompt: 'Quero saber sobre o campeonato de futebol society'
+        },
+        {
+          label: 'Nossas Iniciativas',
+          prompt: 'Quero conhecer os 7 projetos principais do Instituto'
+        },
+        {
+          label: 'Sobre o Instituto',
+          prompt: 'Quero saber mais sobre nossa missão, metodologia HEXA e história'
+        },
+        {
+          label: 'Redes Sociais',
+          prompt: 'Quero acompanhar o Instituto nas redes sociais'
+        },
+        {
+          label: 'Transparência',
+          prompt: 'Quero ver relatórios de impacto e transparência'
+        }
       ]
     },
     onError: (detail) => {
