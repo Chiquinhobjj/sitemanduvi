@@ -419,7 +419,7 @@ const ManduviaChat = () => {
                   <span className="truncate">
                     {status === 'refreshing'
                       ? 'Atualizando base de conhecimento...'
-                      : 'Conectando com a MirIA especialista...'}
+                      : 'Conectando com a MirIA...'}
                   </span>
             </div>
           )}
