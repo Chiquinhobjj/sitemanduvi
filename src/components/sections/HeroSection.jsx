@@ -1,442 +1,199 @@
 import { motion } from 'framer-motion'
 import Marquee from 'react-fast-marquee'
-import { ChatKit, useChatKit } from '@openai/chatkit-react'
 import { useState, useEffect, useRef } from 'react'
 import { Sparkle, ArrowDown } from 'lucide-react'
+import ManduviChatKit from '../chat/ManduviChatKit'
 import './HeroSection.css'
 
 const HeroSection = () => {
-  // ChatKit state
-  const [status, setStatus] = useState('booting')
-  const [errorMessage, setErrorMessage] = useState(null)
   const [showScrollButton, setShowScrollButton] = useState(false)
-  const [sessionCreated, setSessionCreated] = useState(false)
-  const [isWaitingForResponse, setIsWaitingForResponse] = useState(false)
-  const chatContainerRef = useRef(null)
+  const heroRef = useRef(null)
 
-  // Timeout para evitar carregamento infinito
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      if (status === 'booting' && !sessionCreated) {
-        console.warn('⚠️ ChatKit: Timeout - forçando status para error')
-        setStatus('error')
-        setErrorMessage('Timeout ao conectar com o chat. Tente recarregar a página.')
-      }
-    }, 60000) // 60 segundos - mais tempo para o ChatKit carregar
-
-    return () => clearTimeout(timeout)
-  }, [status, sessionCreated])
-
-  // Reset timeout quando status muda para ready
-  useEffect(() => {
-    if (status === 'ready') {
-      console.log('✅ ChatKit: Widget carregado com sucesso!')
-    }
-  }, [status])
-
-  // Timeout específico para quando sessão foi criada mas status não mudou
-  useEffect(() => {
-    if (sessionCreated && status === 'booting') {
-      const timeout = setTimeout(() => {
-        console.log('🔄 ChatKit: Forçando status para ready após sessão criada')
-        setStatus('ready')
-      }, 10000) // 10 segundos após sessão criada
-
-      return () => clearTimeout(timeout)
-    }
-  }, [sessionCreated, status])
-
-  // Timeout para detectar respostas que demoram muito
-  useEffect(() => {
-    let responseTimeout
-    if (isWaitingForResponse) {
-      responseTimeout = setTimeout(() => {
-        console.log('⚠️ ChatKit: Resposta demorou mais de 30 segundos')
-        setIsWaitingForResponse(false)
-        setErrorMessage('A resposta está demorando mais que o esperado. Tente novamente.')
-      }, 30000) // 30 segundos
-    }
-    
-    return () => {
-      if (responseTimeout) clearTimeout(responseTimeout)
-    }
-  }, [isWaitingForResponse])
-
-  // ChatKit configuration com workflow personalizado
-  const { control, fetchUpdates } = useChatKit({
-    startScreen: {
-      greeting: `Olá! Sou a MirIA, Anfitriã do Manduvi.
-Como posso te ajudar hoje?`,
-      prompts: [
-        { label: 'Sobre o Instituto Manduvi', prompt: 'Conte-me sobre o Instituto Manduvi' },
-        { label: 'Cursos e Formações', prompt: 'Quais cursos vocês oferecem?' },
-        { label: 'Projetos e Iniciativas', prompt: 'Mostre-me os projetos do Manduvi' },
-        { label: 'Como entrar em contato', prompt: 'Como posso entrar em contato?' }
-      ],
-    },
-    api: {
-      async getClientSecret() {
-        console.log('🚀 ChatKit: Iniciando criação de sessão...')
-        try {
-          const response = await fetch('/api/chatkit/session', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ deviceId: crypto.randomUUID() })
-          })
-
-          console.log('📡 ChatKit: Resposta recebida', { 
-            status: response.status, 
-            ok: response.ok
-          })
-          
-          const payload = await response.json()
-          console.log('📡 ChatKit: Payload parseado', { 
-            hasClientSecret: !!payload?.client_secret
-          })
-
-          if (!response.ok || !payload?.client_secret) {
-            throw new Error(payload?.error ?? 'Erro ao criar sessão')
-          }
-
-          console.log('✅ ChatKit: Sessão criada!')
-          console.log('🔍 Workflow ID:', payload.workflow?.id)
-          console.log('🔍 Workflow State:', payload.workflow?.state_variables)
-          setSessionCreated(true)
-          return payload.client_secret
-        } catch (error) {
-          console.error('❌ ChatKit: Erro', error)
-          setStatus('error')
-          setErrorMessage('Erro ao conectar. Tente novamente.')
-          throw error
-        }
-      },
-    },
-    composer: {
-      placeholder: 'Dê-me uma missão...',
-    },
-    onError: (detail) => {
-      console.error('❌ ChatKit: Erro no widget', detail)
-      console.error('❌ Detalhes do erro:', JSON.stringify(detail, null, 2))
-      setStatus('error')
-      setErrorMessage('Ocorreu um erro ao acessar a base de conhecimento. Tente novamente.')
-    },
-    onStatusChange: (newStatus) => {
-      console.log('📡 ChatKit: Status mudou', newStatus)
-      setStatus(newStatus)
-      if (newStatus === 'ready') {
-        setErrorMessage(null)
-        setSessionCreated(true)
-        console.log('✅ ChatKit: Widget pronto!')
-        console.log('🔍 ChatKit: Verificando se há mensagens...')
-      } else if (newStatus === 'error') {
-        console.error('❌ ChatKit: Widget com erro')
-        setErrorMessage('Erro ao carregar o chat. Tente recarregar a página.')
-      } else if (newStatus === 'booting') {
-        console.log('🔄 ChatKit: Iniciando...')
-        setErrorMessage(null)
-      } else {
-        console.log('📡 ChatKit: Status desconhecido', newStatus)
-      }
-    },
-    onMessage: (message) => {
-      console.log('💬 ChatKit: Nova mensagem recebida', message)
-      console.log('💬 Tipo:', message.type)
-      console.log('💬 Conteúdo:', message.content)
-      console.log('💬 Status:', message.status)
-      console.log('💬 ID:', message.id)
-      console.log('💬 Role:', message.role)
-      console.log('💬 Timestamp:', new Date().toISOString())
-      
-      // Detectar se é uma mensagem do usuário
-      if (message.role === 'user') {
-        console.log('👤 Usuário enviou mensagem, aguardando resposta...')
-        setIsWaitingForResponse(true)
-      }
-      
-      // Detectar se é uma resposta do assistente
-      if (message.role === 'assistant') {
-        console.log('🤖 Assistente respondeu!')
-        console.log('🤖 Resposta completa:', message.content)
-        setIsWaitingForResponse(false)
-      }
-    },
-    onThreadUpdate: (thread) => {
-      console.log('🧵 ChatKit: Thread atualizada', thread)
-      console.log('🧵 Mensagens:', thread.messages?.length)
-      console.log('🧵 Última mensagem:', thread.messages?.[thread.messages.length - 1])
-      
-      // Verificar se há mensagens incompletas
-      const lastMessage = thread.messages?.[thread.messages.length - 1]
-      if (lastMessage && lastMessage.role === 'assistant') {
-        console.log('🤖 ChatKit: Resposta do assistente detectada')
-        console.log('🤖 Status da resposta:', lastMessage.status)
-        console.log('🤖 Conteúdo da resposta:', lastMessage.content)
-      }
-    },
-    onMessageUpdate: (message) => {
-      console.log('🔄 ChatKit: Mensagem atualizada', message)
-      console.log('🔄 Status:', message.status)
-      console.log('🔄 Conteúdo:', message.content)
-    },
-  })
-
-  // Scroll functions
-  const scrollToBottom = () => {
-    if (chatContainerRef.current) {
-      chatContainerRef.current.scrollTop = chatContainerRef.current.scrollHeight
-    }
-  }
-
-  // Auto-scroll effect
-  useEffect(() => {
-    if (status === 'ready' && chatContainerRef.current) {
-      const container = chatContainerRef.current
-      const observer = new MutationObserver(() => {
-        if (container.scrollHeight > container.clientHeight) {
-          const isAtBottom = container.scrollTop + container.clientHeight >= container.scrollHeight - 10
-          if (isAtBottom) {
-            scrollToBottom()
-          }
-        }
-      })
-      
-      observer.observe(container, { childList: true, subtree: true })
-      return () => observer.disconnect()
-    }
-  }, [status])
-
-  // Scroll button visibility
-  useEffect(() => {
-    const handleScroll = () => {
-      if (chatContainerRef.current) {
-        const { scrollTop, scrollHeight, clientHeight } = chatContainerRef.current
-        const isAtBottom = scrollTop + clientHeight >= scrollHeight - 30
-        setShowScrollButton(!isAtBottom && scrollHeight > clientHeight)
-      }
-    }
-
-    const container = chatContainerRef.current
-    if (container) {
-      container.addEventListener('scroll', handleScroll)
-      return () => container.removeEventListener('scroll', handleScroll)
-    }
-  }, [status])
-
-  const palette = {
-    primary: { bg: 'rgba(242, 139, 48, 0.68)', text: '#2f1a08' },
-    secondary: { bg: 'rgba(166, 69, 33, 0.7)', text: '#F2F2F2' },
-    accent: { bg: 'rgba(133, 66, 36, 0.7)', text: '#F2F2F2' },
-    earth: { bg: 'rgba(96, 56, 19, 0.72)', text: '#F2F2F2' },
-    light: { bg: 'rgba(242, 242, 242, 0.86)', text: '#603813' }
-  }
-
-  const achievements = [
-    { text: '20+ Anos', palette: 'secondary', icon: '📅' },
-    { text: '20K+ Atendimentos', palette: 'primary', icon: '🤝' },
-    { text: 'SocialTech', palette: 'primary', icon: '💻' },
-    { text: 'Inovação', palette: 'light', icon: '💡' },
-    { text: 'Impacto Social', palette: 'accent', icon: '❤️' },
-    { text: 'Sustentabilidade', palette: 'primary', icon: '🌱' },
-    { text: 'Inclusão', palette: 'accent', icon: '🤗' },
-    { text: 'Esporte', palette: 'light', icon: '⚽' },
-    { text: 'Educação', palette: 'secondary', icon: '📚' },
-    { text: 'Tecnologia', palette: 'earth', icon: '🔧' },
-    { text: 'Transformação', palette: 'primary', icon: '✨' },
-    { text: 'Futuro', palette: 'light', icon: '🚀' },
-    { text: 'Esperança', palette: 'secondary', icon: '🌟' },
-    { text: 'Pantanal', palette: 'earth', icon: '🌳' },
-    { text: '3 Países', palette: 'primary', icon: '🌍' },
-    { text: 'Cuiabá', palette: 'light', icon: '📍' }
-  ]
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3
+  // Função para scroll suave
+  const scrollToNext = () => {
+    if (heroRef.current) {
+      const nextSection = heroRef.current.nextElementSibling
+      if (nextSection) {
+        nextSection.scrollIntoView({ behavior: 'smooth' })
       }
     }
   }
 
-  const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-      y: 0,
-      opacity: 1,
-      transition: {
-        duration: 0.5
-      }
-    }
-  }
-
-  const badgeVariants = {
-    hidden: { scale: 0, opacity: 0 },
-    visible: {
-      scale: 1,
-      opacity: 1,
-      transition: {
-        type: 'spring',
-        stiffness: 260,
-        damping: 20
-      }
+  // Função para detectar scroll
+  const handleScroll = () => {
+    if (heroRef.current) {
+      const { scrollTop, scrollHeight, clientHeight } = heroRef.current
+      const isAtBottom = scrollTop + clientHeight >= scrollHeight - 10
+      setShowScrollButton(!isAtBottom)
     }
   }
 
   return (
-    <section
-      id="home"
+    <section 
+      ref={heroRef}
       className="hero-with-background relative min-h-screen flex items-center justify-center bg-background overflow-hidden"
+      id="home"
     >
-      <video
-        className="hero-video"
-        src="/images/hero-background.mp4"
-        autoPlay
-        loop
-        muted
-        playsInline
-      />
-      <div className="mx-auto text-center w-full">
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          animate="visible"
-          className="space-y-8"
+      {/* Background Video */}
+      <div className="absolute inset-0 z-0">
+        <video
+          autoPlay
+          muted
+          loop
+          playsInline
+          className="w-full h-full object-cover"
+          poster="/images/hero-background.webp"
         >
-          <motion.div
-            variants={itemVariants}
-            className="text-center text-5xl sm:text-[3.75rem] lg:text-[4.5rem] font-black tracking-tight text-foreground/90 leading-tight"
-          >
-            Oi, nós somos o
-          </motion.div>
+          <source src="/images/hero-background.mp4" type="video/mp4" />
+        </video>
+        <div className="absolute inset-0 bg-black/40"></div>
+      </div>
 
-          <motion.div variants={itemVariants} className="flex justify-center px-4">
+      {/* Content */}
+      <div className="relative z-10 w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-8">
+          {/* Logo */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8 }}
+            className="mb-8"
+          >
             <img
               src="/images/logo-manduvi.svg"
               alt="Instituto Manduvi"
-              className="w-[min(90vw,420px)] md:w-[min(60vw,500px)] lg:w-[min(50vw,560px)] max-w-4xl h-auto drop-shadow-2xl"
+              className="h-16 sm:h-20 lg:h-24 mx-auto"
             />
           </motion.div>
 
+          {/* Main Title */}
           <motion.div
-            variants={containerVariants}
-            className="flex flex-wrap justify-center overflow-hidden"
+            initial={{ opacity: 0, y: 30 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            className="text-center text-5xl sm:text-[3.75rem] lg:text-[4.5rem] font-black tracking-tight text-foreground/90 leading-tight"
           >
-            <Marquee direction="left" className="py-1 w-full max-w-full" speed={30} autoFill>
-              {achievements.slice(0, Math.ceil(achievements.length / 2)).map((achievement, index) => {
-                const paletteEntry = palette[achievement.palette]
-
-                return (
-                  <motion.div
-                    key={index}
-                    variants={badgeVariants}
-                    className="px-5 sm:px-7 py-3 sm:py-3.5 rounded-full text-base sm:text-lg font-semibold flex items-center gap-3 transition-transform duration-300 hover:-translate-y-0.5 flex-shrink-0 border border-white/20"
-                    style={{
-                      backgroundColor: paletteEntry.bg,
-                      color: paletteEntry.text,
-                      margin: '0 6px'
-                    }}
-                  >
-                    <span className="text-lg sm:text-xl">{achievement.icon}</span>
-                    <span className="whitespace-nowrap">{achievement.text}</span>
-                  </motion.div>
-                )
-              })}
-            </Marquee>
-            <Marquee direction="right" className="py-1 w-full max-w-full mt-1" speed={30} autoFill>
-              {achievements.slice(Math.ceil(achievements.length / 2)).map((achievement, index) => {
-                const paletteEntry = palette[achievement.palette]
-
-                return (
-                  <motion.div
-                    key={index}
-                    variants={badgeVariants}
-                    className="px-5 sm:px-7 py-3 sm:py-3.5 rounded-full text-base sm:text-lg font-semibold flex items-center gap-3 transition-transform duration-300 hover:-translate-y-0.5 flex-shrink-0 border border-white/20"
-                    style={{
-                      backgroundColor: paletteEntry.bg,
-                      color: paletteEntry.text,
-                      margin: '0 6px'
-                    }}
-                  >
-                    <span className="text-lg sm:text-xl">{achievement.icon}</span>
-                    <span className="whitespace-nowrap">{achievement.text}</span>
-                  </motion.div>
-                )
-              })}
-            </Marquee>
+            Oi, nós somos o
+            <br />
+            <span className="text-primary">Instituto Manduvi</span>
           </motion.div>
 
-          <motion.div variants={itemVariants} className="mt-12">
-            <div className="w-full max-w-4xl mx-auto px-2 sm:px-4 lg:px-6">
-              <div className="bg-stone-100 shadow-2xl rounded-[20px] sm:rounded-[24px] lg:rounded-[28px] overflow-hidden">
-                <div className="px-3 sm:px-4 lg:px-6 pb-4 sm:pb-6 pt-1 sm:pt-2">
-                  {status !== 'ready' && !errorMessage && (
-                    <div className="flex items-center gap-2 rounded-xl sm:rounded-2xl border border-primary/10 bg-white px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-foreground/70">
-                      <Sparkle className="h-4 w-4 animate-spin text-primary" />
-                      <span>
-        {isWaitingForResponse
-          ? 'MirIA está pensando...'
-          : status === 'refreshing'
-          ? 'Atualizando base de conhecimento...'
-          : status === 'booting' && sessionCreated
-          ? 'Carregando interface do chat...'
-          : status === 'booting'
-          ? 'Inicializando MirIA...'
-          : 'Conectando com a MirIA especialista...'}
-                      </span>
-                    </div>
-                  )}
+          {/* Subtitle */}
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            className="mt-6 text-lg sm:text-xl lg:text-2xl text-foreground/70 max-w-3xl mx-auto leading-relaxed"
+          >
+            Transformamos vidas através da educação, tecnologia e inovação social.
+            <br />
+            Conheça nossa história e faça parte da mudança.
+          </motion.p>
 
-                  {errorMessage ? (
-                    <div className="rounded-xl sm:rounded-2xl border border-red-200 bg-red-50 px-3 sm:px-4 py-2 sm:py-3 text-xs sm:text-sm text-red-700">
-                      <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-3">
-                        <span className="flex-1">{errorMessage}</span>
-                        <button
-                          type="button"
-                          className="text-primary underline text-xs sm:text-sm font-medium hover:text-primary/80 transition-colors"
-                          onClick={async () => {
-                            setErrorMessage(null)
-                            setStatus('booting')
-                            try {
-                              await fetchUpdates?.()
-                            } catch (error) {
-                              console.error('Erro ao tentar reconectar:', error)
-                              setStatus('error')
-                              setErrorMessage('Falha ao reconectar com a base de conhecimento. Tente novamente.')
-                            }
-                          }}
-                        >
-                          Tentar novamente
-                        </button>
-                      </div>
-                    </div>
-                  ) : (
-                    <div 
-                      ref={chatContainerRef}
-                      className="chat-container mt-3 sm:mt-4 w-full max-h-[85vh] sm:max-h-[70vh] overflow-y-auto relative"
-                    >
-                      <ChatKit 
-                        control={control} 
-                        className="h-auto min-h-[450px] sm:min-h-[320px] lg:min-h-[360px] max-h-[80vh] sm:max-h-[65vh] w-full" 
-                      />
-                      
-                      {showScrollButton && (
-                        <button
-                          onClick={scrollToBottom}
-                          className="scroll-to-bottom-btn"
-                          title="Ir para o final da conversa"
-                        >
-                          <ArrowDown className="h-5 w-5" />
-                        </button>
-                      )}
-                    </div>
-                  )}
-                </div>
-              </div>
-            </div>
+          {/* CTA Buttons */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, delay: 0.6 }}
+            className="mt-8 flex flex-col sm:flex-row gap-4 justify-center items-center"
+          >
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={scrollToNext}
+              className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-white bg-primary rounded-full shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              <Sparkle className="w-5 h-5 mr-2 group-hover:rotate-12 transition-transform duration-300" />
+              Conhecer o Instituto
+            </motion.button>
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={() => document.getElementById('contato')?.scrollIntoView({ behavior: 'smooth' })}
+              className="group relative inline-flex items-center justify-center px-8 py-4 text-lg font-semibold text-primary bg-white/10 backdrop-blur-sm border border-white/20 rounded-full hover:bg-white/20 transition-all duration-300"
+            >
+              Entrar em Contato
+            </motion.button>
           </motion.div>
+        </div>
+
+        {/* Chat Section */}
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, delay: 0.8 }}
+          className="mt-12"
+        >
+          <div className="text-center mb-6">
+            <h3 className="text-2xl sm:text-3xl font-bold text-white mb-2">
+              Converse com a MirIA
+            </h3>
+            <p className="text-white/80 text-lg">
+              Nossa assistente virtual está pronta para te ajudar
+            </p>
+          </div>
+          
+          <ManduviChatKit />
         </motion.div>
+      </div>
+
+      {/* Scroll Indicator */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.8, delay: 1.2 }}
+        className="absolute bottom-8 left-1/2 transform -translate-x-1/2 z-10"
+      >
+        <motion.button
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 2, repeat: Infinity }}
+          onClick={scrollToNext}
+          className="group flex flex-col items-center text-white/70 hover:text-white transition-colors duration-300"
+        >
+          <span className="text-sm font-medium mb-2">Descobrir mais</span>
+          <ArrowDown className="w-6 h-6 group-hover:scale-110 transition-transform duration-300" />
+        </motion.button>
+      </motion.div>
+
+      {/* Floating Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          animate={{
+            y: [0, -20, 0],
+            rotate: [0, 5, 0],
+          }}
+          transition={{
+            duration: 6,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute top-20 left-10 w-20 h-20 bg-primary/20 rounded-full blur-xl"
+        />
+        <motion.div
+          animate={{
+            y: [0, 20, 0],
+            rotate: [0, -5, 0],
+          }}
+          transition={{
+            duration: 8,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute top-40 right-20 w-32 h-32 bg-accent/20 rounded-full blur-xl"
+        />
+        <motion.div
+          animate={{
+            y: [0, -15, 0],
+            rotate: [0, 3, 0],
+          }}
+          transition={{
+            duration: 7,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+          className="absolute bottom-40 left-20 w-24 h-24 bg-primary/15 rounded-full blur-xl"
+        />
       </div>
     </section>
   )
