@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { ChatKit, useChatKit } from '@openai/chatkit-react'
-import { motion } from 'framer-motion'
-import { Sparkle } from 'lucide-react'
 
 const DEVICE_STORAGE_KEY = 'manduvia-chat-device-id'
 
@@ -64,27 +62,7 @@ const ManduviaChat = () => {
         }
       },
     },
-    theme: {
-      radius: 'round',
-      color: {
-        accent: {
-          primary: '#0D9488',
-          level: 3,
-        },
-      },
-    },
-    composer: {
-      placeholder: 'Escreva sua pergunta para o ManduvIA',
-    },
-    startScreen: {
-      greeting: 'Como posso ajudar você hoje?',
-      prompts: [
-        { label: 'Conhecer iniciativas', prompt: 'Quais são as iniciativas?' },
-        { label: 'Participar como beneficiário', prompt: 'Como posso participar?' },
-        { label: 'Apoiar financeiramente', prompt: 'Como posso doar?' },
-        { label: 'Solicitar acolhimento', prompt: 'Como solicitar acolhimento?' },
-      ],
-    },
+    // Use default ChatKit UI without custom theme/start screen to keep it minimal
     onError: (detail) => {
       const message =
         typeof detail === 'string'
@@ -97,52 +75,24 @@ const ManduviaChat = () => {
 
   return (
     <div className="w-full max-w-3xl mx-auto px-4 sm:px-6">
-      <div className="bg-white/95 backdrop-blur-lg border border-white/40 shadow-2xl rounded-[28px] overflow-hidden">
-        <div className="px-5 sm:px-7 pt-6 text-center">
-          <motion.h3
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4 }}
-            className="text-xl sm:text-2xl font-semibold text-foreground/90"
+      {errorMessage ? (
+        <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {errorMessage}
+          <button
+            type="button"
+            className="ml-3 text-primary underline"
+            onClick={() => {
+              setErrorMessage(null)
+              setStatus('booting')
+              fetchUpdates?.()
+            }}
           >
-            O que podemos fazer por você, hoje?
-          </motion.h3>
-          <p className="mt-2 text-sm text-foreground/60">
-            Nosso agente ManduvIA está pronto para direcionar você para iniciativas, matrículas e
-            apoios.
-          </p>
+            Tentar novamente
+          </button>
         </div>
-
-        <div className="px-4 sm:px-6 pb-6 pt-4">
-          {status !== 'ready' && !errorMessage && (
-            <div className="flex items-center gap-2 rounded-2xl border border-primary/10 bg-white px-4 py-3 text-sm text-foreground/70">
-              <Sparkle className="h-4 w-4 animate-pulse text-primary" />
-              {status === 'refreshing'
-                ? 'Atualizando sua sessão...'
-                : 'Conectando com o ManduvIA...'}
-            </div>
-          )}
-
-          {errorMessage ? (
-            <div className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
-              {errorMessage}
-              <button
-                type="button"
-                className="ml-3 text-primary underline"
-                onClick={() => {
-                  setErrorMessage(null)
-                  setStatus('booting')
-                  fetchUpdates?.()
-                }}
-              >
-                Tentar novamente
-              </button>
-            </div>
-          ) : (
-            <ChatKit control={control} className="mt-4 h-[440px] w-full" />
-          )}
-        </div>
-      </div>
+      ) : (
+        <ChatKit control={control} className="h-[440px] w-full" />
+      )}
     </div>
   )
 }
