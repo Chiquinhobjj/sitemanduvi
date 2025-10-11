@@ -82,6 +82,7 @@ Como posso te ajudar hoje?`,
       setStatus(newStatus);
       if (newStatus === 'ready') {
         setErrorMessage(null);
+        console.log('✅ ChatKit está pronto! Control object:', control);
       }
     },
   });
@@ -104,35 +105,105 @@ Como posso te ajudar hoje?`,
       console.log('Sugestão clicada:', suggestion);
       setSendingSuggestion(suggestion);
       
-      // Aguardar um pouco para o ChatKit estar pronto
-      await new Promise(resolve => setTimeout(resolve, 100));
+      // Verificar se o ChatKit está pronto
+      if (status !== 'ready') {
+        console.log('ChatKit não está pronto ainda, aguardando...');
+        setSendingSuggestion(null);
+        return;
+      }
       
-      // Enviar a sugestão como mensagem para o ChatKit
-      if (control && control.sendMessage) {
+      // Aguardar o ChatKit estar completamente pronto
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      // Método 1: Tentar usar a API nativa do ChatKit
+      if (control && typeof control.sendMessage === 'function') {
+        console.log('Tentando enviar via API nativa...');
         await control.sendMessage(suggestion);
+        console.log('Mensagem enviada via API nativa');
       } else {
-        // Fallback: tentar encontrar o input do ChatKit e simular digitação
-        const chatInput = document.querySelector('[data-testid="composer-input"], .chatkit-composer-input, input[placeholder*="digitar"], textarea[placeholder*="digitar"]');
+        console.log('API nativa não disponível, tentando fallback...');
+        
+        // Método 2: Aguardar o ChatKit estar renderizado e tentar múltiplos seletores
+        let chatInput = null;
+        let attempts = 0;
+        const maxAttempts = 10;
+        
+        while (!chatInput && attempts < maxAttempts) {
+          // Tentar diferentes seletores do ChatKit
+          chatInput = document.querySelector(
+            'textarea[placeholder*="digitar"], ' +
+            'input[placeholder*="digitar"], ' +
+            'textarea[placeholder*="Comece"], ' +
+            'input[placeholder*="Comece"], ' +
+            '[data-testid="composer-input"], ' +
+            '.chatkit-composer-input, ' +
+            'textarea, ' +
+            'input[type="text"]'
+          );
+          
+          if (!chatInput) {
+            await new Promise(resolve => setTimeout(resolve, 200));
+            attempts++;
+          }
+        }
+        
         if (chatInput) {
-          // Simular digitação e envio
-          chatInput.value = suggestion;
+          console.log('Input encontrado:', chatInput);
+          
+          // Focar no input primeiro
+          chatInput.focus();
+          
+          // Limpar o input
+          chatInput.value = '';
+          
+          // Simular digitação caractere por caractere para ser mais realista
+          for (let i = 0; i < suggestion.length; i++) {
+            chatInput.value += suggestion[i];
+            chatInput.dispatchEvent(new Event('input', { bubbles: true }));
+            await new Promise(resolve => setTimeout(resolve, 10));
+          }
+          
+          // Disparar eventos de mudança
+          chatInput.dispatchEvent(new Event('change', { bubbles: true }));
           chatInput.dispatchEvent(new Event('input', { bubbles: true }));
           
-          // Tentar encontrar e clicar no botão de envio
-          const sendButton = document.querySelector('[data-testid="send-button"], .chatkit-send-button, button[type="submit"]');
+          // Aguardar um pouco antes de enviar
+          await new Promise(resolve => setTimeout(resolve, 100));
+          
+          // Tentar encontrar o botão de envio
+          const sendButton = document.querySelector(
+            'button[type="submit"], ' +
+            '[data-testid="send-button"], ' +
+            '.chatkit-send-button, ' +
+            'button[aria-label*="send"], ' +
+            'button[title*="send"], ' +
+            'button:has(svg), ' +
+            'button[class*="send"]'
+          );
+          
           if (sendButton) {
+            console.log('Botão de envio encontrado:', sendButton);
             sendButton.click();
           } else {
+            console.log('Botão não encontrado, tentando Enter...');
             // Fallback: pressionar Enter
-            chatInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+            chatInput.dispatchEvent(new KeyboardEvent('keydown', { 
+              key: 'Enter', 
+              code: 'Enter',
+              keyCode: 13,
+              which: 13,
+              bubbles: true 
+            }));
           }
+        } else {
+          console.error('Input do ChatKit não encontrado após', maxAttempts, 'tentativas');
         }
       }
       
       // Limpar o estado de envio após um delay
       setTimeout(() => {
         setSendingSuggestion(null);
-      }, 2000);
+      }, 3000);
       
     } catch (error) {
       console.error('Erro ao enviar sugestão:', error);
@@ -181,10 +252,12 @@ Como posso te ajudar hoje?`,
                 <button
                   key={index}
                   onClick={() => handleSuggestionClick(suggestion)}
-                  disabled={sendingSuggestion === suggestion}
+                  disabled={sendingSuggestion === suggestion || status !== 'ready'}
                   className={`flex-shrink-0 px-4 py-2 rounded-full text-sm transition-all duration-200 border whitespace-nowrap ${
                     sendingSuggestion === suggestion
                       ? 'bg-primary/20 text-primary border-primary/40 cursor-not-allowed'
+                      : status !== 'ready'
+                      ? 'bg-gray-100 text-gray-400 border-gray-200 cursor-not-allowed'
                       : 'bg-gradient-to-r from-primary/10 to-primary/5 text-gray-700 hover:from-primary/20 hover:to-primary/10 border-primary/20 hover:border-primary/30'
                   }`}
                 >
