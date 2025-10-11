@@ -1,6 +1,7 @@
 import { motion } from 'framer-motion'
-import { Mail, MessageCircle, Linkedin, Github, Clock, MapPin, Coffee } from 'lucide-react'
+import { Mail, MessageCircle, Linkedin, Phone, Clock, MapPin, Coffee, ExternalLink } from 'lucide-react'
 import { Button } from '@/components/ui/button.jsx'
+import { contactInfo } from '@/data/socialNetworks.js'
 
 const ContactSection = () => {
   const containerVariants = {
@@ -24,45 +25,45 @@ const ContactSection = () => {
     }
   }
 
-  const contactInfo = [
+  const contactMethods = [
+    {
+      icon: <MessageCircle className="w-6 h-6" />,
+      label: "WhatsApp",
+      value: contactInfo.whatsapp.phone,
+      action: contactInfo.whatsapp.url,
+      color: "green"
+    },
     {
       icon: <Mail className="w-6 h-6" />,
-      label: "Email",
-      value: "marina.santos@email.com",
-      action: "mailto:marina.santos@email.com",
+      label: "Email Principal",
+      value: contactInfo.emails[0].address,
+      action: `mailto:${contactInfo.emails[0].address}`,
       color: "purple"
     },
     {
       icon: <Linkedin className="w-6 h-6" />,
       label: "LinkedIn",
-      value: "marina-santos-dev",
-      action: "https://linkedin.com/in/marina-santos-dev",
+      value: "Instituto Manduvi",
+      action: "https://www.linkedin.com/company/institutomanduvi/",
       color: "blue"
-    },
-    {
-      icon: <Github className="w-6 h-6" />,
-      label: "GitHub",
-      value: "marina-santos",
-      action: "https://github.com/marina-santos",
-      color: "gray"
     }
   ]
 
   const availability = [
     {
       icon: <Clock className="w-5 h-5" />,
-      label: "Horário de Trabalho",
-      value: "Seg-Sex, 9h-18h BRT"
+      label: "Horário de Atendimento",
+      value: "Seg-Sex, 8h-18h BRT"
     },
     {
       icon: <MapPin className="w-5 h-5" />,
       label: "Localização",
-      value: "São Paulo, Brasil"
+      value: "Cuiabá - MT, Brasil"
     },
     {
       icon: <MessageCircle className="w-5 h-5" />,
       label: "Tempo de Resposta",
-      value: "Respondo em até 24h"
+      value: "Respondemos em até 24h"
     }
   ]
 
@@ -84,7 +85,7 @@ const ContactSection = () => {
               Entre em Contato
             </h2>
             <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-              Disponível para novos projetos e oportunidades. Vamos criar algo incrível juntos!
+              Conecte-se conosco e faça parte da transformação social. Estamos aqui para acolher e impactar!
             </p>
           </motion.div>
 
@@ -94,11 +95,11 @@ const ContactSection = () => {
               <div className="bg-white rounded-2xl shadow-lg p-8">
                 <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
                   <span className="text-3xl">📞</span>
-                  Como me encontrar
+                  Como nos encontrar
                 </h3>
                 
                 <div className="space-y-6">
-                  {contactInfo.map((contact, index) => (
+                  {contactMethods.map((contact, index) => (
                     <div key={index} className="flex items-center gap-4 p-4 rounded-xl hover:bg-gray-50 transition-colors">
                       <div className={`w-12 h-12 bg-${contact.color}-100 rounded-full flex items-center justify-center text-${contact.color}-600`}>
                         {contact.icon}
@@ -143,11 +144,44 @@ const ContactSection = () => {
                 <div className="mt-6 p-4 bg-green-50 rounded-xl">
                   <div className="flex items-center gap-2 mb-2">
                     <div className="w-3 h-3 bg-green-500 rounded-full"></div>
-                    <span className="font-semibold text-green-800">Disponível para novos projetos</span>
+                    <span className="font-semibold text-green-800">Aberto para parcerias</span>
                   </div>
                   <p className="text-green-700 text-sm">
-                    Atualmente aceitando projetos para início em dezembro 2024
+                    Sempre buscando novas oportunidades de impacto social e desenvolvimento sustentável
                   </p>
+                </div>
+              </div>
+
+              {/* Physical Addresses */}
+              <div className="bg-white rounded-2xl shadow-lg p-8">
+                <h3 className="text-2xl font-bold text-gray-900 mb-6 flex items-center gap-3">
+                  <span className="text-3xl">📍</span>
+                  Nossas Unidades
+                </h3>
+                
+                <div className="space-y-6">
+                  {contactInfo.addresses.map((address, index) => (
+                    <div key={index} className="p-4 border border-gray-200 rounded-xl hover:bg-gray-50 transition-colors">
+                      <div className="flex items-start justify-between">
+                        <div className="flex-1">
+                          <h4 className="font-semibold text-gray-900 mb-2">{address.name}</h4>
+                          <p className="text-gray-600 text-sm mb-1">{address.address}</p>
+                          {address.reference && (
+                            <p className="text-gray-500 text-xs mb-2">{address.reference}</p>
+                          )}
+                          <p className="text-gray-600 text-sm">{address.city} - {address.zip}</p>
+                        </div>
+                        <a
+                          href={address.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="ml-4 p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                        >
+                          <ExternalLink className="h-4 w-4" />
+                        </a>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               </div>
             </motion.div>
@@ -155,36 +189,36 @@ const ContactSection = () => {
             {/* CTA Section */}
             <motion.div variants={itemVariants} className="space-y-8">
               <div className="bg-white rounded-2xl shadow-lg p-8 text-center">
-                <div className="text-6xl mb-6">👩‍💻</div>
+                <div className="text-6xl mb-6">🌳</div>
                 <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                  Pronta para o próximo desafio!
+                  Prontos para o próximo impacto!
                 </h3>
                 <p className="text-gray-600 mb-8">
-                  Seja um projeto web, aplicativo mobile ou consultoria técnica, 
-                  estou aqui para transformar suas ideias em realidade digital.
+                  Seja uma parceria, projeto social ou iniciativa de desenvolvimento sustentável, 
+                  estamos aqui para transformar vidas e comunidades.
                 </p>
                 
                 <div className="space-y-4">
-                  <Button className="w-full bg-purple-600 hover:bg-purple-700 text-white py-3 text-lg">
-                    <Mail className="w-5 h-5 mr-2" />
-                    Enviar Email
+                  <Button className="w-full bg-green-600 hover:bg-green-700 text-white py-3 text-lg">
+                    <MessageCircle className="w-5 h-5 mr-2" />
+                    WhatsApp
                   </Button>
                   <Button variant="outline" className="w-full border-purple-200 text-purple-600 hover:bg-purple-50 py-3 text-lg">
-                    <Linkedin className="w-5 h-5 mr-2" />
-                    Conectar no LinkedIn
+                    <Mail className="w-5 h-5 mr-2" />
+                    Enviar Email
                   </Button>
                 </div>
               </div>
 
               {/* Fun Fact */}
-              <div className="bg-gradient-to-r from-purple-100 to-blue-100 rounded-2xl p-8 text-center">
-                <Coffee className="w-12 h-12 text-purple-600 mx-auto mb-4" />
+              <div className="bg-gradient-to-r from-green-100 to-blue-100 rounded-2xl p-8 text-center">
+                <div className="text-4xl mb-4">🌱</div>
                 <h4 className="text-lg font-bold text-gray-900 mb-2">
-                  Curiosidade
+                  Nossa Missão
                 </h4>
                 <p className="text-gray-700">
-                  Melhores ideias surgem durante um bom café! ☕ 
-                  Que tal marcarmos um café virtual para discutir seu projeto?
+                  Inspirados na árvore Manduvi, crescemos juntos para acolher, inovar e impactar. 
+                  Que tal fazermos parte da sua jornada de transformação?
                 </p>
               </div>
             </motion.div>
