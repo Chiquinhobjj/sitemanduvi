@@ -1,6 +1,14 @@
 import { motion } from 'framer-motion'
+import { buildImpactVisual, manduviProjects, metodologiaSROI } from '@/utils/impactVisualFramework.js'
+import { useState } from 'react'
 
 const SkillsSection = () => {
+  const [selectedProject, setSelectedProject] = useState('academiaSolidaria')
+  const [showMethodology, setShowMethodology] = useState(false)
+  
+  // Calcular SROI para o projeto selecionado
+  const currentProject = manduviProjects[selectedProject]
+  const sroiData = buildImpactVisual(currentProject)
   const tripéValores = [
     {
       pilar: 'ACOLHER',
@@ -333,6 +341,172 @@ const SkillsSection = () => {
                 </div>
               </div>
             </div>
+          </motion.div>
+
+          {/* SROI Detalhado por Projeto */}
+          <motion.div variants={itemVariants} className="space-y-8">
+            <div className="text-center">
+              <h3 className="text-3xl font-bold text-foreground mb-4">Análise SROI Detalhada</h3>
+              <p className="text-lg text-foreground/70 max-w-3xl mx-auto">
+                Social Return on Investment (SROI) - Metodologia internacional para medir o valor social gerado por nossos projetos
+              </p>
+            </div>
+
+            {/* Seletor de Projetos */}
+            <div className="flex flex-wrap justify-center gap-4 mb-8">
+              {Object.entries(manduviProjects).map(([key, project]) => (
+                <button
+                  key={key}
+                  onClick={() => setSelectedProject(key)}
+                  className={`px-6 py-3 rounded-xl font-medium transition-all ${
+                    selectedProject === key
+                      ? 'bg-primary text-primary-foreground shadow-lg'
+                      : 'bg-white border border-border hover:bg-primary/10'
+                  }`}
+                >
+                  {project.project.name}
+                </button>
+              ))}
+            </div>
+
+            {/* Cards SROI */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+              <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 text-center border border-red-200">
+                <div className="text-3xl font-bold text-red-700 mb-2">
+                  {sroiData.snapshot.sroi.pess.toFixed(1)}x
+                </div>
+                <div className="text-sm text-red-600 font-medium">Cenário Pessimista</div>
+                <div className="text-xs text-red-500 mt-1">-30% dos proxies</div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 text-center border border-green-200">
+                <div className="text-3xl font-bold text-green-700 mb-2">
+                  {sroiData.snapshot.sroi.real.toFixed(1)}x
+                </div>
+                <div className="text-sm text-green-600 font-medium">Cenário Realista</div>
+                <div className="text-xs text-green-500 mt-1">Valores base</div>
+              </div>
+              
+              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 text-center border border-blue-200">
+                <div className="text-3xl font-bold text-blue-700 mb-2">
+                  {sroiData.snapshot.sroi.otim.toFixed(1)}x
+                </div>
+                <div className="text-sm text-blue-600 font-medium">Cenário Otimista</div>
+                <div className="text-xs text-blue-500 mt-1">+30% dos proxies</div>
+              </div>
+            </div>
+
+            {/* Detalhamento Financeiro */}
+            <div className="bg-white rounded-2xl shadow-lg p-8">
+              <h4 className="text-2xl font-bold text-foreground mb-6 text-center">
+                {currentProject.project.name} - Detalhamento Financeiro
+              </h4>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center p-4 bg-gray-50 rounded-xl">
+                    <span className="font-medium text-foreground">Investimento Total</span>
+                    <span className="text-xl font-bold text-red-600">
+                      R$ {sroiData.snapshot.totalInvestmentBRL.toLocaleString('pt-BR')}
+                    </span>
+                  </div>
+                  <div className="flex justify-between items-center p-4 bg-gray-50 rounded-xl">
+                    <span className="font-medium text-foreground">Valor Social Gerado</span>
+                    <span className="text-xl font-bold text-green-600">
+                      R$ {sroiData.snapshot.totalSocialValueBRL.toLocaleString('pt-BR')}
+                    </span>
+                  </div>
+                </div>
+                
+                <div className="space-y-4">
+                  <h5 className="font-semibold text-foreground mb-3">Outcomes Detalhados:</h5>
+                  {sroiData.snapshot.items.map((item, index) => (
+                    <div key={index} className="p-3 bg-blue-50 rounded-lg">
+                      <div className="font-medium text-sm text-foreground mb-1">{item.outcome}</div>
+                      <div className="text-xs text-foreground/70">
+                        Bruto: R$ {item.gross.toLocaleString('pt-BR')} | 
+                        Líquido: R$ {item.net.toLocaleString('pt-BR')}
+                      </div>
+                      <div className="text-xs text-blue-600 mt-1">
+                        Proxy: {item.proxy.key} ({item.proxy.source})
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Botão Metodologia */}
+            <div className="text-center">
+              <button
+                onClick={() => setShowMethodology(!showMethodology)}
+                className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-secondary transition-colors"
+              >
+                {showMethodology ? 'Ocultar' : 'Ver'} Metodologia SROI
+                <span className="text-lg">{showMethodology ? '▲' : '▼'}</span>
+              </button>
+            </div>
+
+            {/* Metodologia Expandida */}
+            {showMethodology && (
+              <motion.div
+                initial={{ opacity: 0, height: 0 }}
+                animate={{ opacity: 1, height: 'auto' }}
+                exit={{ opacity: 0, height: 0 }}
+                className="bg-white rounded-2xl shadow-lg p-8 space-y-6"
+              >
+                <h4 className="text-2xl font-bold text-foreground text-center">
+                  {metodologiaSROI.titulo}
+                </h4>
+                
+                <p className="text-foreground/70 text-center max-w-3xl mx-auto">
+                  {metodologiaSROI.descricao}
+                </p>
+
+                {/* Etapas da Metodologia */}
+                <div className="space-y-4">
+                  <h5 className="text-xl font-bold text-foreground">Etapas da Metodologia:</h5>
+                  {metodologiaSROI.etapas.map((etapa, index) => (
+                    <div key={index} className="flex gap-4 p-4 bg-gray-50 rounded-xl">
+                      <div className="w-8 h-8 bg-primary text-primary-foreground rounded-full flex items-center justify-center font-bold text-sm">
+                        {index + 1}
+                      </div>
+                      <div>
+                        <h6 className="font-semibold text-foreground">{etapa.titulo}</h6>
+                        <p className="text-sm text-foreground/70">{etapa.descricao}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Referências Bibliográficas */}
+                <div className="space-y-4">
+                  <h5 className="text-xl font-bold text-foreground">Referências Bibliográficas:</h5>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {metodologiaSROI.referencias.map((ref, index) => (
+                      <div key={index} className="p-4 bg-blue-50 rounded-xl">
+                        <div className="font-semibold text-foreground text-sm">{ref.fonte}</div>
+                        <div className="text-sm text-foreground/70">{ref.titulo}</div>
+                        <div className="text-xs text-blue-600 mt-1">{ref.ano}</div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Limitações */}
+                <div className="space-y-4">
+                  <h5 className="text-xl font-bold text-foreground">Limitações e Considerações:</h5>
+                  <ul className="space-y-2">
+                    {metodologiaSROI.limitacoes.map((limitacao, index) => (
+                      <li key={index} className="flex items-start gap-2 text-sm text-foreground/70">
+                        <span className="text-orange-500 mt-1">⚠️</span>
+                        <span>{limitacao}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
+            )}
           </motion.div>
         </motion.div>
       </div>
