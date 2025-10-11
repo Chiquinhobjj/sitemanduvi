@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from 'lucide-react';
 const ManduviChatKit = () => {
   const [status, setStatus] = useState('booting');
   const [errorMessage, setErrorMessage] = useState(null);
+  const [sendingSuggestion, setSendingSuggestion] = useState(null);
   const suggestionsRef = useRef(null);
 
   // Sugestões de interação dinâmicas
@@ -98,11 +99,45 @@ Como posso te ajudar hoje?`,
     }
   };
 
-  const handleSuggestionClick = (suggestion) => {
-    // Aqui você pode implementar a lógica para enviar a sugestão como mensagem
-    console.log('Sugestão clicada:', suggestion);
-    // Por enquanto, apenas logamos. Em uma implementação completa,
-    // você enviaria isso como uma mensagem para o ChatKit
+  const handleSuggestionClick = async (suggestion) => {
+    try {
+      console.log('Sugestão clicada:', suggestion);
+      setSendingSuggestion(suggestion);
+      
+      // Aguardar um pouco para o ChatKit estar pronto
+      await new Promise(resolve => setTimeout(resolve, 100));
+      
+      // Enviar a sugestão como mensagem para o ChatKit
+      if (control && control.sendMessage) {
+        await control.sendMessage(suggestion);
+      } else {
+        // Fallback: tentar encontrar o input do ChatKit e simular digitação
+        const chatInput = document.querySelector('[data-testid="composer-input"], .chatkit-composer-input, input[placeholder*="digitar"], textarea[placeholder*="digitar"]');
+        if (chatInput) {
+          // Simular digitação e envio
+          chatInput.value = suggestion;
+          chatInput.dispatchEvent(new Event('input', { bubbles: true }));
+          
+          // Tentar encontrar e clicar no botão de envio
+          const sendButton = document.querySelector('[data-testid="send-button"], .chatkit-send-button, button[type="submit"]');
+          if (sendButton) {
+            sendButton.click();
+          } else {
+            // Fallback: pressionar Enter
+            chatInput.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true }));
+          }
+        }
+      }
+      
+      // Limpar o estado de envio após um delay
+      setTimeout(() => {
+        setSendingSuggestion(null);
+      }, 2000);
+      
+    } catch (error) {
+      console.error('Erro ao enviar sugestão:', error);
+      setSendingSuggestion(null);
+    }
   };
 
   return (
@@ -146,9 +181,21 @@ Como posso te ajudar hoje?`,
                 <button
                   key={index}
                   onClick={() => handleSuggestionClick(suggestion)}
-                  className="flex-shrink-0 px-4 py-2 bg-gradient-to-r from-primary/10 to-primary/5 rounded-full text-sm text-gray-700 hover:from-primary/20 hover:to-primary/10 transition-all duration-200 border border-primary/20 hover:border-primary/30 whitespace-nowrap"
+                  disabled={sendingSuggestion === suggestion}
+                  className={`flex-shrink-0 px-4 py-2 rounded-full text-sm transition-all duration-200 border whitespace-nowrap ${
+                    sendingSuggestion === suggestion
+                      ? 'bg-primary/20 text-primary border-primary/40 cursor-not-allowed'
+                      : 'bg-gradient-to-r from-primary/10 to-primary/5 text-gray-700 hover:from-primary/20 hover:to-primary/10 border-primary/20 hover:border-primary/30'
+                  }`}
                 >
-                  {suggestion}
+                  {sendingSuggestion === suggestion ? (
+                    <span className="flex items-center gap-2">
+                      <div className="w-3 h-3 border-2 border-primary border-t-transparent rounded-full animate-spin"></div>
+                      Enviando...
+                    </span>
+                  ) : (
+                    suggestion
+                  )}
                 </button>
               ))}
             </div>
