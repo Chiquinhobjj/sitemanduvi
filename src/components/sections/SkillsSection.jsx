@@ -236,10 +236,10 @@ const SkillsSection = () => {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
           {/* Áreas de Domínio */}
-          <motion.div variants={itemVariants} className="space-y-8">
+          <div className="space-y-8">
             <h3 className="text-2xl font-bold text-foreground text-center mb-4">
               O Que Dominamos Hoje
             </h3>
@@ -248,7 +248,7 @@ const SkillsSection = () => {
             </p>
             <div className="space-y-6">
               {areasDominio.map((area, index) => (
-                <motion.div
+                <div
                   key={index}
                   initial={{ opacity: 0, x: -20 }}
                   whileInView={{ opacity: 1, x: 0 }}
@@ -292,20 +292,17 @@ const SkillsSection = () => {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
           {/* Frentes em Expansão */}
-          <motion.div variants={itemVariants} className="space-y-8">
+          <div className="space-y-8">
             <h3 className="text-2xl font-bold text-foreground text-center mb-8">
               Frentes em Expansão
             </h3>
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
               {frentesExpansao.map((frente, index) => (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.1 }}
                   className="bg-gradient-to-br from-primary/5 to-secondary/5 border border-primary/20 rounded-2xl p-6 text-center hover:shadow-lg transition-shadow"
                 >
                   <div className="text-4xl mb-4">{frente.icon}</div>
@@ -324,10 +321,10 @@ const SkillsSection = () => {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
 
           {/* Call to Action */}
-          <motion.div variants={itemVariants} className="text-center">
+          <div className="text-center">
             <div className="bg-gradient-to-r from-primary/10 to-secondary/10 rounded-3xl p-8">
               <h3 className="text-2xl font-bold text-foreground mb-4">
                 Faça Parte da Nossa Jornada de Impacto!
@@ -348,10 +345,10 @@ const SkillsSection = () => {
                 </div>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* Arquitetura Metodológica Manduvia */}
-          <motion.div variants={itemVariants} className="space-y-8">
+          <div className="space-y-8">
             <div className="text-center">
               <h3 className="text-3xl font-bold text-foreground mb-4">Arquitetura Metodológica Manduvia</h3>
               <p className="text-lg text-foreground/70 max-w-4xl mx-auto">
@@ -474,10 +471,10 @@ const SkillsSection = () => {
                 </p>
               </div>
             </div>
-          </motion.div>
+          </div>
 
           {/* SROI Detalhado por Projeto */}
-          <motion.div variants={itemVariants} className="space-y-8">
+          <div className="space-y-8">
             <div className="text-center">
               <h3 className="text-3xl font-bold text-foreground mb-4">Análise SROI Detalhada</h3>
               <p className="text-lg text-foreground/70 max-w-3xl mx-auto">
@@ -590,10 +587,7 @@ const SkillsSection = () => {
 
             {/* Metodologia Expandida */}
             {showMethodology && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: 'auto' }}
-                exit={{ opacity: 0, height: 0 }}
+              <div
                 className="bg-white rounded-2xl shadow-lg p-8 space-y-6"
               >
                 <h4 className="text-2xl font-bold text-foreground text-center">
@@ -646,10 +640,10 @@ const SkillsSection = () => {
                     ))}
                   </ul>
                 </div>
-              </motion.div>
+              </div>
             )}
-          </motion.div>
-        </motion.div>
+          </div>
+        </div>
       </div>
     </section>
   )
