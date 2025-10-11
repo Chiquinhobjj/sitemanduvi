@@ -47,7 +47,8 @@ const SkillsSection = () => {
     {
       area: 'Esporte, Inclusão e Alto Rendimento',
       icon: '🥋',
-      nivel: 95,
+      roi: { valor: 1.5, label: 'ROI' },
+      sroi: { valor: 3.2, label: 'SROI' },
       evidencias: [
         'Clube de formação registrado no CBC',
         'Jiu-Jitsu Para Todos - APAE (150 atendimentos/ano)',
@@ -59,7 +60,8 @@ const SkillsSection = () => {
     {
       area: 'Tecnologia e Dados (SocialTech)',
       icon: '🤖',
-      nivel: 88,
+      roi: { valor: 2.8, label: 'ROI' },
+      sroi: { valor: 4.1, label: 'SROI' },
       evidencias: [
         'Programa Coloiado - IA de assessoramento',
         'Academia Digital de Profissionais',
@@ -71,7 +73,8 @@ const SkillsSection = () => {
     {
       area: 'Educação e Formação Profissional',
       icon: '📚',
-      nivel: 90,
+      roi: { valor: 3.2, label: 'ROI' },
+      sroi: { valor: 5.8, label: 'SROI' },
       evidencias: [
         'Programa Meu Futuro - IA e microlearning',
         'Lutar pela Educação (2006-2020) - 100+ bolsas',
@@ -83,7 +86,8 @@ const SkillsSection = () => {
     {
       area: 'Assistência Social e Saúde',
       icon: '🏥',
-      nivel: 92,
+      roi: { valor: 2.1, label: 'ROI' },
+      sroi: { valor: 4.5, label: 'SROI' },
       evidencias: [
         'Ser + Saudável - combate DNTs',
         'Lutar Contra a Fome - alinhado ODS-2',
@@ -95,7 +99,8 @@ const SkillsSection = () => {
     {
       area: 'Governança e Políticas Públicas (GovTech)',
       icon: '🏛️',
-      nivel: 85,
+      roi: { valor: 2.5, label: 'ROI' },
+      sroi: { valor: 4.8, label: 'SROI' },
       evidencias: [
         'Revolução na governança social',
         'Transparência e eficiência em políticas públicas',
@@ -158,17 +163,6 @@ const SkillsSection = () => {
     }
   }
 
-  const progressVariants = {
-    hidden: { width: 0 },
-    visible: (level) => ({
-      width: `${level}%`,
-      transition: {
-        duration: 1.5,
-        ease: "easeOut",
-        delay: 0.5
-      }
-    })
-  }
 
   return (
     <section id="skills" className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-background">
@@ -231,9 +225,12 @@ const SkillsSection = () => {
 
           {/* Áreas de Domínio */}
           <motion.div variants={itemVariants} className="space-y-8">
-            <h3 className="text-2xl font-bold text-foreground text-center mb-8">
+            <h3 className="text-2xl font-bold text-foreground text-center mb-4">
               O Que Dominamos Hoje
             </h3>
+            <p className="text-center text-foreground/70 mb-8 max-w-3xl mx-auto">
+              Nossas competências técnicas e sociais, com métricas objetivas de retorno sobre investimento (ROI) e retorno social sobre investimento (SROI)
+            </p>
             <div className="space-y-6">
               {areasDominio.map((area, index) => (
                 <motion.div
@@ -246,19 +243,26 @@ const SkillsSection = () => {
                   <div className="flex items-center gap-4 mb-4">
                     <div className="text-3xl">{area.icon}</div>
                     <div className="flex-1">
-                      <h4 className="text-xl font-bold text-foreground mb-2">{area.area}</h4>
-                      <div className="flex items-center gap-4">
-                        <div className="flex-1 bg-gray-200 rounded-full h-2">
-                          <motion.div
-                            className="bg-gradient-to-r from-primary to-secondary h-2 rounded-full"
-                            variants={progressVariants}
-                            custom={area.nivel}
-                            initial="hidden"
-                            whileInView="visible"
-                            viewport={{ once: true }}
-                          />
+                      <h4 className="text-xl font-bold text-foreground mb-3">{area.area}</h4>
+                      
+                      {/* ROI/SROI Metrics */}
+                      <div className="grid grid-cols-2 gap-4 mb-4">
+                        <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-3 text-center border border-green-200">
+                          <div className="text-lg font-bold text-green-700">
+                            R$ {area.roi.valor.toFixed(1)}
+                          </div>
+                          <div className="text-xs text-green-600 font-medium">
+                            {area.roi.label} - Para cada R$ 1,00 investido
+                          </div>
                         </div>
-                        <span className="text-sm font-semibold text-primary">{area.nivel}%</span>
+                        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-3 text-center border border-blue-200">
+                          <div className="text-lg font-bold text-blue-700">
+                            {area.sroi.valor.toFixed(1)}x
+                          </div>
+                          <div className="text-xs text-blue-600 font-medium">
+                            {area.sroi.label} - Valor social gerado
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
