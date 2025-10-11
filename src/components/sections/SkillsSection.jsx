@@ -3,6 +3,19 @@ import { motion } from 'framer-motion'
 const SkillsSection = () => {
   const tripéValores = [
     {
+      pilar: 'ACOLHER',
+      subtitulo: 'Afeto & Inclusão',
+      icon: '🌳',
+      descricao: 'Valorizamos a diversidade, criando ambiente inclusivo, colaborativo e inspirador, proporcionando oportunidades de desenvolvimento.',
+      capacidades: [
+        'Inclusão social através do esporte',
+        'Ambiente colaborativo e inspirador',
+        'Desenvolvimento de valores e disciplina',
+        'Acolhimento a pessoas em vulnerabilidade',
+        'Empoderamento e oportunidades para todos'
+      ]
+    },
+    {
       pilar: 'INOVAR',
       subtitulo: 'Tecnologia & Inovação',
       icon: '🚀',
@@ -26,19 +39,6 @@ const SkillsSection = () => {
         'Mato Grosso entre os 3 melhores estados em Wrestling',
         'Alinhamento aos ODS da ONU e princípios ESG',
         'Modelo autossustentável Academia Solidária'
-      ]
-    },
-    {
-      pilar: 'ACOLHER',
-      subtitulo: 'Afeto & Inclusão',
-      icon: '🌳',
-      descricao: 'Valorizamos a diversidade, criando ambiente inclusivo, colaborativo e inspirador, proporcionando oportunidades de desenvolvimento.',
-      capacidades: [
-        'Inclusão social através do esporte',
-        'Ambiente colaborativo e inspirador',
-        'Desenvolvimento de valores e disciplina',
-        'Acolhimento a pessoas em vulnerabilidade',
-        'Empoderamento e oportunidades para todos'
       ]
     }
   ]

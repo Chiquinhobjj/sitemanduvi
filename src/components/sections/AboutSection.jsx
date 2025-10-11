@@ -109,7 +109,7 @@ const AboutSection = ({ className = '' }) => {
               <div className="font-mono space-y-1">
                 <div><span className="text-[#f6d5be]">const</span> <span className="text-[#f28b30]">manduvia</span> <span className="text-[#f2f2f2]">= {'{'}</span></div>
                 <div className="ml-4">forma: <span className="text-[#f6d5be]">'SocialTech acolhedora'</span>,</div>
-                <div className="ml-4">pilastras: <span className="text-[#f28b30]">['Inovar', 'Impactar', 'Acolher']</span>,</div>
+                <div className="ml-4">pilastras: <span className="text-[#f28b30]">['Acolher', 'Inovar', 'Impactar']</span>,</div>
                 <div className="ml-4">metodologia: <span className="text-[#f6d5be]">'HEXA (Competência • Confiança • Conexão • Caráter • Cuidado • Contribuição)'</span>,</div>
                 <div className="ml-4">braços: <span className="text-[#f28b30]">['Educação', 'Inovação', 'Esporte', 'Cultura']</span></div>
                 <div><span className="text-[#f2f2f2]">{'}'}</span></div>
