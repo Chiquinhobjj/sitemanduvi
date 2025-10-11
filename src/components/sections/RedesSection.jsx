@@ -15,7 +15,9 @@ import {
   ChevronRight,
   Users,
   Calendar,
-  TrendingUp
+  TrendingUp,
+  MessageSquare,
+  MapPin
 } from 'lucide-react'
 import { socialNetworks, socialStats, contactInfo } from '@/data/socialNetworks.js'
 
