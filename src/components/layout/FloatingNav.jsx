@@ -42,7 +42,8 @@ const FloatingNav = () => {
         { id: 'instagram', name: 'Instagram', path: '/redes/instagram' },
         { id: 'facebook', name: 'Facebook', path: '/redes/facebook' },
         { id: 'linkedin', name: 'LinkedIn', path: '/redes/linkedin' },
-        { id: 'youtube', name: 'YouTube', path: '/redes/youtube' }
+        { id: 'tiktok', name: 'TikTok', path: '/redes/tiktok' },
+        { id: 'twitter', name: 'Twitter', path: '/redes/twitter' }
       ]
     },
     { id: 'contact', name: 'Contato', path: '/contact' }

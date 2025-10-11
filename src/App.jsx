@@ -18,6 +18,8 @@ const InstagramPage = lazy(() => import('./components/sections/InstagramPage'))
 const FacebookPage = lazy(() => import('./components/sections/FacebookPage'))
 const LinkedInPage = lazy(() => import('./components/sections/LinkedInPage'))
 const YouTubePage = lazy(() => import('./components/sections/YouTubePage'))
+const TikTokPage = lazy(() => import('./components/sections/TikTokPage'))
+const TwitterPage = lazy(() => import('./components/sections/TwitterPage'))
 const Footer = lazy(() => import('./components/layout/Footer'))
 
 const SectionFallback = ({ height = '40vh' }) => (
@@ -138,7 +140,8 @@ function App() {
           <Route path="/redes/instagram" element={<InstagramPage />} />
           <Route path="/redes/facebook" element={<FacebookPage />} />
           <Route path="/redes/linkedin" element={<LinkedInPage />} />
-          <Route path="/redes/youtube" element={<YouTubePage />} />
+          <Route path="/redes/tiktok" element={<TikTokPage />} />
+          <Route path="/redes/twitter" element={<TwitterPage />} />
           <Route path="/achievements" element={<AchievementsPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />

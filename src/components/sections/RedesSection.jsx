@@ -17,14 +17,14 @@ import {
   Calendar,
   TrendingUp
 } from 'lucide-react'
-import { socialNetworks, socialStats } from '@/data/socialNetworks.js'
+import { socialNetworks, socialStats, contactInfo } from '@/data/socialNetworks.js'
 
 const RedesSection = () => {
   const [selectedNetwork, setSelectedNetwork] = useState('instagram')
   const [currentPostIndex, setCurrentPostIndex] = useState(0)
 
   const currentNetwork = socialNetworks.find(network => network.id === selectedNetwork)
-  const currentPost = currentNetwork?.posts[currentPostIndex]
+  const currentPost = currentNetwork?.posts?.[currentPostIndex]
 
   const nextPost = () => {
     if (currentNetwork?.posts) {
@@ -84,22 +84,67 @@ const RedesSection = () => {
             </p>
           </motion.div>
 
-          {/* Stats Overview */}
-          <motion.div variants={itemVariants} className="grid grid-cols-2 lg:grid-cols-4 gap-6">
-            {[
-              { icon: Users, label: 'Seguidores', value: socialStats.totalFollowers, color: 'bg-blue-50 text-blue-600' },
-              { icon: Calendar, label: 'Posts', value: socialStats.totalPosts, color: 'bg-green-50 text-green-600' },
-              { icon: Eye, label: 'Visualizações', value: socialStats.totalViews, color: 'bg-purple-50 text-purple-600' },
-              { icon: TrendingUp, label: 'Engajamento', value: socialStats.engagementRate, color: 'bg-orange-50 text-orange-600' }
-            ].map((stat, index) => (
-              <div key={index} className="bg-white/95 border border-border/50 rounded-2xl p-6 text-center">
-                <div className={`w-12 h-12 rounded-full ${stat.color} flex items-center justify-center mx-auto mb-3`}>
-                  <stat.icon className="h-6 w-6" />
-                </div>
-                <h3 className="text-2xl font-bold text-foreground mb-1">{stat.value}</h3>
-                <p className="text-sm text-foreground/70">{stat.label}</p>
+          {/* Contact Info Overview */}
+          <motion.div variants={itemVariants} className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {/* WhatsApp */}
+            <div className="bg-white/95 border border-border/50 rounded-2xl p-6 text-center">
+              <div className="w-12 h-12 rounded-full bg-green-50 text-green-600 flex items-center justify-center mx-auto mb-3">
+                <MessageCircle className="h-6 w-6" />
               </div>
-            ))}
+              <h3 className="text-lg font-bold text-foreground mb-1">{contactInfo.whatsapp.phone}</h3>
+              <p className="text-sm text-foreground/70 mb-3">WhatsApp</p>
+              <a 
+                href={contactInfo.whatsapp.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-green-600 hover:text-green-700 text-sm font-medium"
+              >
+                <ExternalLink className="h-4 w-4" />
+                Conversar
+              </a>
+            </div>
+
+            {/* Email */}
+            <div className="bg-white/95 border border-border/50 rounded-2xl p-6 text-center">
+              <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center mx-auto mb-3">
+                <MessageSquare className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-foreground mb-1">3 E-mails</h3>
+              <p className="text-sm text-foreground/70 mb-3">Contato Institucional</p>
+              <div className="space-y-1">
+                {contactInfo.emails.slice(0, 2).map((email, index) => (
+                  <a 
+                    key={index}
+                    href={`mailto:${email.address}`}
+                    className="block text-blue-600 hover:text-blue-700 text-xs"
+                  >
+                    {email.address}
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Endereços */}
+            <div className="bg-white/95 border border-border/50 rounded-2xl p-6 text-center">
+              <div className="w-12 h-12 rounded-full bg-purple-50 text-purple-600 flex items-center justify-center mx-auto mb-3">
+                <MapPin className="h-6 w-6" />
+              </div>
+              <h3 className="text-lg font-bold text-foreground mb-1">2 Unidades</h3>
+              <p className="text-sm text-foreground/70 mb-3">Cuiabá - MT</p>
+              <div className="space-y-1">
+                {contactInfo.addresses.map((address, index) => (
+                  <a 
+                    key={index}
+                    href={address.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="block text-purple-600 hover:text-purple-700 text-xs"
+                  >
+                    {address.name}
+                  </a>
+                ))}
+              </div>
+            </div>
           </motion.div>
 
           {/* Network Selector */}
@@ -125,7 +170,12 @@ const RedesSection = () => {
                     <Icon className="h-5 w-5" />
                     <div className="text-left">
                       <div className="font-semibold">{network.name}</div>
-                      <div className="text-xs opacity-80">{network.followers} seguidores</div>
+                      <div className="text-xs opacity-80">
+                        {network.id === 'instagram' 
+                          ? `${network.accounts?.length || 1} contas`
+                          : network.handle
+                        }
+                      </div>
                     </div>
                   </div>
                   {isSelected && (
@@ -168,101 +218,62 @@ const RedesSection = () => {
                   </a>
                 </div>
 
-                {/* Posts Carousel */}
-                <div className="relative">
-                  <div className="flex items-center justify-between mb-4">
-                    <h4 className="text-xl font-bold text-foreground">Últimas Postagens</h4>
-                    <div className="flex items-center gap-2">
-                      <button
-                        onClick={prevPost}
-                        className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
-                        disabled={currentNetwork.posts.length <= 1}
-                      >
-                        <ChevronLeft className="h-4 w-4" />
-                      </button>
-                      <span className="text-sm text-foreground/60">
-                        {currentPostIndex + 1} de {currentNetwork.posts.length}
-                      </span>
-                      <button
-                        onClick={nextPost}
-                        className="p-2 rounded-lg bg-gray-100 hover:bg-gray-200 transition-colors"
-                        disabled={currentNetwork.posts.length <= 1}
-                      >
-                        <ChevronRight className="h-4 w-4" />
-                      </button>
-                    </div>
-                  </div>
-
-                  <AnimatePresence mode="wait">
-                    <motion.div
-                      key={currentPostIndex}
-                      initial={{ opacity: 0, x: 20 }}
-                      animate={{ opacity: 1, x: 0 }}
-                      exit={{ opacity: 0, x: -20 }}
-                      transition={{ duration: 0.3 }}
-                      className="bg-white border border-border/30 rounded-2xl overflow-hidden"
-                    >
-                      {currentPost && (
-                        <div className="space-y-4">
-                          {/* Post Image */}
-                          <div className="relative aspect-video bg-gray-100">
-                            <img
-                              src={currentPost.image}
-                              alt="Post"
-                              className="w-full h-full object-cover"
-                            />
-                            {currentPost.type === 'video' && (
-                              <div className="absolute inset-0 flex items-center justify-center">
-                                <div className="w-16 h-16 rounded-full bg-black/50 flex items-center justify-center">
-                                  <Play className="h-6 w-6 text-white ml-1" />
-                                </div>
-                              </div>
-                            )}
-                            {currentPost.duration && (
-                              <div className="absolute bottom-2 right-2 bg-black/70 text-white text-xs px-2 py-1 rounded">
-                                {currentPost.duration}
-                              </div>
-                            )}
-                          </div>
-
-                          {/* Post Content */}
-                          <div className="p-6">
-                            <p className="text-foreground/80 leading-relaxed mb-4">
-                              {currentPost.caption}
-                            </p>
-
-                            {/* Post Stats */}
-                            <div className="flex items-center justify-between text-sm text-foreground/60">
-                              <div className="flex items-center gap-4">
-                                <div className="flex items-center gap-1">
-                                  <Heart className="h-4 w-4" />
-                                  <span>{currentPost.likes}</span>
-                                </div>
-                                <div className="flex items-center gap-1">
-                                  <MessageCircle className="h-4 w-4" />
-                                  <span>{currentPost.comments}</span>
-                                </div>
-                                {currentPost.shares && (
-                                  <div className="flex items-center gap-1">
-                                    <Share2 className="h-4 w-4" />
-                                    <span>{currentPost.shares}</span>
-                                  </div>
-                                )}
-                                {currentPost.views && (
-                                  <div className="flex items-center gap-1">
-                                    <Eye className="h-4 w-4" />
-                                    <span>{currentPost.views}</span>
-                                  </div>
-                                )}
-                              </div>
-                              <span>{currentPost.date}</span>
+                {/* Instagram Accounts or Network Info */}
+                {currentNetwork.id === 'instagram' && currentNetwork.accounts ? (
+                  <div className="space-y-6">
+                    <h4 className="text-xl font-bold text-foreground">Contas do Instagram</h4>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                      {currentNetwork.accounts.map((account, index) => (
+                        <motion.div
+                          key={index}
+                          initial={{ opacity: 0, y: 20 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: index * 0.1 }}
+                          className="bg-white border border-border/30 rounded-2xl p-6 hover:shadow-lg transition-shadow"
+                        >
+                          <div className="flex items-center gap-4 mb-4">
+                            <div className="w-12 h-12 rounded-full bg-gradient-to-r from-pink-500 to-purple-600 flex items-center justify-center">
+                              <Instagram className="h-6 w-6 text-white" />
+                            </div>
+                            <div>
+                              <h5 className="font-semibold text-foreground">{account.name}</h5>
+                              <p className="text-sm text-foreground/70">{account.handle}</p>
                             </div>
                           </div>
-                        </div>
-                      )}
-                    </motion.div>
-                  </AnimatePresence>
-                </div>
+                          <a
+                            href={account.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 w-full justify-center px-4 py-2 bg-gradient-to-r from-pink-500 to-purple-600 text-white rounded-xl hover:from-pink-600 hover:to-purple-700 transition-all"
+                          >
+                            <ExternalLink className="h-4 w-4" />
+                            Seguir
+                          </a>
+                        </motion.div>
+                      ))}
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-6">
+                    <h4 className="text-xl font-bold text-foreground">Conecte-se Conosco</h4>
+                    <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-2xl p-8 text-center">
+                      <div className={`w-20 h-20 rounded-full bg-gradient-to-r ${currentNetwork.color} flex items-center justify-center mx-auto mb-4`}>
+                        <currentNetwork.icon className="h-10 w-10 text-white" />
+                      </div>
+                      <h5 className="text-xl font-bold text-foreground mb-2">{currentNetwork.name}</h5>
+                      <p className="text-foreground/70 mb-6">{currentNetwork.description}</p>
+                      <a
+                        href={currentNetwork.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-2 px-6 py-3 bg-primary text-primary-foreground rounded-xl hover:bg-secondary transition-colors font-semibold"
+                      >
+                        <ExternalLink className="h-5 w-5" />
+                        Acessar {currentNetwork.name}
+                      </a>
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </motion.div>
