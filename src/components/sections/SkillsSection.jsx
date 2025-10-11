@@ -191,20 +191,9 @@ const SkillsSection = () => {
   return (
     <section id="skills" className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-background">
       <div className="max-w-7xl mx-auto">
-        {/* TESTE SIMPLES */}
-        <div className="bg-red-500 text-white p-8 text-center text-2xl font-bold mb-8">
-          🚨 TESTE: SkillsSection está funcionando! 🚨
-        </div>
-        
-        <motion.div
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.3 }}
-          className="space-y-16"
-        >
+        <div className="space-y-16">
           {/* Header */}
-          <motion.div variants={itemVariants} className="text-center">
+          <div className="text-center">
             <p className="text-sm font-medium text-primary uppercase tracking-wide mb-2">
               ECOSSISTEMA DE TRANSFORMAÇÃO SOCIAL
             </p>
@@ -215,20 +204,17 @@ const SkillsSection = () => {
               Unimos afeto, tecnologia e acolhimento para transformar vidas no Pantanal, no Brasil e além. 
               Inspirados na árvore Manduvi, crescemos juntos para gerar impacto sustentável.
             </p>
-          </motion.div>
+          </div>
 
           {/* Tripé de Valores */}
-          <motion.div variants={itemVariants} className="space-y-8">
+          <div className="space-y-8">
             <h3 className="text-2xl font-bold text-foreground text-center mb-8">
               Nosso Tripé de Valores
             </h3>
             <div className="grid lg:grid-cols-3 gap-8">
               {tripéValores.map((pilar, index) => (
-                <motion.div
+                <div
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ delay: index * 0.2 }}
                   className="bg-white/95 border border-border/50 rounded-3xl p-8 hover:shadow-xl transition-shadow"
                 >
                   <div className="text-center mb-6">
@@ -247,7 +233,7 @@ const SkillsSection = () => {
                       </li>
                     ))}
                   </ul>
-                </motion.div>
+                </div>
               ))}
             </div>
           </motion.div>
@@ -303,7 +289,7 @@ const SkillsSection = () => {
                       </div>
                     ))}
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </motion.div>
@@ -335,7 +321,7 @@ const SkillsSection = () => {
                       Status: {frente.status}
                     </div>
                   </div>
-                </motion.div>
+                </div>
               ))}
             </div>
           </motion.div>
