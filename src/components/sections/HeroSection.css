@@ -1,4 +1,13 @@
 /* ChatKit Integration Styles - Padrão Ouro */
+
+/* Esconder scrollbar para o carrossel de sugestões */
+.scrollbar-hide {
+  -ms-overflow-style: none;  /* Internet Explorer 10+ */
+  scrollbar-width: none;  /* Firefox */
+}
+.scrollbar-hide::-webkit-scrollbar { 
+  display: none;  /* Safari and Chrome */
+}
 .chat-container {
   /* Scrollbar personalizada seguindo identidade visual */
   scrollbar-width: thin;
