@@ -238,6 +238,7 @@ const SkillsSection = () => {
             </div>
           </div>
 
+
           {/* Áreas de Domínio */}
           <div className="space-y-8">
             <h3 className="text-2xl font-bold text-foreground text-center mb-4">
