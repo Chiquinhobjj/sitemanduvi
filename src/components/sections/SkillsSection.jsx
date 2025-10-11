@@ -9,26 +9,22 @@ const SkillsSection = () => {
   // Calcular SROI para o projeto selecionado
   const currentProject = manduviProjects[selectedProject]
   
-  // Dados mock usando useMemo para evitar re-renderizações
-  const sroiData = React.useMemo(() => {
-    console.log('🔄 Calculando SROI para:', currentProject.project.name)
-    
-    return {
-      snapshot: {
-        sroi: { pess: 2.8, real: 4.0, otim: 5.2 },
-        totalInvestmentBRL: 180000,
-        totalSocialValueBRL: 720000,
-        items: [
-          {
-            outcome: 'Inclusão social através do esporte',
-            gross: 360000,
-            net: 288000,
-            proxy: { key: 'esporte.inclusao_social', source: 'FNDE/MEC' }
-          }
-        ]
-      }
+  // Dados mock estáticos para evitar re-renderizações
+  const sroiData = {
+    snapshot: {
+      sroi: { pess: 2.8, real: 4.0, otim: 5.2 },
+      totalInvestmentBRL: 180000,
+      totalSocialValueBRL: 720000,
+      items: [
+        {
+          outcome: 'Inclusão social através do esporte',
+          gross: 360000,
+          net: 288000,
+          proxy: { key: 'esporte.inclusao_social', source: 'FNDE/MEC' }
+        }
+      ]
     }
-  }, [selectedProject])
+  }
   const tripéValores = [
     {
       pilar: 'ACOLHER',
@@ -192,15 +188,8 @@ const SkillsSection = () => {
   }
 
 
-  console.log('🎨 SkillsSection renderizando...', { sroiData, selectedProject })
-  
   return (
     <section id="skills" className="py-12 sm:py-16 lg:py-20 px-4 sm:px-6 lg:px-8 bg-background">
-      {/* TESTE DE RENDERIZAÇÃO */}
-      <div className="fixed top-0 left-0 bg-red-500 text-white p-4 z-50">
-        SkillsSection CARREGADO! SROI: {sroiData ? 'OK' : 'NULL'}
-      </div>
-      
       <div className="max-w-7xl mx-auto">
         <motion.div
           variants={containerVariants}
