@@ -5,42 +5,29 @@ import { buildImpactVisual, manduviProjects, metodologiaSROI } from '@/utils/imp
 const SkillsSection = () => {
   const [selectedProject, setSelectedProject] = useState('academiaSolidaria')
   const [showMethodology, setShowMethodology] = useState(false)
-  const [sroiData, setSroiData] = useState(null)
   
   // Calcular SROI para o projeto selecionado
   const currentProject = manduviProjects[selectedProject]
   
-  // useEffect para calcular SROI quando o projeto muda
-  React.useEffect(() => {
-    const calculateSROI = async () => {
-      try {
-        console.log('🔄 Calculando SROI para:', currentProject.project.name)
-        
-        // Dados mock temporários para teste
-        const mockSroiData = {
-          snapshot: {
-            sroi: { pess: 2.8, real: 4.0, otim: 5.2 },
-            totalInvestmentBRL: 180000,
-            totalSocialValueBRL: 720000,
-            items: [
-              {
-                outcome: 'Inclusão social através do esporte',
-                gross: 360000,
-                net: 288000,
-                proxy: { key: 'esporte.inclusao_social', source: 'FNDE/MEC' }
-              }
-            ]
+  // Dados mock usando useMemo para evitar re-renderizações
+  const sroiData = React.useMemo(() => {
+    console.log('🔄 Calculando SROI para:', currentProject.project.name)
+    
+    return {
+      snapshot: {
+        sroi: { pess: 2.8, real: 4.0, otim: 5.2 },
+        totalInvestmentBRL: 180000,
+        totalSocialValueBRL: 720000,
+        items: [
+          {
+            outcome: 'Inclusão social através do esporte',
+            gross: 360000,
+            net: 288000,
+            proxy: { key: 'esporte.inclusao_social', source: 'FNDE/MEC' }
           }
-        }
-        
-        console.log('✅ SROI mock aplicado:', mockSroiData)
-        setSroiData(mockSroiData)
-      } catch (error) {
-        console.error('❌ Erro ao calcular SROI:', error)
-        setSroiData(null)
+        ]
       }
     }
-    calculateSROI()
   }, [selectedProject])
   const tripéValores = [
     {
