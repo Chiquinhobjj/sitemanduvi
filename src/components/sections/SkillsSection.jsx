@@ -1,14 +1,28 @@
+import React, { useState } from 'react'
 import { motion } from 'framer-motion'
 import { buildImpactVisual, manduviProjects, metodologiaSROI } from '@/utils/impactVisualFramework.js'
-import { useState } from 'react'
 
 const SkillsSection = () => {
   const [selectedProject, setSelectedProject] = useState('academiaSolidaria')
   const [showMethodology, setShowMethodology] = useState(false)
+  const [sroiData, setSroiData] = useState(null)
   
   // Calcular SROI para o projeto selecionado
   const currentProject = manduviProjects[selectedProject]
-  const sroiData = buildImpactVisual(currentProject)
+  
+  // useEffect para calcular SROI quando o projeto muda
+  React.useEffect(() => {
+    const calculateSROI = async () => {
+      try {
+        const data = await buildImpactVisual(currentProject)
+        setSroiData(data)
+      } catch (error) {
+        console.error('Erro ao calcular SROI:', error)
+        setSroiData(null)
+      }
+    }
+    calculateSROI()
+  }, [selectedProject])
   const tripéValores = [
     {
       pilar: 'ACOLHER',
@@ -370,71 +384,79 @@ const SkillsSection = () => {
             </div>
 
             {/* Cards SROI */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-              <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 text-center border border-red-200">
-                <div className="text-3xl font-bold text-red-700 mb-2">
-                  {sroiData.snapshot.sroi.pess.toFixed(1)}x
-                </div>
-                <div className="text-sm text-red-600 font-medium">Cenário Pessimista</div>
-                <div className="text-xs text-red-500 mt-1">-30% dos proxies</div>
-              </div>
-              
-              <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 text-center border border-green-200">
-                <div className="text-3xl font-bold text-green-700 mb-2">
-                  {sroiData.snapshot.sroi.real.toFixed(1)}x
-                </div>
-                <div className="text-sm text-green-600 font-medium">Cenário Realista</div>
-                <div className="text-xs text-green-500 mt-1">Valores base</div>
-              </div>
-              
-              <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 text-center border border-blue-200">
-                <div className="text-3xl font-bold text-blue-700 mb-2">
-                  {sroiData.snapshot.sroi.otim.toFixed(1)}x
-                </div>
-                <div className="text-sm text-blue-600 font-medium">Cenário Otimista</div>
-                <div className="text-xs text-blue-500 mt-1">+30% dos proxies</div>
-              </div>
-            </div>
-
-            {/* Detalhamento Financeiro */}
-            <div className="bg-white rounded-2xl shadow-lg p-8">
-              <h4 className="text-2xl font-bold text-foreground mb-6 text-center">
-                {currentProject.project.name} - Detalhamento Financeiro
-              </h4>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-                <div className="space-y-4">
-                  <div className="flex justify-between items-center p-4 bg-gray-50 rounded-xl">
-                    <span className="font-medium text-foreground">Investimento Total</span>
-                    <span className="text-xl font-bold text-red-600">
-                      R$ {sroiData.snapshot.totalInvestmentBRL.toLocaleString('pt-BR')}
-                    </span>
+            {sroiData ? (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div className="bg-gradient-to-br from-red-50 to-red-100 rounded-2xl p-6 text-center border border-red-200">
+                  <div className="text-3xl font-bold text-red-700 mb-2">
+                    {sroiData.snapshot.sroi.pess.toFixed(1)}x
                   </div>
-                  <div className="flex justify-between items-center p-4 bg-gray-50 rounded-xl">
-                    <span className="font-medium text-foreground">Valor Social Gerado</span>
-                    <span className="text-xl font-bold text-green-600">
-                      R$ {sroiData.snapshot.totalSocialValueBRL.toLocaleString('pt-BR')}
-                    </span>
-                  </div>
+                  <div className="text-sm text-red-600 font-medium">Cenário Pessimista</div>
+                  <div className="text-xs text-red-500 mt-1">-30% dos proxies</div>
                 </div>
                 
-                <div className="space-y-4">
-                  <h5 className="font-semibold text-foreground mb-3">Outcomes Detalhados:</h5>
-                  {sroiData.snapshot.items.map((item, index) => (
-                    <div key={index} className="p-3 bg-blue-50 rounded-lg">
-                      <div className="font-medium text-sm text-foreground mb-1">{item.outcome}</div>
-                      <div className="text-xs text-foreground/70">
-                        Bruto: R$ {item.gross.toLocaleString('pt-BR')} | 
-                        Líquido: R$ {item.net.toLocaleString('pt-BR')}
-                      </div>
-                      <div className="text-xs text-blue-600 mt-1">
-                        Proxy: {item.proxy.key} ({item.proxy.source})
-                      </div>
-                    </div>
-                  ))}
+                <div className="bg-gradient-to-br from-green-50 to-green-100 rounded-2xl p-6 text-center border border-green-200">
+                  <div className="text-3xl font-bold text-green-700 mb-2">
+                    {sroiData.snapshot.sroi.real.toFixed(1)}x
+                  </div>
+                  <div className="text-sm text-green-600 font-medium">Cenário Realista</div>
+                  <div className="text-xs text-green-500 mt-1">Valores base</div>
+                </div>
+                
+                <div className="bg-gradient-to-br from-blue-50 to-blue-100 rounded-2xl p-6 text-center border border-blue-200">
+                  <div className="text-3xl font-bold text-blue-700 mb-2">
+                    {sroiData.snapshot.sroi.otim.toFixed(1)}x
+                  </div>
+                  <div className="text-sm text-blue-600 font-medium">Cenário Otimista</div>
+                  <div className="text-xs text-blue-500 mt-1">+30% dos proxies</div>
                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="text-center py-8">
+                <div className="text-lg text-foreground/70">Carregando análise SROI...</div>
+              </div>
+            )}
+
+            {/* Detalhamento Financeiro */}
+            {sroiData && (
+              <div className="bg-white rounded-2xl shadow-lg p-8">
+                <h4 className="text-2xl font-bold text-foreground mb-6 text-center">
+                  {currentProject.project.name} - Detalhamento Financeiro
+                </h4>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+                  <div className="space-y-4">
+                    <div className="flex justify-between items-center p-4 bg-gray-50 rounded-xl">
+                      <span className="font-medium text-foreground">Investimento Total</span>
+                      <span className="text-xl font-bold text-red-600">
+                        R$ {sroiData.snapshot.totalInvestmentBRL.toLocaleString('pt-BR')}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center p-4 bg-gray-50 rounded-xl">
+                      <span className="font-medium text-foreground">Valor Social Gerado</span>
+                      <span className="text-xl font-bold text-green-600">
+                        R$ {sroiData.snapshot.totalSocialValueBRL.toLocaleString('pt-BR')}
+                      </span>
+                    </div>
+                  </div>
+                  
+                  <div className="space-y-4">
+                    <h5 className="font-semibold text-foreground mb-3">Outcomes Detalhados:</h5>
+                    {sroiData.snapshot.items.map((item, index) => (
+                      <div key={index} className="p-3 bg-blue-50 rounded-lg">
+                        <div className="font-medium text-sm text-foreground mb-1">{item.outcome}</div>
+                        <div className="text-xs text-foreground/70">
+                          Bruto: R$ {item.gross.toLocaleString('pt-BR')} | 
+                          Líquido: R$ {item.net.toLocaleString('pt-BR')}
+                        </div>
+                        <div className="text-xs text-blue-600 mt-1">
+                          Proxy: {item.proxy.key} ({item.proxy.source})
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
 
             {/* Botão Metodologia */}
             <div className="text-center">
