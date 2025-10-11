@@ -362,87 +362,87 @@ const SkillsSection = () => {
             <div className="text-center">
               <h3 className="text-3xl font-bold text-foreground mb-4">Arquitetura Metodológica Manduvia</h3>
               <p className="text-lg text-foreground/70 max-w-4xl mx-auto">
-                Nossa metodologia exclusiva de SROI integra tecnologia, dados e acolhimento para gerar impacto social mensurável e sustentável
+                Plataforma ManduvIA, observatórios Coloiado e Operações Manduvia formam nosso ecossistema de tecnologia, dados e acolhimento.
               </p>
             </div>
 
-            {/* Ecossistema de Tecnologia */}
+            {/* ManduvIA Platform */}
             <div className="bg-gradient-to-br from-blue-50 to-indigo-100 rounded-3xl p-8 border border-blue-200">
-              <h4 className="text-2xl font-bold text-foreground mb-6 text-center">🤖 Plataforma ManduvIA</h4>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <h4 className="text-2xl font-bold text-foreground mb-6 text-center">🤖 ManduvIA Platform</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-white rounded-xl p-6 shadow-lg">
                   <div className="text-2xl mb-3">💬</div>
                   <h5 className="font-bold text-foreground mb-2">ManduvIA Mentor & Concierge</h5>
-                  <p className="text-sm text-foreground/70">Assistente empática em WhatsApp, web e voz para acolhimento, trilhas educacionais e voluntariado com análise de sentimento em tempo real.</p>
+                  <p className="text-sm text-foreground/70">Assistente empática em WhatsApp, web e voz para acolhimento, trilhas educacionais e voluntariado.</p>
                 </div>
                 <div className="bg-white rounded-xl p-6 shadow-lg">
                   <div className="text-2xl mb-3">🧠</div>
                   <h5 className="font-bold text-foreground mb-2">NLP Multilíngue + Sentimento</h5>
-                  <p className="text-sm text-foreground/70">Modelos customizados para português, libras e línguas pantaneiras com análise emocional para personalização do acolhimento.</p>
+                  <p className="text-sm text-foreground/70">Modelos customizados para português, libras e línguas pantaneiras com análise emocional em tempo real.</p>
                 </div>
                 <div className="bg-white rounded-xl p-6 shadow-lg">
                   <div className="text-2xl mb-3">🧭</div>
                   <h5 className="font-bold text-foreground mb-2">Motor de Jornadas</h5>
-                  <p className="text-sm text-foreground/70">Orquestra fluxos de acolhimento, educação e renda com personalização baseada em dados comportamentais e necessidades individuais.</p>
+                  <p className="text-sm text-foreground/70">Orquestra fluxos de acolhimento, educação e renda com personalização ManduvIA.</p>
                 </div>
                 <div className="bg-white rounded-xl p-6 shadow-lg">
                   <div className="text-2xl mb-3">🧑‍⚕️</div>
                   <h5 className="font-bold text-foreground mb-2">Assistentes Especialistas</h5>
-                  <p className="text-sm text-foreground/70">Bots especializados em saúde, esporte, dados e captação atuando em conjunto com equipe humana para máxima eficiência.</p>
+                  <p className="text-sm text-foreground/70">Bots especializados em saúde, esporte, dados e captação atuando com equipe humana.</p>
                 </div>
               </div>
             </div>
 
-            {/* Infraestrutura de Dados */}
+            {/* Infraestrutura de Dados Coloiado */}
             <div className="bg-gradient-to-br from-green-50 to-emerald-100 rounded-3xl p-8 border border-green-200">
               <h4 className="text-2xl font-bold text-foreground mb-6 text-center">📊 Infraestrutura de Dados Coloiado</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-white rounded-xl p-6 shadow-lg">
                   <div className="text-2xl mb-3">📈</div>
                   <h5 className="font-bold text-foreground mb-2">Observatórios Interativos</h5>
-                  <p className="text-sm text-foreground/70">Dashboards com drilldown por território, públicos e indicadores ESG para tomada de decisão baseada em dados.</p>
+                  <p className="text-sm text-foreground/70">Dashboards com drilldown por território, públicos e indicadores ESG.</p>
                 </div>
                 <div className="bg-white rounded-xl p-6 shadow-lg">
                   <div className="text-2xl mb-3">🛰️</div>
                   <h5 className="font-bold text-foreground mb-2">Crawlers Sociais + APIs</h5>
-                  <p className="text-sm text-foreground/70">Coleta automatizada de dados públicos, privados e de sensores comunitários para análise preditiva de impacto.</p>
+                  <p className="text-sm text-foreground/70">Coleta automatizada de dados públicos, privados e de sensores comunitários.</p>
                 </div>
                 <div className="bg-white rounded-xl p-6 shadow-lg">
                   <div className="text-2xl mb-3">✨</div>
                   <h5 className="font-bold text-foreground mb-2">ManduvIA Insights</h5>
-                  <p className="text-sm text-foreground/70">Recomendações e alertas para gestores com base em IA e especialistas Manduvia para otimização contínua.</p>
+                  <p className="text-sm text-foreground/70">Recomendações e alertas para gestores com base em IA e especialistas Manduvia.</p>
                 </div>
                 <div className="bg-white rounded-xl p-6 shadow-lg">
                   <div className="text-2xl mb-3">💾</div>
                   <h5 className="font-bold text-foreground mb-2">Lakehouse ESG</h5>
-                  <p className="text-sm text-foreground/70">Arquitetura de dados auditável com governança, LGPD e métricas de impacto para transparência total.</p>
+                  <p className="text-sm text-foreground/70">Arquitetura de dados auditável com governança, LGPD e métricas de impacto.</p>
                 </div>
               </div>
             </div>
 
-            {/* Experiências & Operações */}
+            {/* Experiências & Operações Manduvia */}
             <div className="bg-gradient-to-br from-orange-50 to-amber-100 rounded-3xl p-8 border border-orange-200">
               <h4 className="text-2xl font-bold text-foreground mb-6 text-center">🌱 Experiências & Operações Manduvia</h4>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
                 <div className="bg-white rounded-xl p-6 shadow-lg">
                   <div className="text-2xl mb-3">📘</div>
                   <h5 className="font-bold text-foreground mb-2">Hexa Method Playbook</h5>
-                  <p className="text-sm text-foreground/70">Metodologia de acolhimento, inovação e impacto aplicada em esporte, educação e renda com métricas SROI integradas.</p>
+                  <p className="text-sm text-foreground/70">Metodologia de acolhimento, inovação e impacto aplicada em esporte, educação e renda.</p>
                 </div>
                 <div className="bg-white rounded-xl p-6 shadow-lg">
                   <div className="text-2xl mb-3">🥋</div>
                   <h5 className="font-bold text-foreground mb-2">Academia Solidária Ops</h5>
-                  <p className="text-sm text-foreground/70">Processos operacionais, PIDs e analytics integrados às unidades socioesportivas para otimização de resultados.</p>
+                  <p className="text-sm text-foreground/70">Processos operacionais, PIDs e analytics integrados às unidades socioesportivas.</p>
                 </div>
                 <div className="bg-white rounded-xl p-6 shadow-lg">
                   <div className="text-2xl mb-3">💡</div>
                   <h5 className="font-bold text-foreground mb-2">Pipeline de Investimentos</h5>
-                  <p className="text-sm text-foreground/70">Captação ESG, leis de incentivo e parcerias articuladas com ManduvIA Dealflow para sustentabilidade financeira.</p>
+                  <p className="text-sm text-foreground/70">Captação ESG, leis de incentivo e parcerias articuladas com ManduvIA Dealflow.</p>
                 </div>
                 <div className="bg-white rounded-xl p-6 shadow-lg">
                   <div className="text-2xl mb-3">🫶</div>
-                  <h5 className="font-bold text-foreground mb-2">Rede de Voluntariado</h5>
-                  <p className="text-sm text-foreground/70">Matching inteligente de especialistas, eventos de acolhimento e reconhecimento da rede com impacto mensurável.</p>
+                  <h5 className="font-bold text-foreground mb-2">Rede de Voluntariado Manduvia</h5>
+                  <p className="text-sm text-foreground/70">Matching inteligente de especialistas, eventos de acolhimento e reconhecimento da rede.</p>
                 </div>
               </div>
             </div>
