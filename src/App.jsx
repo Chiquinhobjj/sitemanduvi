@@ -10,6 +10,9 @@ const ProjectsSection = lazy(() => import('./components/sections/ProjectsSection
 const TechStackSection = lazy(() => import('./components/sections/TechStackSection'))
 const AchievementsSection = lazy(() => import('./components/sections/AchievementsSection'))
 const ContactSection = lazy(() => import('./components/sections/ContactSection'))
+const DataObservatorySection = lazy(() => import('./components/sections/DataObservatorySection'))
+const ObservatoryUserPanel = lazy(() => import('./components/sections/ObservatoryUserPanel'))
+const SeciteciPanel = lazy(() => import('./components/sections/SeciteciPanel'))
 const InitiativeDetail = lazy(() => import('./components/sections/InitiativeDetail'))
 const EventsSection = lazy(() => import('./components/sections/EventsSection'))
 const SuperralinhaEvent = lazy(() => import('./components/sections/SuperralinhaEvent'))
@@ -69,6 +72,30 @@ const ProjectsPage = () => (
   <PageSection>
     <Suspense fallback={<SectionFallback height="60vh" />}>
       <ProjectsSection />
+    </Suspense>
+  </PageSection>
+)
+
+const ObservatoryPage = () => (
+  <PageSection>
+    <Suspense fallback={<SectionFallback height="70vh" />}>
+      <DataObservatorySection />
+    </Suspense>
+  </PageSection>
+)
+
+const ObservatoryUsersPage = () => (
+  <PageSection>
+    <Suspense fallback={<SectionFallback height="70vh" />}>
+      <ObservatoryUserPanel />
+    </Suspense>
+  </PageSection>
+)
+
+const SeciteciPage = () => (
+  <PageSection>
+    <Suspense fallback={<SectionFallback height="80vh" />}>
+      <SeciteciPanel />
     </Suspense>
   </PageSection>
 )
@@ -133,6 +160,9 @@ function App() {
           <Route path="/skills" element={<SkillsPage />} />
           <Route path="/projects" element={<ProjectsPage />} />
           <Route path="/projects/:initiativeId" element={<InitiativeDetailPage />} />
+          <Route path="/observatorio" element={<ObservatoryPage />} />
+          <Route path="/observatorio/usuarios" element={<ObservatoryUsersPage />} />
+          <Route path="/observatorio/seciteci-mt" element={<SeciteciPage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/events/superralinha" element={<SuperralinhaPage />} />
           <Route path="/redes" element={<RedesPage />} />

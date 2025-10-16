@@ -114,6 +114,50 @@ const achievements = [
 - Telefone e email
 - Redes sociais
 
+## 📊 Observatório de Dados Manduvi
+
+O Observatório é uma página completa que cruza indicadores institucionais, metas de projetos e status da integração via MCP/API. Ele fica no arquivo `src/components/sections/DataObservatorySection.jsx` e usa os dados carregados pelo hook `useObservatoryData`.
+
+### ✨ Como abrir no Cursor
+1. Abra o Cursor e carregue a pasta do projeto (`Arquivo > Open...`).
+2. No painel esquerdo, localize `src/components/sections/DataObservatorySection.jsx`.
+3. Use `Cmd/Ctrl + P` para pesquisar por “DataObservatorySection” e abrir o componente mais rápido.
+4. Para editar os dados padrão, abra também `src/data/observatory.js`.
+
+### 🔌 Conectando à API ou MCP
+O hook `src/hooks/use-observatory-data.js` primeiro tenta buscar os dados reais e, se houver erro, usa o fallback local.
+
+1. **Endpoints**: atualize `src/lib/observatoryClient.js` com as URLs da MCP ou da sua API REST.
+2. **Chaves/Headers**: personalize a função `fetchFromApi()` no mesmo arquivo para incluir tokens ou cabeçalhos necessários.
+3. **Teste**: rode `pnpm dev` e observe o bloco “Pipeline automatizado” na página do Observatório. Ele mostra se o feed está “Online”, “Sincronizando” ou “Em manutenção”.
+
+### 🧠 Customizando os indicadores
+- `src/data/observatory.js` contém séries históricas, metas e insights utilizados como fallback. Você pode editar os arrays `instituteIndicators`, `projects` e `integrationFlow` diretamente no Cursor.
+- Cada projeto aceita campos como `trilhasConcluidas`, `satisfacao`, `empregabilidade` etc. Mantenha o formato em `camelCase` para continuar exibindo nos gráficos.
+- Os textos explicativos (cards de destaque, insights e CTAs) também moram nesse arquivo.
+
+### 👥 Painel de Usuários
+- A página `src/components/sections/ObservatoryUserPanel.jsx` lista guardiões, parceiros e convites pendentes do Observatório.
+- Ajuste filtros, textos e cards alterando os arrays `userStats`, `userDirectory` e `activityTimeline` no topo do componente.
+- Para incluir integrações reais, substitua os dados estáticos por chamadas MCP/API dentro do componente (ou extraia para um hook dedicado).
+
+### 🎨 Ajustando layout/narrativa
+O componente principal está dividido em blocos:
+
+1. **Hero** – linhas 40-120: título, resumo e indicadores principais.
+2. **Indicadores institucionais** – linhas 120-270: gráficos (`recharts`) e resumos automáticos.
+3. **Destaques por projeto** – linhas 270-520: cards com série histórica + comparativos.
+4. **Pipeline de dados** – linhas 520-660: status de integrações MCP/API.
+5. **CTA final e governança** – linhas 660+.
+
+Edite textos e rótulos diretamente nas seções correspondentes. Se quiser alterar cores dos gráficos, ajuste os objetos `instituteTrendConfig` e `projectEngagementConfig` no topo do arquivo.
+
+### 🚀 Publicando as mudanças
+1. Confirme que tudo funciona localmente (`pnpm dev`).
+2. Rode `pnpm build` para garantir que não há erros de produção.
+3. Faça commit das alterações e publique normalmente (Vercel, Netlify ou servidor próprio).
+4. Caso use MCP hospedado separadamente, verifique se o cron/sincronização está ativo para alimentar o Observatório.
+
 ## 🎨 Personalização Visual
 
 ### **Cores do Instituto**

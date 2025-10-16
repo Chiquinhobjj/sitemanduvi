@@ -24,6 +24,16 @@ const FloatingNav = () => {
       ]
     },
     {
+      id: 'observatorio',
+      name: 'Observatório',
+      path: '/observatorio',
+      children: [
+        { id: 'observatorio-home', name: 'Visão geral', path: '/observatorio' },
+        { id: 'observatorio-users', name: 'Painel de Usuários', path: '/observatorio/usuarios' },
+        { id: 'seciteci-mt', name: 'SECITECI MT', path: '/observatorio/seciteci-mt' }
+      ]
+    },
+    {
       id: 'events',
       name: 'Eventos',
       path: '/events',
@@ -133,7 +143,11 @@ const FloatingNav = () => {
                         >
                           <ul className="py-2">
                             {item.children.map((child) => {
-                              const isHomeOption = child.id === 'projects-home' || child.id === 'events-home' || child.id === 'redes-home'
+                              const isHomeOption =
+                                child.id === 'projects-home' ||
+                                child.id === 'events-home' ||
+                                child.id === 'redes-home' ||
+                                child.id === 'observatorio-home'
                               return (
                                 <li key={child.id}>
                                   <button
@@ -232,7 +246,11 @@ const FloatingNav = () => {
                           >
                             <ul className="py-2 bg-white/95">
                               {item.children.map((child) => {
-                                const isHomeOption = child.id === 'projects-home' || child.id === 'events-home' || child.id === 'redes-home'
+                                const isHomeOption =
+                                  child.id === 'projects-home' ||
+                                  child.id === 'events-home' ||
+                                  child.id === 'redes-home' ||
+                                  child.id === 'observatorio-home'
                                 return (
                                   <li key={child.id}>
                                     <button
