@@ -13,6 +13,10 @@ const ContactSection = lazy(() => import('./components/sections/ContactSection')
 const DataObservatorySection = lazy(() => import('./components/sections/DataObservatorySection'))
 const ObservatoryUserPanel = lazy(() => import('./components/sections/ObservatoryUserPanel'))
 const SeciteciPanel = lazy(() => import('./components/sections/SeciteciPanel'))
+const AdminDashboard = lazy(() => import('./components/admin/AdminDashboard'))
+const UserManagement = lazy(() => import('./components/admin/UserManagement'))
+const AuditLogs = lazy(() => import('./components/admin/AuditLogs'))
+const LoginForm = lazy(() => import('./components/auth/LoginForm'))
 const InitiativeDetail = lazy(() => import('./components/sections/InitiativeDetail'))
 const EventsSection = lazy(() => import('./components/sections/EventsSection'))
 const SuperralinhaEvent = lazy(() => import('./components/sections/SuperralinhaEvent'))
@@ -100,6 +104,36 @@ const SeciteciPage = () => (
   </PageSection>
 )
 
+const AdminPage = () => (
+  <PageSection>
+    <Suspense fallback={<SectionFallback height="80vh" />}>
+      <AdminDashboard />
+    </Suspense>
+  </PageSection>
+)
+
+const UserManagementPage = () => (
+  <PageSection>
+    <Suspense fallback={<SectionFallback height="80vh" />}>
+      <UserManagement />
+    </Suspense>
+  </PageSection>
+)
+
+const LoginPage = () => (
+  <Suspense fallback={<SectionFallback height="100vh" />}>
+    <LoginForm />
+  </Suspense>
+)
+
+const AuditLogsPage = () => (
+  <PageSection>
+    <Suspense fallback={<SectionFallback height="80vh" />}>
+      <AuditLogs />
+    </Suspense>
+  </PageSection>
+)
+
 const AchievementsPage = () => (
   <PageSection>
     <Suspense fallback={<SectionFallback height="50vh" />}>
@@ -163,6 +197,10 @@ function App() {
           <Route path="/observatorio" element={<ObservatoryPage />} />
           <Route path="/observatorio/usuarios" element={<ObservatoryUsersPage />} />
           <Route path="/observatorio/seciteci-mt" element={<SeciteciPage />} />
+          <Route path="/observatorio/admin" element={<AdminPage />} />
+          <Route path="/observatorio/admin/usuarios" element={<UserManagementPage />} />
+          <Route path="/observatorio/admin/auditoria" element={<AuditLogsPage />} />
+          <Route path="/login" element={<LoginPage />} />
           <Route path="/events" element={<EventsPage />} />
           <Route path="/events/superralinha" element={<SuperralinhaPage />} />
           <Route path="/redes" element={<RedesPage />} />

@@ -30,7 +30,8 @@ const FloatingNav = () => {
       children: [
         { id: 'observatorio-home', name: 'Visão geral', path: '/observatorio' },
         { id: 'observatorio-users', name: 'Painel de Usuários', path: '/observatorio/usuarios' },
-        { id: 'seciteci-mt', name: 'SECITECI MT', path: '/observatorio/seciteci-mt' }
+        { id: 'seciteci-mt', name: 'SECITECI MT', path: '/observatorio/seciteci-mt' },
+        { id: 'admin-dashboard', name: 'Administração', path: '/observatorio/admin' }
       ]
     },
     {
