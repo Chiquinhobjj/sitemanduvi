@@ -1,5 +1,4 @@
 import { createClient } from '@supabase/supabase-js'
-import { useState, useEffect } from 'react'
 
 const supabaseUrl = process.env.REACT_APP_SUPABASE_URL || 'https://ygnxdxkykkdflaswegwn.supabase.co'
 const supabaseKey = process.env.REACT_APP_SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlnbnhkeGt5a2tkZmxhc3dlZ3duIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ0NzQ0MDAsImV4cCI6MjA1MDA1MDQwMH0.placeholder'
@@ -212,77 +211,5 @@ export const auth = {
   }
 }
 
-// Hook para gerenciar estado de autenticação
-export const useAuth = () => {
-  const [user, setUser] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState(null)
-
-  useEffect(() => {
-    // Verificar usuário atual
-    const checkUser = async () => {
-      try {
-        const { user: currentUser } = await auth.getCurrentUser()
-        setUser(currentUser)
-      } catch (err) {
-        setError(err.message)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    checkUser()
-
-    // Escutar mudanças de autenticação
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
-        setUser(session?.user ?? null)
-        setLoading(false)
-      }
-    )
-
-    return () => subscription.unsubscribe()
-  }, [])
-
-  const signIn = async (email, password) => {
-    setLoading(true)
-    setError(null)
-    try {
-      const { data, error } = await auth.signIn(email, password)
-      if (error) throw error
-      setUser(data.user)
-      return { success: true }
-    } catch (err) {
-      setError(err.message)
-      return { success: false, error: err.message }
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  const signOut = async () => {
-    setLoading(true)
-    try {
-      const { error } = await auth.signOut()
-      if (error) throw error
-      setUser(null)
-      return { success: true }
-    } catch (err) {
-      setError(err.message)
-      return { success: false, error: err.message }
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  return {
-    user,
-    loading,
-    error,
-    signIn,
-    signOut,
-    isAuthenticated: !!user
-  }
-}
 
 export default auth

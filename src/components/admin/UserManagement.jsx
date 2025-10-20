@@ -24,10 +24,9 @@ import { Badge } from '@/components/ui/badge'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog'
-import { useAuth } from '@/lib/auth'
+import { auth } from '@/lib/auth'
 
 const UserManagement = () => {
-  const { getAllUsers, createUser, updateUser, deleteUser, assignRole, removeRole, getAllRoles } = useAuth()
   const [users, setUsers] = useState([])
   const [roles, setRoles] = useState([])
   const [loading, setLoading] = useState(true)
@@ -96,8 +95,8 @@ const UserManagement = () => {
       setLoading(true)
       try {
         // Em produção, usar as funções reais do auth
-        // const { data: usersData } = await getAllUsers()
-        // const { data: rolesData } = await getAllRoles()
+        // const { data: usersData } = await auth.getAllUsers()
+        // const { data: rolesData } = await auth.getAllRoles()
         
         // Mock data
         setTimeout(() => {
